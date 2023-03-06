@@ -31,15 +31,20 @@ public class CommentMetrics {
 		List<CommentMethodPair> commentMethodPairs = getCommentMethodPairs(comments);
 		int jdCoverageCount = 0;
 		for (CommentMethodPair cm : commentMethodPairs) {
-			if(!isMethodCovered(cm)) {
-				System.out.println(cm.method.getNameAsString() + " not covered");
-			}
-			else {
+			if(isMethodCovered(cm)) {
 				jdCoverageCount++;
 			}
 		}
+		System.out.println("HAS AUTHOR?: " + hasAuthor(comments));
 		System.out.println("NUMBER OF COMMENTS:" + comments.size());
-		System.out.println("OVERALL JAVADOC COVERAGE:" + jdCoverageCount + "/" + methods.size());
+		System.out.println("OVERALL JAVADOC METHOD COVERAGE:" + jdCoverageCount + "/" + methods.size());
+	}
+	private static boolean hasAuthor(List<Comment> comments) {
+		return comments.stream()
+				.filter(Comment::isJavadocComment)
+				.map(Comment::asJavadocComment)
+				.flatMap(javadocComment -> javadocComment.parse().getBlockTags().stream())
+				.anyMatch(tag -> tag.getType() == JavadocBlockTag.Type.AUTHOR);
 	}
 	private static boolean isMethodCovered(CommentMethodPair commentMethod) {
 		List<Parameter> params = new ArrayList<>(commentMethod.method.getParameters());
@@ -47,41 +52,34 @@ public class CommentMetrics {
 		if (!commentMethod.method.getType().isVoidType() && !isMethodReturnCovered(javadocBlockTags)) return false;
 		return isMethodParamsCovered(params, javadocBlockTags);
 	}
-
 	private static boolean isMethodReturnCovered(List<JavadocBlockTag> javadocBlockTags) {
-		for (JavadocBlockTag tag : javadocBlockTags) {
-			if (tag.getType() == JavadocBlockTag.Type.RETURN) {
-				return true;
-			}
-		}
-		return false;
+		return javadocBlockTags.stream().anyMatch(tag -> tag.getType() == JavadocBlockTag.Type.RETURN);
 	}
-
 	private static boolean isMethodParamsCovered(List<Parameter> params, List<JavadocBlockTag> javadocBlockTags) {
 		for (Parameter param : params) {
 			if (javadocBlockTags.stream()
 					.map(JavadocBlockTag::getName)
 					.filter(Optional::isPresent)
 					.map(Optional::get)
-					.noneMatch(param.getNameAsString()::equals)) {
-				return false;
+					.anyMatch(param.getNameAsString()::equals)) {
+				return true;
 			}
 		}
 		return true;
 	}
 
 	private static List<CommentMethodPair> getCommentMethodPairs(List<Comment> comments) {
-		List<CommentMethodPair> jdComments = new ArrayList<>();
-		for (Comment comment : comments) {
-			if (comment.isJavadocComment() && comment.getCommentedNode().isPresent()) {
-				Node node = comment.getCommentedNode().get();
-				if (node instanceof MethodDeclaration method) {
-					CommentMethodPair temp = new CommentMethodPair(comment.asJavadocComment(), method);
-					jdComments.add(temp);
-				}
-			}
-		}
-		return jdComments;
+		return comments.stream()
+				.filter(comment -> comment.isJavadocComment() && comment.getCommentedNode().isPresent())
+				.map(comment -> {
+					Node node = comment.getCommentedNode().get();
+					if (node instanceof MethodDeclaration method) {
+						return new CommentMethodPair(comment.asJavadocComment(), method);
+					}
+					return null;
+				})
+				.filter(Objects::nonNull)
+				.toList();
 	}
 
 	private record CommentMethodPair(JavadocComment comment, MethodDeclaration method) {}
