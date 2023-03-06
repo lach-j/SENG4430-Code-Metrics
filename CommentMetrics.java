@@ -16,7 +16,6 @@ public class CommentMetrics {
 
 	private static final String FILE_PATH = "C:\\University\\SENG4430-Code-Metrics\\Graphics.java";
 
-
 	public static void main(String[] args) throws Exception {
 		CompilationUnit cu = StaticJavaParser.parse(new File(FILE_PATH));
 		runCommentMetrics(cu);
@@ -29,12 +28,7 @@ public class CommentMetrics {
 		methodVisitor.visit(cu, methods);
 
 		List<CommentMethodPair> commentMethodPairs = getCommentMethodPairs(comments);
-		int jdCoverageCount = 0;
-		for (CommentMethodPair cm : commentMethodPairs) {
-			if(isMethodCovered(cm)) {
-				jdCoverageCount++;
-			}
-		}
+		int jdCoverageCount = (int) commentMethodPairs.stream().filter(CommentMetrics::isMethodCovered).count();
 		System.out.println("HAS AUTHOR?: " + hasAuthor(comments));
 		System.out.println("NUMBER OF COMMENTS:" + comments.size());
 		System.out.println("OVERALL JAVADOC METHOD COVERAGE:" + jdCoverageCount + "/" + methods.size());
