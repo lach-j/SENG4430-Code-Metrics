@@ -15,12 +15,10 @@ public class LengthOfIdentifiersTest {
   public void returnsAverageNoOfChars() throws IOException {
     var loiProvider = new LengthOfIdentifiersMetricProvider();
 
-
     SourceRoot sourceRoot = new SourceRoot(Path.of("./src/test/java/TestProject"));
     List<ParseResult<CompilationUnit>> parseResults = sourceRoot.tryToParse();
     var result = loiProvider.runAnalysis(parseResults);
 
-    Assertions.assertEquals(7.5, result);
-
+    Assertions.assertEquals(7.5, result.get("avgId").value());
   }
 }

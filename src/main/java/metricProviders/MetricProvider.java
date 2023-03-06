@@ -4,7 +4,10 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MetricProvider {
-    double runAnalysis(List<ParseResult<CompilationUnit>> parseResults);
+    Map<String, MetricResult<?>> runAnalysis(List<ParseResult<CompilationUnit>> parseResults);
+
+    String metricName();
 }
