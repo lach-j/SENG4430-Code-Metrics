@@ -1,6 +1,8 @@
+package TestProject;
+
 import java.io.File;
 
-public class TestClass {
+public class AnotherTestClass {
 
     public long runAnalysis(File file) {
         var testVar = "test";

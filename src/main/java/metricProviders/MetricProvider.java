@@ -1,7 +1,10 @@
 package metricProviders;
 
-import java.io.File;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ast.CompilationUnit;
+
+import java.util.List;
 
 public interface MetricProvider {
-    long runAnalysis(File file);
+    double runAnalysis(List<ParseResult<CompilationUnit>> parseResults);
 }

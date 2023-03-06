@@ -1,42 +1,48 @@
 package metricProviders;
 
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LengthOfIdentifiersMetricProvider implements MetricProvider {
 
   @Override
-  public long runAnalysis(File file) {
+  public double runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
     var identifiers = new ArrayList<String>();
 
-    try {
-      // Parse Java file
-      CompilationUnit cu = StaticJavaParser.parse(file);
+    // Parse Java file
+    for (var parseResult:
+         parseResults) {
+      var cu = parseResult.getResult().orElse(null);
+      if (cu == null)
+        continue;
 
       // Get all class names
       cu.findAll(ClassOrInterfaceDeclaration.class)
-          .forEach(variable -> identifiers.add(variable.getNameAsString()));
+              .forEach(variable -> identifiers.add(variable.getNameAsString()));
       // Get all variable names
       cu.findAll(VariableDeclarator.class)
-          .forEach(variable -> identifiers.add(variable.getNameAsString()));
+              .forEach(variable -> identifiers.add(variable.getNameAsString()));
 
       // Get all method names
       cu.findAll(MethodDeclaration.class)
-          .forEach(variable -> identifiers.add(variable.getNameAsString()));
-    } catch (IOException ignored) {
-      // FIXME: Add Error handling
+              .forEach(variable -> identifiers.add(variable.getNameAsString()));
+
+      // Get all parameter names
+      cu.findAll(Parameter.class)
+              .forEach(variable -> identifiers.add(variable.getNameAsString()));
     }
+
     // Calculate total number of characters
     var total = identifiers.stream().map(String::length).reduce(Integer::sum);
 
     // Calculate and return average identifier name
-    return (total.orElse(0)) / identifiers.size();
+    return Double.valueOf((total.orElse(0))) / identifiers.size();
   }
 }
