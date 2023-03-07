@@ -2,62 +2,75 @@ package metricProviders;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 
 import java.util.*;
 
 public class LengthOfIdentifiersMetricProvider implements MetricProvider {
 
-    @Override
-    public String metricName() {
-        return "Length of Identifiers";
+  @Override
+  public String metricName() {
+    return "Length of Identifiers";
+  }
+
+  @Override
+  public Map<String, MetricResult<?>> runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    var identifiers = new ArrayList<String>();
+
+    List<Class<? extends Node>> classes =
+        new ArrayList<>() {
+          {
+            add(ClassOrInterfaceDeclaration.class);
+            add(VariableDeclarator.class);
+            add(MethodDeclaration.class);
+            add(Parameter.class);
+          }
+        };
+
+    // Parse Java file
+    for (var parseResult : parseResults) {
+      var cu = parseResult.getResult().orElse(null);
+      if (cu == null) continue;
+
+      for (Class<? extends Node> clazz : classes) {
+        if (!NodeWithSimpleName.class.isAssignableFrom(clazz))
+          throw new IllegalArgumentException(
+              clazz.getName() + " does not contain a getNameAsString definition");
+
+        cu.findAll(clazz)
+            .forEach(node -> identifiers.add(((NodeWithSimpleName<?>) node).getNameAsString()));
+      }
     }
 
-    @Override
-    public Map<String, MetricResult<?>> runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
-        var identifiers = new ArrayList<String>();
+    // Calculate total number of characters
+    var total = identifiers.stream().map(String::length).reduce(Integer::sum);
 
-        // Parse Java file
-        for (var parseResult :
-                parseResults) {
-            var cu = parseResult.getResult().orElse(null);
-            if (cu == null)
-                continue;
+    // Calculate average number of characters per identifier
+    var avgIdLength = Double.valueOf((total.orElse(0))) / identifiers.size();
 
-            // Get all class names
-            cu.findAll(ClassOrInterfaceDeclaration.class)
-                    .forEach(variable -> identifiers.add(variable.getNameAsString()));
+    // Find longest identifier
+    var maxIdLength =
+        identifiers.stream().max(Comparator.comparing(String::length)).orElse("").length();
 
-            // Get all variable names
-            cu.findAll(VariableDeclarator.class)
-                    .forEach(variable -> identifiers.add(variable.getNameAsString()));
+    // Find shortest identifier
+    var minIdLength =
+        identifiers.stream().min(Comparator.comparing(String::length)).orElse("").length();
 
-            // Get all method names
-            cu.findAll(MethodDeclaration.class)
-                    .forEach(variable -> identifiers.add(variable.getNameAsString()));
+    var results = new HashMap<String, MetricResult<?>>();
+    results.put(
+        "avgId", new MetricResult<>("Average Identifier Length", avgIdLength, "characters"));
+    results.put("maxId", new MetricResult<>("Max Identifier Length", maxIdLength, "characters"));
+    results.put("minId", new MetricResult<>("Min Identifier Length", minIdLength, "characters"));
+    results.put(
+        "totId",
+        new MetricResult<>("Total Number of Identifiers", identifiers.size(), "characters"));
 
-            // Get all parameter names
-            cu.findAll(Parameter.class)
-                    .forEach(variable -> identifiers.add(variable.getNameAsString()));
-        }
-
-        // Calculate total number of characters
-        var total = identifiers.stream().map(String::length).reduce(Integer::sum);
-
-        var avgIdLength = Double.valueOf((total.orElse(0))) / identifiers.size();
-        var maxIdLength = identifiers.stream().max(Comparator.comparingInt(String::length));
-        var minIdLength = identifiers.stream().min(Comparator.comparingInt(String::length));
-
-        var results = new HashMap<String, MetricResult<?>>();
-        results.put("avgId", new MetricResult<>("Average Identifier Length", avgIdLength));
-        results.put("maxId", new MetricResult<>("Max Identifier Length", maxIdLength));
-        results.put("minId", new MetricResult<>("Min Identifier Length", minIdLength));
-        results.put("totId", new MetricResult<>("Total Number of Identifiers", avgIdLength));
-
-        // Calculate and return average identifier name
-        return results;
-    }
+    // Calculate and return average identifier name
+    return results;
+  }
 }
