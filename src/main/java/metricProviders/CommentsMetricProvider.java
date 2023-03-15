@@ -81,7 +81,7 @@ public class CommentsMetricProvider implements MetricProvider {
 	}
 	private static int countSyllables(String[] words) {
 		int numComplexWords = 0;
-		//
+		//Regex for syllables
 		String regex = "(?i)[aiou][aeiou]*|e[aeiou]*(?!d?\\b)";
 		Pattern pattern = Pattern.compile(regex);
 		for (String word : words) {
