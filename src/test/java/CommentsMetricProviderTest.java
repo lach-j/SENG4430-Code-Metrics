@@ -42,4 +42,12 @@ public class CommentsMetricProviderTest {
 		var result = cmProvider.runAnalysis(parseResults);
 		Assertions.assertEquals(3, result.get("fileCount").value());
 	}
+	@Test
+	public void returnsFogIndex() throws IOException {
+		var cmProvider = new CommentsMetricProvider();
+
+		List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
+		var result = cmProvider.runAnalysis(parseResults);
+		Assertions.assertEquals(15.509810671256455, result.get("fogIndex").value());
+	}
 }

@@ -10,8 +10,9 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.javadoc.JavadocBlockTag;
-
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommentsMetricProvider implements MetricProvider {
 
@@ -41,6 +42,7 @@ public class CommentsMetricProvider implements MetricProvider {
 			commentMethodPairs.addAll(getCommentMethodPairs(comments));
 			}
 
+		var fogIndex = fogIndex(comments.toString());
 		// Calculate total number of method pairs covered by JavaDocs
 		var jdCoverageCount = (int) commentMethodPairs.stream().filter(CommentsMetricProvider::isMethodCovered).count();
 		// Calculate total number of comments
@@ -51,13 +53,50 @@ public class CommentsMetricProvider implements MetricProvider {
 		results.put("authorJavaDocCoverage", new MetricResult<>("Files with Author JavaDoc", hasAuthorCount, "/" + fileCount));
 		results.put("totalId", new MetricResult<>("Total Number of Comments", comments.size(), ""));
 		results.put("fileCount", new MetricResult<>("Total Number of Files",fileCount, ""));
+		results.put("fogIndex", new MetricResult<>("Fog index",fogIndex, ""));
 		// Calculate and return average identifier name
 		return results;
 	}
+	private static double fogIndex(String text) {
+		text = removeCommentArtifacts(text);
+		String[] sentences = text.split("[.!?]");
+		String[] words = text.split("\\s+");
 
+		// Calculate the average number of words per sentence
+		double avgWordsPerSentence = (double) words.length / sentences.length;
+		// Count the number of words with three or more syllables
+		int complexWords = countSyllables(words);
 
-
-
+		// Calculate the Fog Index
+		return 0.4 * (avgWordsPerSentence + 100 * (double) complexWords / words.length);
+	}
+	private static String removeCommentArtifacts(String code) {
+		//Remove * from javadocs
+		code = code.replaceAll("\\*", "");
+		//Remove slash symbols
+		code = code.replaceAll("[*/]", "");
+		//Remove anything enclosed in <tags>
+		code = code.replaceAll("<[^>]*>", "");
+		return code;
+	}
+	private static int countSyllables(String[] words) {
+		int numComplexWords = 0;
+		//
+		String regex = "(?i)[aiou][aeiou]*|e[aeiou]*(?!d?\\b)";
+		Pattern pattern = Pattern.compile(regex);
+		for (String word : words) {
+			Matcher m = pattern.matcher(word);
+			int sylCount = 0;
+			while (m.find()) {
+				sylCount++;
+				if (sylCount >= 3) {
+					numComplexWords++;
+					break;
+				}
+			}
+		}
+		return numComplexWords;
+	}
 	private static class MethodVisitor extends VoidVisitorAdapter<List<MethodDeclaration>> {
 		@Override
 		public void visit(MethodDeclaration md, List<MethodDeclaration> collector) {
@@ -106,7 +145,6 @@ public class CommentsMetricProvider implements MetricProvider {
 		}
 		return true;
 	}
-
 
 	private record CommentMethodPair(JavadocComment comment, MethodDeclaration method) {}
 }
