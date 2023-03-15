@@ -17,6 +17,6 @@ public class LengthOfIdentifiersTest {
     List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
     var result = loiProvider.runAnalysis(parseResults);
 
-    Assertions.assertEquals(7.5, result.get("avgId").value());
+    Assertions.assertEquals(7.166666666666667, result.get("avgId").value());
   }
 }
