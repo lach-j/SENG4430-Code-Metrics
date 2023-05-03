@@ -19,7 +19,7 @@ public class LengthOfIdentifiersMetricProvider implements MetricProvider {
   }
 
   @Override
-  public Map<String, MetricResult<?>> runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+  public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
     var identifiers = new ArrayList<String>();
 
     List<Class<? extends Node>> classes =
@@ -61,16 +61,12 @@ public class LengthOfIdentifiersMetricProvider implements MetricProvider {
     var minIdLength =
         identifiers.stream().min(Comparator.comparing(String::length)).orElse("").length();
 
-    var results = new HashMap<String, MetricResult<?>>();
-    results.put(
-        "avgId", new MetricResult<>("Average Identifier Length", avgIdLength, "characters"));
-    results.put("maxId", new MetricResult<>("Max Identifier Length", maxIdLength, "characters"));
-    results.put("minId", new MetricResult<>("Min Identifier Length", minIdLength, "characters"));
-    results.put(
-        "totId",
-        new MetricResult<>("Total Number of Identifiers", identifiers.size(), "characters"));
-
-    // Calculate and return average identifier name
-    return results;
+    // Return identifier length metric results;
+    return new MetricResultSet(this.metricName())
+            .addSummaryResult("avgId", new MetricResult<>("Average Identifier Length", avgIdLength, "characters"))
+            .addSummaryResult("maxId", new MetricResult<>("Max Identifier Length", maxIdLength, "characters"))
+            .addSummaryResult("minId", new MetricResult<>("Min Identifier Length", minIdLength, "characters"))
+            .addSummaryResult("totId",
+                    new MetricResult<>("Total Number of Identifiers", identifiers.size(), "characters"));
   }
 }

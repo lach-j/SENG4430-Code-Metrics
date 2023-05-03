@@ -2,6 +2,7 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import metricProviders.MetricProvider;
 import metricProviders.MetricResult;
+import metricProviders.MetricResultSet;
 import parsing.ProjectParser;
 
 import java.io.IOException;
@@ -22,8 +23,8 @@ public class StaticAnalyser {
     this(Path.of(projectRoot));
   }
 
-  public Map<String, Map<String, MetricResult<?>>> runAnalysis(List<MetricProvider> providers) {
-    var analysisResults = new HashMap<String, Map<String, MetricResult<?>>>();
+  public Map<String, MetricResultSet> runAnalysis(List<MetricProvider> providers) {
+    var analysisResults = new HashMap<String, MetricResultSet>();
 
     for (var provider : providers) {
       var results = provider.runAnalysis(ParsingResults);
