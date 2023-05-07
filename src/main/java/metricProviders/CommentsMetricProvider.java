@@ -22,7 +22,7 @@ public class CommentsMetricProvider implements MetricProvider {
 	}
 
 	@Override
-	public Map<String, MetricResult<?>> runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+	public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
 
 		List<MethodDeclaration> methods = new ArrayList<>();
 		List<Comment> comments = new ArrayList<>();
@@ -48,12 +48,13 @@ public class CommentsMetricProvider implements MetricProvider {
 		// Calculate total number of comments
 		var totalJdCoverage = jdCoverageCount + "/" + methods.size();
 
-		var results = new HashMap<String, MetricResult<?>>();
-		results.put("javaDocMethodCoverage", new MetricResult<>("Overall JavaDoc Method Coverage", totalJdCoverage, ""));
-		results.put("authorJavaDocCoverage", new MetricResult<>("Files with Author JavaDoc", hasAuthorCount, "/" + fileCount));
-		results.put("totalId", new MetricResult<>("Total Number of Comments", comments.size(), ""));
-		results.put("fileCount", new MetricResult<>("Total Number of Files",fileCount, ""));
-		results.put("fogIndex", new MetricResult<>("Fog index",fogIndex, ""));
+		var results = new MetricResultSet(metricName());
+
+		results.addSummaryResult("javaDocMethodCoverage", new MetricResult<>("Overall JavaDoc Method Coverage", totalJdCoverage, ""));
+		results.addSummaryResult("authorJavaDocCoverage", new MetricResult<>("Files with Author JavaDoc", hasAuthorCount, "/" + fileCount));
+		results.addSummaryResult("totalId", new MetricResult<>("Total Number of Comments", comments.size(), ""));
+		results.addSummaryResult("fileCount", new MetricResult<>("Total Number of Files",fileCount, ""));
+		results.addSummaryResult("fogIndex", new MetricResult<>("Fog index",fogIndex, ""));
 		// Calculate and return average identifier name
 		return results;
 	}

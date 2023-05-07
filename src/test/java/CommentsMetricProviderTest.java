@@ -16,7 +16,7 @@ public class CommentsMetricProviderTest {
 
 		List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
 		var result = cmProvider.runAnalysis(parseResults);
-		Assertions.assertEquals(5, result.get("totalId").value());
+		Assertions.assertEquals(5, result.getSummaryResult("totalId").value());
 	}
 	@Test
 	public void returnsAuthorJavaDocCoverage() throws IOException {
@@ -24,7 +24,7 @@ public class CommentsMetricProviderTest {
 
 		List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
 		var result = cmProvider.runAnalysis(parseResults);
-		Assertions.assertEquals(2, result.get("authorJavaDocCoverage").value());
+		Assertions.assertEquals(2, result.getSummaryResult("authorJavaDocCoverage").value());
 	}
 	@Test
 	public void returnsOverallJavadocCoverage() throws IOException {
@@ -32,7 +32,7 @@ public class CommentsMetricProviderTest {
 
 		List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
 		var result = cmProvider.runAnalysis(parseResults);
-		Assertions.assertEquals("9/5", result.get("javaDocMethodCoverage").value());
+		Assertions.assertEquals("9/5", result.getSummaryResult("javaDocMethodCoverage").value());
 	}
 	@Test
 	public void returnsFileCount() throws IOException {
@@ -40,7 +40,7 @@ public class CommentsMetricProviderTest {
 
 		List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
 		var result = cmProvider.runAnalysis(parseResults);
-		Assertions.assertEquals(3, result.get("fileCount").value());
+		Assertions.assertEquals(3, result.getSummaryResult("fileCount").value());
 	}
 	@Test
 	public void returnsFogIndex() throws IOException {
@@ -48,6 +48,6 @@ public class CommentsMetricProviderTest {
 
 		List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
 		var result = cmProvider.runAnalysis(parseResults);
-		Assertions.assertEquals(15.509810671256455, result.get("fogIndex").value());
+		Assertions.assertEquals(15.509810671256455, result.getSummaryResult("fogIndex").value());
 	}
 }
