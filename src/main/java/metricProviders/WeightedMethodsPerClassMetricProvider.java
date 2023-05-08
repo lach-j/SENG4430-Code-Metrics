@@ -42,6 +42,6 @@ public class WeightedMethodsPerClassMetricProvider implements MetricProvider {
         double avgWmc = (double) totalWmc / classCount; //find average WMC
 
         return new MetricResultSet(this.metricName()) //return metric results
-                .addSummaryResult("avgWmc", new MetricResult<>("Average WMC", avgWmc));
+                .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc));
     }
 }
