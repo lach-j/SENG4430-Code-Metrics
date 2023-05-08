@@ -1,25 +1,36 @@
 package metricProviders;
 
-import java.util.function.Function;
+import java.util.Optional;
 
-public record MetricResult<T>(String label, T value, String unitLabel, Function<T, String> formatter) {
-    public MetricResult(String label, T value) {
-        this(label, value, null, null);
+public abstract class MetricResult<T> {
+
+    private final String label;
+    private final T value;
+    private String unitLabel;
+
+    protected MetricResult(String label, T value) {
+        this.label = label;
+        this.value = value;
     }
 
-    public MetricResult(String label, T value, Function<T, String> formatter) {
-        this(label, value, null, formatter);
+    protected MetricResult(String label, T value, String unitLabel) {
+        this(label, value);
+        this.unitLabel = unitLabel;
     }
 
-    public MetricResult(String label, T value, String unitLabel) {
-        this(label, value, unitLabel, null);
+    protected T getValue() {
+        return value;
     }
 
-    @Override
-    public String toString() {
-        if (formatter != null)
-            return formatter.apply(value);
+    public String label() {
+        return label;
+    }
 
-        return value.toString();
+    public String unitLabel() {
+        return Optional.ofNullable(unitLabel).orElse("");
+    }
+
+    public T value() {
+        return value;
     }
 }
