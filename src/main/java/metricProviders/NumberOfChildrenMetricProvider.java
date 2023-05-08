@@ -41,9 +41,9 @@ public class NumberOfChildrenMetricProvider implements MetricProvider {
         int maxNumberOfChildren = calculateMax(numberOfChildrenList); //find maximum number of children
 
         return new MetricResultSet(this.metricName()) //return metric results
-                .addSummaryResult("avgNOC", new MetricResult<>("Average Number of Children", averageNumberOfChildren))
-                .addSummaryResult("minNOC", new MetricResult<>("Minimum Number of Children", minNumberOfChildren))
-                .addSummaryResult("maxNOC", new MetricResult<>("Maximum Number of Children", maxNumberOfChildren));
+                .addResult("avgNOC", new SummaryResult<>("Average Number of Children", averageNumberOfChildren))
+                .addResult("minNOC", new SummaryResult<>("Minimum Number of Children", minNumberOfChildren))
+                .addResult("maxNOC", new SummaryResult<>("Maximum Number of Children", maxNumberOfChildren));
     }
 
     private double calculateAvg(List<Integer> values) { //calulate average
