@@ -1,29 +1,36 @@
+import metricProviders.FileResult;
 import metricProviders.MetricResult;
+import metricProviders.MetricResultSet;
 
-import java.util.Map;
+import java.util.Collection;
 
 public class StringResultsRenderer implements ResultsRender<String> {
 
-  public String render(Map<String, Map<String, MetricResult<?>>> results) {
+    public String render(Collection<MetricResultSet> results) {
 
-    var builder = new StringBuilder();
+        var builder = new StringBuilder();
 
-    results.forEach(
-        (key, value) -> {
-          builder.append(key);
-          value.forEach(
-              (key2, value2) ->
-                  builder.append(
-                      String.format(
-                          "%n%4s => %-40s: %-40s",
-                          "",
-                          value2.label(),
-                          value2.value().toString()
-                              + " "
-                              + (value2.unitLabel() == null ? "" : value2.unitLabel()))));
-          builder.append("\n");
-        });
+        results.forEach(
+                metricResultSet -> {
+                    builder.append(metricResultSet.getMetricName());
+                    metricResultSet.getResults().forEach(
+                            (k, result) -> addResult(result, builder));
+                });
 
-    return builder.toString();
-  }
+        return builder.toString();
+    }
+
+    private static void addResult(MetricResult<?> result, StringBuilder builder) {
+        if (result instanceof FileResult<?> fileResult) {
+            builder.append(
+                    String.format("%n%4s => %-40s", "", fileResult.label()));
+
+            fileResult.value().forEach((k, v) -> builder.append(
+                    String.format("%n%9s - %-36s: %-40s", "", k, v + " " + fileResult.unitLabel())));
+        } else {
+            builder.append(
+                    String.format("%n%4s => %-40s: %-40s", "", result.label(), result.value() + " " + result.unitLabel()));
+        }
+        builder.append("\n");
+    }
 }

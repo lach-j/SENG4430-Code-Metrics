@@ -10,13 +10,13 @@ import java.util.List;
 
 public class ProjectParser {
 
-  public static List<ParseResult<CompilationUnit>> parse(Path rootPath) throws IOException {
-    SourceRoot sourceRoot = new SourceRoot(rootPath);
+    public static List<ParseResult<CompilationUnit>> parse(Path rootPath) throws IOException {
+        SourceRoot sourceRoot = new SourceRoot(rootPath);
 
-    return sourceRoot.tryToParse();
-  }
+        return sourceRoot.tryToParse();
+    }
 
-  public static List<ParseResult<CompilationUnit>> parse(String rootPathString) throws IOException {
-    return parse(Path.of(rootPathString));
-  }
+    public static List<ParseResult<CompilationUnit>> parse(String rootPathString) throws IOException {
+        return parse(Path.of(rootPathString));
+    }
 }

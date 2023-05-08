@@ -1,36 +1,41 @@
+import metricProviders.FileResult;
 import metricProviders.MetricResult;
+import metricProviders.MetricResultSet;
+import metricProviders.SummaryResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class StringRenderTest {
     @Test
     public void stringRenderTest() {
-        var aResults = new HashMap<String, MetricResult<?>>() {
-            {
-                put("a", new MetricResult<>("Longest Word", "Test Word"));
-                put("b", new MetricResult<>("Biggest Number", 1234));
-                put("c", new MetricResult<>("Download Speed", 32.68, "Mbps"));
-            }
-        };
-        var bResults = new HashMap<String, MetricResult<?>>() {
-            {
-                put("a", new MetricResult<>("Shortest Word", "a"));
-                put("b", new MetricResult<>("Speed of Sound", 343, "m/s"));
-                put("c", new MetricResult<>("Boolean Metric", false));
-                put("d", new MetricResult<>("Upload Speed", 15.28, "Mbps"));
-            }
-        };
+        var aResults = new MetricResultSet("First Set of Metrics");
+        aResults
+                .addResult("a", new SummaryResult<>("Longest Word", "Test Word"))
+                .addResult("b", new SummaryResult<>("Biggest Number", 1234))
+                .addResult("c", new SummaryResult<>("Download Speed", 32.68, "Mbps"));
 
-        var allMetricResults = new HashMap<String, Map<String, MetricResult<?>>>() {
-            {
-                put("First Set of Metrics", aResults);
-                put("Second Set of Metrics", bResults);
-            }
-        };
+        var bResults = new MetricResultSet("Second Set of Metrics");
+        bResults
+                .addResult("a", new SummaryResult<>("Shortest Word", "a"))
+                .addResult("b", new SummaryResult<>("Speed of Sound", 343, "m/s"))
+                .addResult("c", new SummaryResult<>("Boolean Metric", false))
+                .addResult("d", new SummaryResult<>("Upload Speed", 15.28, "Mbps"));
+
+        var fileResults = new FileResult<Integer>("File Based Metric");
+        bResults.addResult("e", fileResults);
+        fileResults
+                .addResult("TestFile1.java", 234)
+                .addResult("TestFile3.java", 2)
+                .addResult("OtherFile.java", 12)
+                .addResult("OneMoreFile.java", 10);
+
+
+        var allMetricResults = new ArrayList<MetricResultSet>();
+        allMetricResults.add(aResults);
+        allMetricResults.add(bResults);
 
         var renderedResult = new StringResultsRenderer().render(allMetricResults);
 
@@ -44,6 +49,11 @@ public class StringRenderTest {
                      => Speed of Sound                          : 343 m/s
                      => Boolean Metric                          : false
                      => Upload Speed                            : 15.28 Mbps
+                     => File Based Metric
+                          - OtherFile.java                      : 12
+                          - TestFile1.java                      : 234
+                          - TestFile3.java                      : 2
+                          - OneMoreFile.java                    : 10
                      """;
 
         Assertions.assertEquals(makeUniform(expected), makeUniform(renderedResult));

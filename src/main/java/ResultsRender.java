@@ -1,7 +1,9 @@
-import metricProviders.MetricResult;
+import metricProviders.MetricResultSet;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 
 public interface ResultsRender<T> {
-  T render(Map<String, Map<String, MetricResult<?>>> results);
+    T render(Collection<MetricResultSet> results);
 }

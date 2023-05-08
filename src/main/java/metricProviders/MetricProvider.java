@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MetricProvider {
-  Map<String, MetricResult<?>> runAnalysis(List<ParseResult<CompilationUnit>> parseResults);
+    MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults);
 
-  String metricName();
+    String metricName();
 }
