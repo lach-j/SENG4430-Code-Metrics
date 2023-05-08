@@ -10,13 +10,13 @@ import java.util.List;
 
 public class LengthOfIdentifiersTest {
 
-  @Test
-  public void returnsAverageNoOfChars() throws IOException {
-    var loiProvider = new LengthOfIdentifiersMetricProvider();
+    @Test
+    public void returnsAverageNoOfChars() throws IOException {
+        var loiProvider = new LengthOfIdentifiersMetricProvider();
 
-    List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-    var result = loiProvider.runAnalysis(parseResults);
+        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
+        var result = loiProvider.runAnalysis(parseResults);
 
-    Assertions.assertEquals(7.166666666666667, result.getSummaryResult("avgId").value());
-  }
+        Assertions.assertEquals(7.166666666666667, result.getResult("avgId").value());
+    }
 }

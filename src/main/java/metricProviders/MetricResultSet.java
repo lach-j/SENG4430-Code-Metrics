@@ -1,6 +1,8 @@
 package metricProviders;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MetricResultSet {
@@ -11,41 +13,22 @@ public class MetricResultSet {
         this.metricName = metricName;
     }
 
-    private final Map<String, MetricResult<?>> summaryResults = new HashMap<>();
-    private final Map<String, Map<String, MetricResult<?>>> fileResults = new HashMap<>();
+    private final Map<String, MetricResult<?>> results = new HashMap<>();
 
-    public MetricResultSet addSummaryResult(String resultKey, MetricResult<?> result) {
-        summaryResults.put(resultKey, result);
+    public Map<String, MetricResult<?>> getResults() {
+        return results;
+    }
+
+    public MetricResult<?> getResult(String key) {
+        return results.get(key);
+    }
+
+    public MetricResultSet addResult(String key, MetricResult<?> result) {
+        this.results.put(key, result);
         return this;
-    }
-
-    public Map<String, MetricResult<?>> getSummaryResults() {
-        return summaryResults;
-    }
-
-    public MetricResult<?> getSummaryResult(String metricKey) {
-        return summaryResults.get(metricKey);
-    }
-
-    public Map<String, MetricResult<?>> getFileResult(String metricKey) {
-        return fileResults.get(metricKey);
-    }
-
-    public Map<String, Map<String, MetricResult<?>>> getFileResults() {
-        return fileResults;
     }
 
     public String getMetricName() {
         return metricName;
-    }
-
-    public MetricResultSet addFileResult(String resultKey, String fileName, MetricResult<?> result) {
-        if (!fileResults.containsKey(resultKey))
-            fileResults.put(resultKey, new HashMap<>());
-
-        var resultsMap = fileResults.get(resultKey);
-
-        resultsMap.put(fileName, result);
-        return this;
     }
 }

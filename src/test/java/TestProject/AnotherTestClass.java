@@ -1,13 +1,14 @@
 package TestProject;
 
 import java.io.File;
+
 /**
  * This is a test class
  *
- * @author      Lachlan Johnson
- * @author      Finbar Laffan
- * @version     %I%, %G%
- * @since       1.0
+ * @author Lachlan Johnson
+ * @author Finbar Laffan
+ * @version %I%, %G%
+ * @since 1.0
  */
 public class AnotherTestClass {
 

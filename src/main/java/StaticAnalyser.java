@@ -13,24 +13,24 @@ import java.util.Map;
 
 public class StaticAnalyser {
 
-  private final List<ParseResult<CompilationUnit>> ParsingResults;
+    private final List<ParseResult<CompilationUnit>> ParsingResults;
 
-  public StaticAnalyser(Path projectRoot) throws IOException {
-    ParsingResults = ProjectParser.parse(projectRoot);
-  }
-
-  public StaticAnalyser(String projectRoot) throws IOException {
-    this(Path.of(projectRoot));
-  }
-
-  public Map<String, MetricResultSet> runAnalysis(List<MetricProvider> providers) {
-    var analysisResults = new HashMap<String, MetricResultSet>();
-
-    for (var provider : providers) {
-      var results = provider.runAnalysis(ParsingResults);
-      analysisResults.put(provider.metricName(), results);
+    public StaticAnalyser(Path projectRoot) throws IOException {
+        ParsingResults = ProjectParser.parse(projectRoot);
     }
 
-    return analysisResults;
-  }
+    public StaticAnalyser(String projectRoot) throws IOException {
+        this(Path.of(projectRoot));
+    }
+
+    public Map<String, MetricResultSet> runAnalysis(List<MetricProvider> providers) {
+        var analysisResults = new HashMap<String, MetricResultSet>();
+
+        for (var provider : providers) {
+            var results = provider.runAnalysis(ParsingResults);
+            analysisResults.put(provider.metricName(), results);
+        }
+
+        return analysisResults;
+    }
 }

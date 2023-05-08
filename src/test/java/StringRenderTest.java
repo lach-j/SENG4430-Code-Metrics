@@ -1,5 +1,7 @@
+import metricProviders.FileResult;
 import metricProviders.MetricResult;
 import metricProviders.MetricResultSet;
+import metricProviders.SummaryResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,20 +12,25 @@ public class StringRenderTest {
     @Test
     public void stringRenderTest() {
         var aResults = new MetricResultSet("First Set of Metrics");
-        aResults.addSummaryResult("a", new MetricResult<>("Longest Word", "Test Word"));
-        aResults.addSummaryResult("b", new MetricResult<>("Biggest Number", 1234));
-        aResults.addSummaryResult("c", new MetricResult<>("Download Speed", 32.68, "Mbps"));
+        aResults
+                .addResult("a", new SummaryResult<>("Longest Word", "Test Word"))
+                .addResult("b", new SummaryResult<>("Biggest Number", 1234))
+                .addResult("c", new SummaryResult<>("Download Speed", 32.68, "Mbps"));
 
         var bResults = new MetricResultSet("Second Set of Metrics");
-        bResults.addSummaryResult("a", new MetricResult<>("Shortest Word", "a"));
-        bResults.addSummaryResult("b", new MetricResult<>("Speed of Sound", 343, "m/s"));
-        bResults.addSummaryResult("c", new MetricResult<>("Boolean Metric", false));
-        bResults.addSummaryResult("d", new MetricResult<>("Upload Speed", 15.28, "Mbps"));
+        bResults
+                .addResult("a", new SummaryResult<>("Shortest Word", "a"))
+                .addResult("b", new SummaryResult<>("Speed of Sound", 343, "m/s"))
+                .addResult("c", new SummaryResult<>("Boolean Metric", false))
+                .addResult("d", new SummaryResult<>("Upload Speed", 15.28, "Mbps"));
 
-        bResults.addFileResult("e", "TestFile1.java", new MetricResult<>("File Based Metric", 234));
-        bResults.addFileResult("e", "TestFile3.java", new MetricResult<>("File Based Metric", 2));
-        bResults.addFileResult("e", "OtherFile.java", new MetricResult<>("File Based Metric", 12));
-        bResults.addFileResult("e", "OneMoreFile.java", new MetricResult<>("File Based Metric", 10));
+        var fileResults = new FileResult<Integer>("File Based Metric");
+        bResults.addResult("e", fileResults);
+        fileResults
+                .addResult("TestFile1.java", 234)
+                .addResult("TestFile3.java", 2)
+                .addResult("OtherFile.java", 12)
+                .addResult("OneMoreFile.java", 10);
 
 
         var allMetricResults = new ArrayList<MetricResultSet>();
