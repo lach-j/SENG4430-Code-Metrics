@@ -21,51 +21,47 @@ public class LCOMMetricProvider implements MetricProvider {
         MetricResultSet resultSet = new MetricResultSet(metricName());
         for (ParseResult<CompilationUnit> parseResult : parseResults) {
             CompilationUnit cu = parseResult.getResult().get();
-            LCOMVisitor visitor = new LCOMVisitor();
-            FileResult<Integer> fileResult = new FileResult<>(metricName());
-            visitor.visit(cu, fileResult);
-            resultSet.addResult(cu.toString(), fileResult);
+            for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+//                LCOMVisitor visitor = new LCOMVisitor();
+                SummaryResult<Integer> summaryResult = new SummaryResult<>("", 0, "");
+                LCOMCalculator(clazz, resultSet);
+            }
         }
         return resultSet;
     }
 
-    private static class LCOMVisitor extends VoidVisitorAdapter<FileResult<Integer>> {
+    public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
+        Map<String, Set<String>> methodMap = new HashMap<>();
 
-        @Override
-        public void visit(ClassOrInterfaceDeclaration clazz, FileResult<Integer> fileResult) {
-            Map<String, Set<String>> methodMap = new HashMap<>();
-
-            for (MethodDeclaration method : clazz.getMethods()) {
-                methodMap.put(method.getNameAsString(), new HashSet<>());
-            }
-
-            for (FieldDeclaration field : clazz.getFields()) {
-                String fieldName = field.getVariable(0).getNameAsString();
-                for (MethodDeclaration method : clazz.getMethods()) {
-                    if (method.getBody().isPresent()) {
-                        String methodBody = method.getBody().get().toString();
-                        if (methodBody.contains(fieldName)) {
-                            methodMap.get(method.getNameAsString()).add(fieldName);
-                        }
-                    }
-                }
-            }
-
-            int lcom = 0;
-            for (String methodName : methodMap.keySet()) {
-                Set<String> fieldsUsed = methodMap.get(methodName);
-                for (String otherMethodName : methodMap.keySet()) {
-                    if (!methodName.equals(otherMethodName)) {
-                        Set<String> otherFieldsUsed = methodMap.get(otherMethodName);
-                        if (!fieldsUsed.stream().anyMatch(otherFieldsUsed::contains)) {
-                            lcom ++;
-                        }
-                    }
-                }
-            }
-
-            fileResult.addResult(clazz.getNameAsString(), lcom);
-            super.visit(clazz, fileResult);
+        for (MethodDeclaration method : clazz.getMethods()) {
+            methodMap.put(method.getNameAsString(), new HashSet<>());
         }
+
+        for (FieldDeclaration field : clazz.getFields()) {
+            String fieldName = field.getVariable(0).getNameAsString();
+            for (MethodDeclaration method : clazz.getMethods()) {
+                if (method.getBody().isPresent()) {
+                    String methodBody = method.getBody().get().toString();
+                    if (methodBody.contains(fieldName)) {
+                        methodMap.get(method.getNameAsString()).add(fieldName);
+                    }
+                }
+            }
+        }
+
+        int lcom = 0;
+        for (String methodName : methodMap.keySet()) {
+            Set<String> fieldsUsed = methodMap.get(methodName);
+            for (String otherMethodName : methodMap.keySet()) {
+                if (!methodName.equals(otherMethodName)) {
+                    Set<String> otherFieldsUsed = methodMap.get(otherMethodName);
+                    if (!fieldsUsed.stream().anyMatch(otherFieldsUsed::contains)) {
+                        lcom ++;
+                    }
+                }
+            }
+        }
+
+        resultSet.addResult(clazz.getNameAsString(), new SummaryResult<>(metricName(), lcom, "LCOM Score"));
     }
 }
