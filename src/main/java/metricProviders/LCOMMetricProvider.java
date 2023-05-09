@@ -22,8 +22,6 @@ public class LCOMMetricProvider implements MetricProvider {
         for (ParseResult<CompilationUnit> parseResult : parseResults) {
             CompilationUnit cu = parseResult.getResult().get();
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-//                LCOMVisitor visitor = new LCOMVisitor();
-                SummaryResult<Integer> summaryResult = new SummaryResult<>("", 0, "");
                 LCOMCalculator(clazz, resultSet);
             }
         }
