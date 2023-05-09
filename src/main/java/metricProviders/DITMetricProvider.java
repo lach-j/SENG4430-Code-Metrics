@@ -41,28 +41,4 @@ public class DITMetricProvider implements MetricProvider {
         }
         resultSet.addResult(clazz.getNameAsString(), new SummaryResult<>(metricName(), depth, "Inheritance Depth"));
     }
-
-    private static class DepthOfInheritanceTreeVisitor extends VoidVisitorAdapter<FileResult<Integer>> {
-        @Override
-        public void visit(ClassOrInterfaceDeclaration clazz, FileResult<Integer> fileResult) {
-            if (!clazz.isInterface()) {
-                int depth = getDepthOfInheritanceTree(clazz);
-                fileResult.addResult(clazz.getNameAsString(), depth);
-            }
-            super.visit(clazz, fileResult);
-        }
-
-        private int getDepthOfInheritanceTree(ClassOrInterfaceDeclaration clazz) {
-            int depth = 0;
-            Optional<Node> parentNode = clazz.getParentNode();
-            while (parentNode.isPresent()) {
-                Node parent = parentNode.get();
-                if (parent instanceof ClassOrInterfaceDeclaration) {
-                    depth++;
-                }
-                parentNode = parent.getParentNode();
-            }
-            return depth;
-        }
-    }
 }
