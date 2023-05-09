@@ -9,6 +9,11 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.*;
 
+/**
+ * Class that provides metric score for Lack of Cohesion in Methods
+ *
+ * @author Keenan Groves
+ */
 public class LCOMMetricProvider implements MetricProvider {
 
     @Override
