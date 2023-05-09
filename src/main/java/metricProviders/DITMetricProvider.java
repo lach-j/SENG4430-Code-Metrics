@@ -4,11 +4,15 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Class that provides metric results for the depth of the inheritance tree for all passed classes
+ *
+ * @author Keenan Groves
+ */
 public class DITMetricProvider implements MetricProvider {
     @Override
     public String metricName() {
