@@ -1,6 +1,6 @@
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import metricProviders.DepthOfInheritanceTreeMetricProvider;
+import metricProviders.DITMetricProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import parsing.ProjectParser;
@@ -12,7 +12,7 @@ public class DepthOfInheritanceTreeTest {
 
     @Test
     public void acceptableDepthOfInheritance() throws IOException {
-        var ditProvider = new DepthOfInheritanceTreeMetricProvider();
+        var ditProvider = new DITMetricProvider();
 
         List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
         var result = ditProvider.runAnalysis(parseResults);
