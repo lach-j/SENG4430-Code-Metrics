@@ -1,12 +1,15 @@
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import metricProviders.DITMetricProvider;
+import metricProviders.MetricResult;
+import metricProviders.SummaryResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import parsing.ProjectParser;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class DepthOfInheritanceTreeTest {
 
@@ -15,8 +18,11 @@ public class DepthOfInheritanceTreeTest {
         var ditProvider = new DITMetricProvider();
 
         List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        var result = ditProvider.runAnalysis(parseResults);
-        Assertions.assertEquals(1, 1);
+        var result = ditProvider.runAnalysis(parseResults).getResults();
+        for (Map.Entry<String, MetricResult<?>> r : result.entrySet()) {
+            Integer score = (Integer)r.getValue().value();
+            Assertions.assertTrue((score < 5), (r.getKey() + " has too many inheritance layers! (" + r.getValue().value() + ")"));
+        }
     }
 
 }
