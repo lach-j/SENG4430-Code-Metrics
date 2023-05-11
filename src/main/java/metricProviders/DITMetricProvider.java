@@ -33,6 +33,7 @@ public class DITMetricProvider implements MetricProvider {
 
     public void DITCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
         int depth = 0;
+        ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "layers");
         if (!clazz.isInterface()) {
             Optional<Node> parentNode = clazz.getParentNode();
             while (parentNode.isPresent()) {
@@ -43,6 +44,7 @@ public class DITMetricProvider implements MetricProvider {
                 parentNode = parent.getParentNode();
             }
         }
-        resultSet.addResult(clazz.getNameAsString(), new SummaryResult<>(metricName(), depth, "Inheritance Depth"));
+        result.addResult(clazz.getNameAsString(), depth);
+        resultSet.addResult(clazz.getNameAsString(), result);
     }
 }

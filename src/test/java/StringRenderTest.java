@@ -1,5 +1,4 @@
-import metricProviders.FileResult;
-import metricProviders.MetricResult;
+import metricProviders.ClassResult;
 import metricProviders.MetricResultSet;
 import metricProviders.SummaryResult;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +23,7 @@ public class StringRenderTest {
                 .addResult("c", new SummaryResult<>("Boolean Metric", false))
                 .addResult("d", new SummaryResult<>("Upload Speed", 15.28, "Mbps"));
 
-        var fileResults = new FileResult<Integer>("File Based Metric");
+        var fileResults = new ClassResult<Integer>("File Based Metric");
         bResults.addResult("e", fileResults);
         fileResults
                 .addResult("TestFile1.java", 234)
