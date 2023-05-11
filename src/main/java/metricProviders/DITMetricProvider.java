@@ -14,6 +14,9 @@ import java.util.Optional;
  * @author Keenan Groves
  */
 public class DITMetricProvider implements MetricProvider {
+    private int clazzCount = 0;
+    private int totalDepth = 0;
+
     @Override
     public String metricName() {
         return "Depth of Inheritance Tree";
@@ -28,12 +31,13 @@ public class DITMetricProvider implements MetricProvider {
                 DITCalculator(clazz, resultSet);
             }
         }
+        resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", totalDepth/clazzCount, "Layers"));
         return resultSet;
     }
 
     public void DITCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
         int depth = 0;
-        ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "layers");
+        ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "Layers");
         if (!clazz.isInterface()) {
             Optional<Node> parentNode = clazz.getParentNode();
             while (parentNode.isPresent()) {
@@ -44,7 +48,13 @@ public class DITMetricProvider implements MetricProvider {
                 parentNode = parent.getParentNode();
             }
         }
+        averageTracker(depth);
         result.addResult(clazz.getNameAsString(), depth);
         resultSet.addResult(clazz.getNameAsString(), result);
+    }
+
+    private void averageTracker(int depth) {
+        totalDepth += depth;
+        clazzCount++;
     }
 }

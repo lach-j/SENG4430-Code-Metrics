@@ -23,10 +23,7 @@ public class DepthOfInheritanceTreeTest {
 
         List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
         var result = ditProvider.runAnalysis(parseResults).getResults();
-        for (Map.Entry<String, MetricResult<?>> r : result.entrySet()) {
-            Integer score = (Integer)r.getValue().value();
-            Assertions.assertTrue((score < 5), (r.getKey() + " has too many inheritance layers! (" + r.getValue().value() + ")"));
-        }
+        Assertions.assertEquals(result.get("avgDepth").value(), 0);
     }
 
 }
