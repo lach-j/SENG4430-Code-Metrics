@@ -15,6 +15,8 @@ import java.util.*;
  * @author Keenan Groves
  */
 public class LCOMMetricProvider implements MetricProvider {
+    private int clazzCount = 0;
+    private int totalLCOM = 0;
 
     @Override
     public String metricName() {
@@ -30,11 +32,13 @@ public class LCOMMetricProvider implements MetricProvider {
                 LCOMCalculator(clazz, resultSet);
             }
         }
+        resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", totalLCOM/clazzCount));
         return resultSet;
     }
 
     public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
         Map<String, Set<String>> methodMap = new HashMap<>();
+        FileResult result = new FileResult<>(clazz.getNameAsString(), "LCOM Score");
 
         for (MethodDeclaration method : clazz.getMethods()) {
             methodMap.put(method.getNameAsString(), new HashSet<>());
@@ -64,7 +68,13 @@ public class LCOMMetricProvider implements MetricProvider {
                 }
             }
         }
+        averageTracker(lcom);
+        result.addResult(clazz.getNameAsString(), lcom);
+        resultSet.addResult(clazz.getNameAsString(), result);
+    }
 
-        resultSet.addResult(clazz.getNameAsString(), new SummaryResult<>(metricName(), lcom, "LCOM Score"));
+    private void averageTracker(int lcom) {
+        totalLCOM += lcom;
+        clazzCount++;
     }
 }

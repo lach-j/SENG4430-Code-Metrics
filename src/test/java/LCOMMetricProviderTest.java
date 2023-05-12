@@ -23,9 +23,6 @@ public class LCOMMetricProviderTest {
 
         List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
         var result = lcomProvider.runAnalysis(parseResults).getResults();
-        for(Map.Entry<String, MetricResult<?>> r : result.entrySet()) {
-            Integer score = (Integer) r.getValue().value();
-            Assertions.assertTrue((score == 0), (r.getKey() + " has an LCOM score of higher than zero! (" + r.getValue().value() + ") The lower the score, the better!"));
-        }
+        Assertions.assertEquals(result.get("avgLCOM").value(),  0);
     }
 }
