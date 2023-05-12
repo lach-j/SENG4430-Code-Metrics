@@ -38,7 +38,7 @@ public class LCOMMetricProvider implements MetricProvider {
 
     public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
         Map<String, Set<String>> methodMap = new HashMap<>();
-        FileResult result = new FileResult<>(clazz.getNameAsString(), "LCOM Score");
+        ClassResult result = new ClassResult(clazz.getNameAsString(), "LCOM Score");
 
         for (MethodDeclaration method : clazz.getMethods()) {
             methodMap.put(method.getNameAsString(), new HashSet<>());
