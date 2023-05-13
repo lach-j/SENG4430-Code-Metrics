@@ -1,4 +1,5 @@
 import metricProviders.FileResult;
+import metricProviders.MethodResult;
 import metricProviders.MetricResult;
 import metricProviders.MetricResultSet;
 
@@ -27,6 +28,17 @@ public class StringResultsRenderer implements ResultsRender<String> {
 
             fileResult.value().forEach((k, v) -> builder.append(
                     String.format("%n%9s - %-36s: %-40s", "", k, v + " " + fileResult.unitLabel())));
+        } else if (result instanceof MethodResult<?> methodResult) {
+            builder.append(
+                    String.format("%n%4s => %-40s", "", methodResult.label()));
+
+            methodResult.value().forEach((k, v) -> {
+                builder.append(
+                        String.format("%n%9s - %-36s", "", k));
+
+                v.forEach((method, valueResult) ->                 builder.append(
+                        String.format("%n%14s - %-31s: %-40s", "", method, valueResult + " " + methodResult.unitLabel())));
+            });
         } else {
             builder.append(
                     String.format("%n%4s => %-40s: %-40s", "", result.label(), result.value() + " " + result.unitLabel()));

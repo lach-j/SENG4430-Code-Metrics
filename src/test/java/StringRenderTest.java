@@ -1,5 +1,5 @@
 import metricProviders.FileResult;
-import metricProviders.MetricResult;
+import metricProviders.MethodResult;
 import metricProviders.MetricResultSet;
 import metricProviders.SummaryResult;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +16,19 @@ public class StringRenderTest {
                 .addResult("a", new SummaryResult<>("Longest Word", "Test Word"))
                 .addResult("b", new SummaryResult<>("Biggest Number", 1234))
                 .addResult("c", new SummaryResult<>("Download Speed", 32.68, "Mbps"));
+
+        var methodResults = new MethodResult<Integer>("Testing Method Metric Result");
+        methodResults
+                .addResult("TestClass", "doSomething", 1)
+                .addResult("TestClass", "complete", 4)
+                .addResult("TestClass2", "start", 66)
+                .addResult("TestClass2", "stop", 1000)
+                .addResult("TestClass2", "dispose", 9)
+                .addResult("TestClass2", "render", 2)
+                .addResult("TestClass3", "main", 12)
+                .addResult("TestClass4", "main", 10);
+        aResults.addResult("d", methodResults);
+
 
         var bResults = new MetricResultSet("Second Set of Metrics");
         bResults
@@ -44,6 +57,19 @@ public class StringRenderTest {
                      => Longest Word                            : Test Word
                      => Biggest Number                          : 1234
                      => Download Speed                          : 32.68 Mbps
+                     => Testing Method Metric Result
+                          - TestClass4
+                               - main                           : 10
+                          - TestClass
+                               - doSomething                    : 1
+                               - complete                       : 4
+                          - TestClass3
+                               - main                           : 12
+                          - TestClass2
+                               - stop                           : 1000
+                               - start                          : 66
+                               - dispose                        : 9
+                               - render                         : 2
                 Second Set of Metrics
                      => Shortest Word                           : a
                      => Speed of Sound                          : 343 m/s
