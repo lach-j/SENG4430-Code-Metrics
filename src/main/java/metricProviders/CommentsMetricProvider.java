@@ -1,6 +1,5 @@
 package metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -23,7 +22,7 @@ public class CommentsMetricProvider implements MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
         List<MethodDeclaration> methods = new ArrayList<>();
         List<Comment> comments = new ArrayList<>();
@@ -32,14 +31,13 @@ public class CommentsMetricProvider implements MetricProvider {
         int hasAuthorCount = 0;
         for (var parseResult : parseResults) {
             fileCount++;
-            var cu = parseResult.getResult().orElse(null);
-            if (cu == null) continue;
+            if (parseResult == null) continue;
             VoidVisitor<List<MethodDeclaration>> methodVisitor = new MethodVisitor();
-            if (hasAuthor(cu.getAllContainedComments())) {
+            if (hasAuthor(parseResult.getAllContainedComments())) {
                 hasAuthorCount++;
             }
-            comments.addAll(cu.getAllContainedComments());
-            methodVisitor.visit(cu, methods);
+            comments.addAll(parseResult.getAllContainedComments());
+            methodVisitor.visit(parseResult, methods);
             commentMethodPairs.addAll(getCommentMethodPairs(comments));
         }
 

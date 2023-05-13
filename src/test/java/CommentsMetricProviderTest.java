@@ -1,8 +1,9 @@
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import org.junit.jupiter.api.BeforeAll;
 import metricProviders.CommentsMetricProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import metricProviders.MetricResultSet;
 import parsing.ProjectParser;
 
 import java.io.IOException;
@@ -10,48 +11,37 @@ import java.util.List;
 
 public class CommentsMetricProviderTest {
 
-    @Test
-    public void returnsTotalComments() throws IOException {
+    @BeforeAll
+    public static void arrange() throws IOException {
         var cmProvider = new CommentsMetricProvider();
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/TestProject");
+        resultSet = cmProvider.runAnalysis(parseResults, null);
+    }
 
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        var result = cmProvider.runAnalysis(parseResults);
-        Assertions.assertEquals(5, result.getResult("totalId").value());
+    private static MetricResultSet resultSet;
+
+    @Test
+    public void returnsTotalComments() {
+        Assertions.assertEquals(5, resultSet.getResult("totalId").value());
     }
 
     @Test
-    public void returnsAuthorJavaDocCoverage() throws IOException {
-        var cmProvider = new CommentsMetricProvider();
-
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        var result = cmProvider.runAnalysis(parseResults);
-        Assertions.assertEquals(2, result.getResult("authorJavaDocCoverage").value());
+    public void returnsAuthorJavaDocCoverage() {
+        Assertions.assertEquals(2, resultSet.getResult("authorJavaDocCoverage").value());
     }
 
     @Test
-    public void returnsOverallJavadocCoverage() throws IOException {
-        var cmProvider = new CommentsMetricProvider();
-
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        var result = cmProvider.runAnalysis(parseResults);
-        Assertions.assertEquals("9/5", result.getResult("javaDocMethodCoverage").value());
+    public void returnsOverallJavadocCoverage() {
+        Assertions.assertEquals("9/5", resultSet.getResult("javaDocMethodCoverage").value());
     }
 
     @Test
-    public void returnsFileCount() throws IOException {
-        var cmProvider = new CommentsMetricProvider();
-
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        var result = cmProvider.runAnalysis(parseResults);
-        Assertions.assertEquals(3, result.getResult("fileCount").value());
+    public void returnsFileCount() {
+        Assertions.assertEquals(3, resultSet.getResult("fileCount").value());
     }
 
     @Test
-    public void returnsFogIndex() throws IOException {
-        var cmProvider = new CommentsMetricProvider();
-
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        var result = cmProvider.runAnalysis(parseResults);
-        Assertions.assertEquals(15.509810671256455, result.getResult("fogIndex").value());
+    public void returnsFogIndex() {
+        Assertions.assertEquals(15.509810671256455, resultSet.getResult("fogIndex").value());
     }
 }

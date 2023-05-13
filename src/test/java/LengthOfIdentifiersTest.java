@@ -1,4 +1,3 @@
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import metricProviders.LengthOfIdentifiersMetricProvider;
 import org.junit.jupiter.api.Assertions;
@@ -14,8 +13,8 @@ public class LengthOfIdentifiersTest {
     public void returnsAverageNoOfChars() throws IOException {
         var loiProvider = new LengthOfIdentifiersMetricProvider();
 
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        var result = loiProvider.runAnalysis(parseResults);
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/TestProject");
+        var result = loiProvider.runAnalysis(parseResults, null);
 
         Assertions.assertEquals(7.166666666666667, result.getResult("avgId").value());
     }
