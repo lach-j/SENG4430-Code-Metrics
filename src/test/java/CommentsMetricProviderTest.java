@@ -1,8 +1,8 @@
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.BeforeAll;
-import seng4430.metricProviders.CommentsMetricProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import seng4430.metricProviders.CommentsMetricProvider;
 import seng4430.metricProviders.MetricResultSet;
 import seng4430.parsing.ProjectParser;
 

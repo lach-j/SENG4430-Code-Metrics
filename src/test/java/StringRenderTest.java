@@ -1,12 +1,12 @@
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import seng4430.StringResultsRenderer;
 import seng4430.metricProviders.ClassResult;
 import seng4430.metricProviders.MethodResult;
 import seng4430.metricProviders.MetricResultSet;
 import seng4430.metricProviders.SummaryResult;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class StringRenderTest {

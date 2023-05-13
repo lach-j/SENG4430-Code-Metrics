@@ -1,12 +1,8 @@
 package seng4430.metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import seng4430.metricProviders.ClassResult;
-import seng4430.metricProviders.MetricProvider;
-import seng4430.metricProviders.MetricResultSet;
 
 import java.util.List;
 import java.util.Optional;

@@ -3,7 +3,10 @@ package seng4430.metricProviders;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FanInMetricProvider extends MetricProvider {
 
