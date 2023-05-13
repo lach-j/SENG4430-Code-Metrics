@@ -10,6 +10,6 @@ public abstract class MetricProvider {
     public abstract String metricName();
 
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults) {
-        return this.runAnalysis(parseResults);
+        return this.runAnalysis(parseResults, null);
     }
 }
