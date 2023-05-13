@@ -1,4 +1,4 @@
-import metricProviders.FileResult;
+import metricProviders.ClassResult;
 import metricProviders.MetricResult;
 import metricProviders.MetricResultSet;
 
@@ -21,7 +21,7 @@ public class StringResultsRenderer implements ResultsRender<String> {
     }
 
     private static void addResult(MetricResult<?> result, StringBuilder builder) {
-        if (result instanceof FileResult<?> fileResult) {
+        if (result instanceof ClassResult<?> fileResult) {
             builder.append(
                     String.format("%n%4s => %-40s", "", fileResult.label()));
 
