@@ -7,7 +7,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 
 import java.util.*;
 
-public class FanOutMetricProvider implements MetricProvider {
+public class FanOutMetricProvider extends MetricProvider {
 
     private final Map<String, Map<String, Integer>> totalFanOut = new HashMap<>();
     private final Map<String, Map<String, Integer>> uniqueFanOut = new HashMap<>();

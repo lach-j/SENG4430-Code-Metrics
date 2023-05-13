@@ -1,6 +1,6 @@
 package seng4430;
 
-import seng4430.metricProviders.FileResult;
+import seng4430.metricProviders.ClassResult;
 import seng4430.metricProviders.MethodResult;
 import seng4430.metricProviders.MetricResult;
 import seng4430.metricProviders.MetricResultSet;
@@ -24,12 +24,12 @@ public class StringResultsRenderer implements ResultsRender<String> {
     }
 
     private static void addResult(MetricResult<?> result, StringBuilder builder) {
-        if (result instanceof FileResult<?> fileResult) {
+        if (result instanceof ClassResult<?> classResult) {
             builder.append(
-                    String.format("%n%4s => %-40s", "", fileResult.label()));
+                    String.format("%n%4s => %-40s", "", classResult.label()));
 
-            fileResult.value().forEach((k, v) -> builder.append(
-                    String.format("%n%9s - %-36s: %-40s", "", k, v + " " + fileResult.unitLabel())));
+            classResult.value().forEach((k, v) -> builder.append(
+                    String.format("%n%9s - %-36s: %-40s", "", k, v + " " + classResult.unitLabel())));
         } else if (result instanceof MethodResult<?> methodResult) {
             builder.append(
                     String.format("%n%4s => %-40s", "", methodResult.label()));

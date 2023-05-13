@@ -10,7 +10,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 
 import java.util.*;
 
-public class LengthOfIdentifiersMetricProvider implements MetricProvider {
+public class LengthOfIdentifiersMetricProvider extends MetricProvider {
 
     @Override
     public String metricName() {

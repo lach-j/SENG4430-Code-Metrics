@@ -30,7 +30,7 @@ public class FanInTest {
     @Test
     public void providesCorrectTotalFanInResults() {
         if (!(results.getResult("totFanIn") instanceof MethodResult<?> methodResult)) {
-            Assertions.fail("totFanIn not an instance of FileResult");
+            Assertions.fail("totFanIn not an instance of MethodResult");
             return;
         }
 

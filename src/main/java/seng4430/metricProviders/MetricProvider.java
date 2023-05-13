@@ -4,8 +4,12 @@ import com.github.javaparser.ast.CompilationUnit;
 
 import java.util.List;
 
-public interface MetricProvider {
-    MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration);
+public abstract class MetricProvider {
+    public abstract MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration);
 
-    String metricName();
+    public abstract String metricName();
+
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults) {
+        return this.runAnalysis(parseResults);
+    }
 }

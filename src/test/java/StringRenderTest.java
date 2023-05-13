@@ -1,5 +1,5 @@
 import seng4430.StringResultsRenderer;
-import seng4430.metricProviders.FileResult;
+import seng4430.metricProviders.ClassResult;
 import seng4430.metricProviders.MethodResult;
 import seng4430.metricProviders.MetricResultSet;
 import seng4430.metricProviders.SummaryResult;
@@ -38,13 +38,13 @@ public class StringRenderTest {
                 .addResult("c", new SummaryResult<>("Boolean Metric", false))
                 .addResult("d", new SummaryResult<>("Upload Speed", 15.28, "Mbps"));
 
-        var fileResults = new FileResult<Integer>("File Based Metric");
-        bResults.addResult("e", fileResults);
-        fileResults
-                .addResult("TestFile1.java", 234)
-                .addResult("TestFile3.java", 2)
-                .addResult("OtherFile.java", 12)
-                .addResult("OneMoreFile.java", 10);
+        var classResults = new ClassResult<>("Class Based Metric");
+        bResults.addResult("e", classResults);
+        classResults
+                .addResult("TestClass1", 234)
+                .addResult("TestClass3", 2)
+                .addResult("OtherClass", 12)
+                .addResult("OneMoreClass", 10);
 
 
         var allMetricResults = new ArrayList<MetricResultSet>();
@@ -59,28 +59,28 @@ public class StringRenderTest {
                      => Biggest Number                          : 1234
                      => Download Speed                          : 32.68 Mbps
                      => Testing Method Metric Result
-                          - TestClass4
-                               - main                           : 10
                           - TestClass
                                - doSomething                    : 1
                                - complete                       : 4
-                          - TestClass3
-                               - main                           : 12
                           - TestClass2
-                               - stop                           : 1000
                                - start                          : 66
+                               - stop                           : 1000
                                - dispose                        : 9
                                - render                         : 2
+                          - TestClass3
+                               - main                           : 12
+                          - TestClass4
+                               - main                           : 10
                 Second Set of Metrics
                      => Shortest Word                           : a
                      => Speed of Sound                          : 343 m/s
                      => Boolean Metric                          : false
                      => Upload Speed                            : 15.28 Mbps
-                     => File Based Metric
-                          - OtherFile.java                      : 12
-                          - TestFile1.java                      : 234
-                          - TestFile3.java                      : 2
-                          - OneMoreFile.java                    : 10
+                     => Class Based Metric
+                          - TestClass1                          : 234
+                          - TestClass3                          : 2
+                          - OtherClass                          : 12
+                          - OneMoreClass                        : 10
                      """;
 
         Assertions.assertEquals(makeUniform(expected), makeUniform(renderedResult));

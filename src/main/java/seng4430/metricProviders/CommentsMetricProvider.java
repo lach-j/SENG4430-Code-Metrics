@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommentsMetricProvider implements MetricProvider {
+public class CommentsMetricProvider extends MetricProvider {
 
     @Override
     public String metricName() {

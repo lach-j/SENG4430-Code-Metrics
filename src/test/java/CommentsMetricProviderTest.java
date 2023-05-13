@@ -15,7 +15,7 @@ public class CommentsMetricProviderTest {
     public static void arrange() throws IOException {
         var cmProvider = new CommentsMetricProvider();
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/TestProject");
-        resultSet = cmProvider.runAnalysis(parseResults, null);
+        resultSet = cmProvider.runAnalysis(parseResults);
     }
 
     private static MetricResultSet resultSet;

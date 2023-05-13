@@ -22,7 +22,7 @@ public class FanOutTest {
         var loiProvider = new FanOutMetricProvider();
 
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/FanOutTestProject", "./src/test/java", "./src/main/java");
-        results = loiProvider.runAnalysis(parseResults, null);
+        results = loiProvider.runAnalysis(parseResults);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class FanOutTest {
     @Test
     public void providesCorrectTotalFanOutResults() {
         if (!(results.getResult("totFanOut") instanceof MethodResult<?> methodResult)) {
-            Assertions.fail("totFanOut not an instance of FileResult");
+            Assertions.fail("totFanOut not an instance of MethodResult");
             return;
         }
 
@@ -50,7 +50,7 @@ public class FanOutTest {
     @Test
     public void providesCorrectUniqueFanOutResults() {
         if (!(results.getResult("unqFanOut") instanceof MethodResult<?> methodResult)) {
-            Assertions.fail("unqFanOut not an instance of FileResult");
+            Assertions.fail("unqFanOut not an instance of MethodResult");
             return;
         }
 

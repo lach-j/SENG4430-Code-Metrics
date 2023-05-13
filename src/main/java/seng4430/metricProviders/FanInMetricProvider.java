@@ -5,7 +5,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 
 import java.util.*;
 
-public class FanInMetricProvider implements MetricProvider {
+public class FanInMetricProvider extends MetricProvider {
 
     private final Map<String, Map<String, Integer>> numMethodCalls = new HashMap<>();
 
