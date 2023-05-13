@@ -1,4 +1,4 @@
-package parsing;
+package seng4430.parsing;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;

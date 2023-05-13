@@ -1,8 +1,8 @@
 import com.github.javaparser.ast.CompilationUnit;
-import metricProviders.LengthOfIdentifiersMetricProvider;
+import seng4430.metricProviders.LengthOfIdentifiersMetricProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import parsing.ProjectParser;
+import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
 import java.util.List;

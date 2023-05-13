@@ -1,4 +1,4 @@
-package metricProviders;
+package seng4430.metricProviders;
 
 public class SummaryResult<T> extends MetricResult<T> {
     public SummaryResult(String resultLabel, T result) {

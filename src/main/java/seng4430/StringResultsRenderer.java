@@ -1,7 +1,9 @@
-import metricProviders.FileResult;
-import metricProviders.MethodResult;
-import metricProviders.MetricResult;
-import metricProviders.MetricResultSet;
+package seng4430;
+
+import seng4430.metricProviders.FileResult;
+import seng4430.metricProviders.MethodResult;
+import seng4430.metricProviders.MetricResult;
+import seng4430.metricProviders.MetricResultSet;
 
 import java.util.Collection;
 

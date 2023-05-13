@@ -1,8 +1,10 @@
+package seng4430;
+
 import com.github.javaparser.ast.CompilationUnit;
-import metricProviders.AnalysisConfiguration;
-import metricProviders.MetricProvider;
-import metricProviders.MetricResultSet;
-import parsing.ProjectParser;
+import seng4430.metricProviders.AnalysisConfiguration;
+import seng4430.metricProviders.MetricProvider;
+import seng4430.metricProviders.MetricResultSet;
+import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
 import java.util.HashMap;

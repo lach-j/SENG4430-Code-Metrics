@@ -1,13 +1,13 @@
 import com.github.javaparser.ast.CompilationUnit;
 
-import metricProviders.FanOutMetricProvider;
+import seng4430.metricProviders.FanOutMetricProvider;
 
-import metricProviders.MethodResult;
-import metricProviders.MetricResultSet;
+import seng4430.metricProviders.MethodResult;
+import seng4430.metricProviders.MetricResultSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import parsing.ProjectParser;
+import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
 import java.util.HashMap;

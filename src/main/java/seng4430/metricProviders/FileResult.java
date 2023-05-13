@@ -1,4 +1,4 @@
-package metricProviders;
+package seng4430.metricProviders;
 
 import java.util.HashMap;
 import java.util.Map;

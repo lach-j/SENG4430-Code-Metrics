@@ -1,4 +1,6 @@
-import metricProviders.MetricResultSet;
+package seng4430;
+
+import seng4430.metricProviders.MetricResultSet;
 
 import java.util.Collection;
 

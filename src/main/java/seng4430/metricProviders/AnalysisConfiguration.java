@@ -1,4 +1,4 @@
-package metricProviders;
+package seng4430.metricProviders;
 
 public class AnalysisConfiguration {
     private String[] basePackages;

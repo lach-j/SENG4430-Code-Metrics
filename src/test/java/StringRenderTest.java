@@ -1,7 +1,8 @@
-import metricProviders.FileResult;
-import metricProviders.MethodResult;
-import metricProviders.MetricResultSet;
-import metricProviders.SummaryResult;
+import seng4430.StringResultsRenderer;
+import seng4430.metricProviders.FileResult;
+import seng4430.metricProviders.MethodResult;
+import seng4430.metricProviders.MetricResultSet;
+import seng4430.metricProviders.SummaryResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

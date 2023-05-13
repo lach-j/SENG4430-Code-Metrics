@@ -1,10 +1,10 @@
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.BeforeAll;
-import metricProviders.CommentsMetricProvider;
+import seng4430.metricProviders.CommentsMetricProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import metricProviders.MetricResultSet;
-import parsing.ProjectParser;
+import seng4430.metricProviders.MetricResultSet;
+import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
 import java.util.List;
