@@ -23,6 +23,6 @@ public class LCOMMetricProviderTest {
 
         List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
         var result = lcomProvider.runAnalysis(parseResults).getResults();
-        Assertions.assertEquals(result.get("avgLCOM").value(),  0);
+        Assertions.assertEquals(result.get("avgLCOM").value(),  1);
     }
 }

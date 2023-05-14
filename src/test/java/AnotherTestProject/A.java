@@ -1,4 +1,4 @@
-package AnotherTestPackage;
+package AnotherTestProject;
 
 public class A {
     public void method1(){

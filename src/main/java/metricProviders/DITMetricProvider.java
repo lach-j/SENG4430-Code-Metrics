@@ -4,6 +4,9 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import javassist.compiler.CompileError;
+import javassist.compiler.ast.ASTree;
+import javassist.compiler.ast.Visitor;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +30,7 @@ public class DITMetricProvider implements MetricProvider {
         MetricResultSet resultSet = new MetricResultSet(metricName());
         for (ParseResult<CompilationUnit> parseResult : parseResults) {
             CompilationUnit cu = parseResult.getResult().get();
+            ASTree tree = new ASTree(cu);
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 DITCalculator(clazz, resultSet);
             }
@@ -42,9 +46,7 @@ public class DITMetricProvider implements MetricProvider {
             Optional<Node> parentNode = clazz.getParentNode();
             while (parentNode.isPresent()) {
                 Node parent = parentNode.get();
-                if (parent instanceof ClassOrInterfaceDeclaration) {
-                    depth++;
-                }
+                depth++;
                 parentNode = parent.getParentNode();
             }
         }
