@@ -1,11 +1,9 @@
-package metricProviders;
+package seng4430.metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.*;
 
@@ -14,7 +12,7 @@ import java.util.*;
  *
  * @author Keenan Groves
  */
-public class LCOMMetricProvider implements MetricProvider {
+public class LCOMMetricProvider extends MetricProvider {
     private int clazzCount = 0;
     private int totalLCOM = 0;
 
@@ -24,10 +22,9 @@ public class LCOMMetricProvider implements MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
-        for (ParseResult<CompilationUnit> parseResult : parseResults) {
-            CompilationUnit cu = parseResult.getResult().get();
+        for (CompilationUnit cu : parseResults) {
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 LCOMCalculator(clazz, resultSet);
             }
@@ -38,7 +35,7 @@ public class LCOMMetricProvider implements MetricProvider {
 
     public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
         Map<String, Set<String>> methodMap = new HashMap<>();
-        ClassResult result = new ClassResult(clazz.getNameAsString(), "LCOM Score");
+        ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "LCOM Score");
 
         for (MethodDeclaration method : clazz.getMethods()) {
             methodMap.put(method.getNameAsString(), new HashSet<>());

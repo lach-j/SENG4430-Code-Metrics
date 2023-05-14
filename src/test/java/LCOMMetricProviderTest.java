@@ -1,14 +1,11 @@
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import metricProviders.LCOMMetricProvider;
-import metricProviders.MetricResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import parsing.ProjectParser;
+import seng4430.metricProviders.LCOMMetricProvider;
+import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Test for the Lack of Cohesion in Methods score - the lower the score, the more cohesive the methods
@@ -21,7 +18,7 @@ public class LCOMMetricProviderTest {
     public void acceptableLCOMScore() throws IOException {
         var lcomProvider = new LCOMMetricProvider();
 
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/TestProject");
         var result = lcomProvider.runAnalysis(parseResults).getResults();
         Assertions.assertEquals(result.get("avgLCOM").value(),  0);
     }

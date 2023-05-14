@@ -1,6 +1,5 @@
-package metricProviders;
+package seng4430.metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -13,7 +12,7 @@ import java.util.Optional;
  *
  * @author Keenan Groves
  */
-public class DITMetricProvider implements MetricProvider {
+public class DITMetricProvider extends MetricProvider {
     private int clazzCount = 0;
     private int totalDepth = 0;
 
@@ -23,10 +22,9 @@ public class DITMetricProvider implements MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
-        for (ParseResult<CompilationUnit> parseResult : parseResults) {
-            CompilationUnit cu = parseResult.getResult().get();
+        for (CompilationUnit cu : parseResults) {
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 DITCalculator(clazz, resultSet);
             }

@@ -1,8 +1,8 @@
-import metricProviders.MetricResultSet;
+package seng4430;
 
-import java.util.ArrayList;
+import seng4430.metricProviders.MetricResultSet;
+
 import java.util.Collection;
-import java.util.Set;
 
 public interface ResultsRender<T> {
     T render(Collection<MetricResultSet> results);
