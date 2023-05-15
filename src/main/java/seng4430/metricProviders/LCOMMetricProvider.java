@@ -15,6 +15,8 @@ import java.util.*;
 public class LCOMMetricProvider extends MetricProvider {
     private int clazzCount = 0;
     private int totalLCOM = 0;
+    private List<String> visitedMethods = new ArrayList<>();
+    private Map<String, Set<String>> methodMap = new HashMap<>();
 
     @Override
     public String metricName() {
@@ -38,19 +40,20 @@ public class LCOMMetricProvider extends MetricProvider {
     }
 
     public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, ClassResult<Integer> result) {
-        Map<String, Set<String>> methodMap = new HashMap<>();
-
         for (MethodDeclaration method : clazz.getMethods()) {
             methodMap.put(method.getNameAsString(), new HashSet<>());
-        }
-
-        for (FieldDeclaration field : clazz.getFields()) {
-            String fieldName = field.getVariable(0).getNameAsString();
-            for (MethodDeclaration method : clazz.getMethods()) {
-                if (method.getBody().isPresent()) {
-                    String methodBody = method.getBody().get().toString();
+            if (method.getBody().isPresent()) {
+                String methodBody = method.getBody().get().toString();
+                for (FieldDeclaration field : clazz.getFields()) {
+                    String fieldName = field.getVariable(0).getNameAsString();
                     if (methodBody.contains(fieldName)) {
                         methodMap.get(method.getNameAsString()).add(fieldName);
+                    }
+                }
+                for (MethodDeclaration method2 : clazz.getMethods()) {
+                    String methodName = method2.getNameAsString();
+                    if (methodBody.contains(methodName)) {
+                        methodMap.get(method.getNameAsString()).add(methodName);
                     }
                 }
             }
@@ -58,18 +61,42 @@ public class LCOMMetricProvider extends MetricProvider {
 
         int lcom = 0;
         for (String methodName : methodMap.keySet()) {
-            Set<String> fieldsUsed = methodMap.get(methodName);
-            for (String otherMethodName : methodMap.keySet()) {
-                if (!methodName.equals(otherMethodName)) {
-                    Set<String> otherFieldsUsed = methodMap.get(otherMethodName);
-                    if (fieldsUsed.stream().noneMatch(otherFieldsUsed::contains)) {
-                        lcom ++;
-                    }
-                }
+            if (!visitedMethods.contains(methodName)) {
+                visitedMethods.add(methodName);
+                recursiveCheck(methodName);
+                lcom++;
             }
         }
         averageTracker(lcom);
         result.addResult(clazz.getNameAsString(), lcom);
+        visitedMethods = new ArrayList<>();
+        methodMap = new HashMap<>();
+    }
+
+    public void recursiveCheck(String methodName) {
+        for (Map.Entry<String, Set<String>> entry : methodMap.entrySet()) {
+            if (!methodName.equals(entry.getKey()) && !visitedMethods.contains(entry.getKey())) {
+                if (entry.getValue().contains(methodName)) {
+                    visitedMethods.add(entry.getKey());
+                    recursiveCheck(entry.getKey());
+                }
+                if (methodMap.get(methodName) != null) {
+                    for (String methodOrVariable : methodMap.get(methodName)) {
+                        if (!methodOrVariable.equals(methodName) && !visitedMethods.contains(methodOrVariable)) {
+                            if(methodMap.containsKey(methodOrVariable)) {
+                                visitedMethods.add(methodOrVariable);
+                                recursiveCheck(methodOrVariable);
+                            } else {
+                                if (entry.getValue().contains(methodOrVariable)) {
+                                    visitedMethods.add(entry.getKey());
+                                    recursiveCheck(entry.getKey());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void averageTracker(int lcom) {

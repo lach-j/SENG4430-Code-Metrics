@@ -1,4 +1,4 @@
-package AnotherTestProject;
+package DITTestProject;
 
 public class C extends A {
     public void method3() {
