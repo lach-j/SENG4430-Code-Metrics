@@ -24,18 +24,20 @@ public class DITMetricProvider extends MetricProvider {
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
+        ClassResult<Integer> result = new ClassResult<>("Depth Per Class", "Layers");
+        resultSet.addResult("ditLayersPerClass", result);
+
         for (CompilationUnit cu : parseResults) {
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                DITCalculator(clazz, resultSet);
+                DITCalculator(clazz, result);
             }
         }
         resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", totalDepth/clazzCount, "Layers"));
         return resultSet;
     }
 
-    public void DITCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
+    public void DITCalculator(ClassOrInterfaceDeclaration clazz, ClassResult<Integer> result) {
         int depth = 0;
-        ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "Layers");
         if (!clazz.isInterface()) {
             Optional<Node> parentNode = clazz.getParentNode();
             while (parentNode.isPresent()) {
@@ -48,7 +50,6 @@ public class DITMetricProvider extends MetricProvider {
         }
         averageTracker(depth);
         result.addResult(clazz.getNameAsString(), depth);
-        resultSet.addResult(clazz.getNameAsString(), result);
     }
 
     private void averageTracker(int depth) {

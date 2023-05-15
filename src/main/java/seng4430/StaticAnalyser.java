@@ -7,24 +7,22 @@ import seng4430.metricProviders.MetricResultSet;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StaticAnalyser {
 
     private final List<CompilationUnit> ParsingResults;
 
-    public StaticAnalyser(String projectRoot) throws IOException {
-        ParsingResults = ProjectParser.parse(projectRoot);
+    public StaticAnalyser(String parsePath, String[] projectRoots) throws IOException {
+        ParsingResults = ProjectParser.parse(parsePath, projectRoots);
     }
 
-    public Map<String, MetricResultSet> runAnalysis(List<MetricProvider> providers, AnalysisConfiguration configuration) {
-        var analysisResults = new HashMap<String, MetricResultSet>();
+    public Collection<MetricResultSet> runAnalysis(List<MetricProvider> providers, AnalysisConfiguration configuration) {
+        var analysisResults = new ArrayList<MetricResultSet>();
 
         for (var provider : providers) {
             var results = provider.runAnalysis(ParsingResults, configuration);
-            analysisResults.put(provider.metricName(), results);
+            analysisResults.add(results);
         }
 
         return analysisResults;

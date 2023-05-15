@@ -1,7 +1,7 @@
 package seng4430.metricProviders;
 
 public class AnalysisConfiguration {
-    private String[] basePackages;
+    private final String[] basePackages;
 
     public AnalysisConfiguration(String[] basePackages) {
         this.basePackages = basePackages;

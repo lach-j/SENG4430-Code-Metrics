@@ -15,6 +15,7 @@ public class StringResultsRenderer implements ResultsRender<String> {
 
         results.forEach(
                 metricResultSet -> {
+                    builder.append("\n");
                     builder.append(metricResultSet.getMetricName());
                     metricResultSet.getResults().forEach(
                             (k, result) -> addResult(result, builder));
@@ -45,6 +46,5 @@ public class StringResultsRenderer implements ResultsRender<String> {
             builder.append(
                     String.format("%n%4s => %-40s: %-40s", "", result.label(), result.value() + " " + result.unitLabel()));
         }
-        builder.append("\n");
     }
 }

@@ -24,18 +24,21 @@ public class LCOMMetricProvider extends MetricProvider {
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
+
+        ClassResult<Integer> result = new ClassResult<>("LCOM Score Per Class", "LCOM Score");
+        resultSet.addResult("lcomPerClass", result);
+
         for (CompilationUnit cu : parseResults) {
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                LCOMCalculator(clazz, resultSet);
+                LCOMCalculator(clazz, result);
             }
         }
         resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", totalLCOM/clazzCount));
         return resultSet;
     }
 
-    public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
+    public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, ClassResult<Integer> result) {
         Map<String, Set<String>> methodMap = new HashMap<>();
-        ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "LCOM Score");
 
         for (MethodDeclaration method : clazz.getMethods()) {
             methodMap.put(method.getNameAsString(), new HashSet<>());
@@ -59,7 +62,7 @@ public class LCOMMetricProvider extends MetricProvider {
             for (String otherMethodName : methodMap.keySet()) {
                 if (!methodName.equals(otherMethodName)) {
                     Set<String> otherFieldsUsed = methodMap.get(otherMethodName);
-                    if (!fieldsUsed.stream().anyMatch(otherFieldsUsed::contains)) {
+                    if (fieldsUsed.stream().noneMatch(otherFieldsUsed::contains)) {
                         lcom ++;
                     }
                 }
@@ -67,7 +70,6 @@ public class LCOMMetricProvider extends MetricProvider {
         }
         averageTracker(lcom);
         result.addResult(clazz.getNameAsString(), lcom);
-        resultSet.addResult(clazz.getNameAsString(), result);
     }
 
     private void averageTracker(int lcom) {

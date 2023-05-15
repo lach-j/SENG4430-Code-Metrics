@@ -29,11 +29,11 @@ public class FanInMetricProvider extends MetricProvider {
 
                     String type = null;
                     try {
-                        type = scope.get().calculateResolvedType().describe();
+                        type = scope.get().calculateResolvedType().asReferenceType().getQualifiedName();
                     } catch (Exception ignored) {
                     }
                     String finalType = type;
-                    if (type != null && Arrays.stream(configuration.getBasePackages()).anyMatch(y -> finalType.startsWith(y + "."))) {
+                    if (type != null && (configuration.getBasePackages().length == 0 || Arrays.stream(configuration.getBasePackages()).anyMatch(y -> finalType.startsWith(y + ".")))) {
                         addMethod(type, methodName);
                     }
                 }
