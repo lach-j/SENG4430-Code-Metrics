@@ -18,8 +18,8 @@ public class LCOMMetricProviderTest {
     public void acceptableLCOMScore() throws IOException {
         var lcomProvider = new LCOMMetricProvider();
 
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/TestProject");
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/LCOMTestProject");
         var result = lcomProvider.runAnalysis(parseResults).getResults();
-        Assertions.assertEquals(result.get("avgLCOM").value(),  0);
+        Assertions.assertEquals(2, result.get("avgLCOM").value());
     }
 }

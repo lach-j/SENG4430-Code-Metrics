@@ -18,7 +18,7 @@ public class DepthOfInheritanceTreeTest {
     public void acceptableDepthOfInheritance() throws IOException {
         var ditProvider = new DITMetricProvider();
 
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/AnotherTestProject");
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/DITTestProject");
         var result = ditProvider.runAnalysis(parseResults).getResults();
         Assertions.assertEquals(1, result.get("avgDepth").value());
     }
