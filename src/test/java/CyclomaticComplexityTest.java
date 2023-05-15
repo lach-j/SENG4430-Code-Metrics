@@ -21,12 +21,12 @@ public class CyclomaticComplexityTest {
 
     @Test
     public void returnsNumberOfEdges() {
-        Assertions.assertEquals(16, results.getResult("Edges").value());
+        Assertions.assertEquals(17, results.getResult("Edges").value());
     }
 
     @Test
     public void returnsNumberOfNodes() {
-        Assertions.assertEquals(10, results.getResult("Nodes").value());
+        Assertions.assertEquals(11, results.getResult("Nodes").value());
     }
 
     @Test
