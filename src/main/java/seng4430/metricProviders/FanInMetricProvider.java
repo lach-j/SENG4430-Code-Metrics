@@ -34,7 +34,8 @@ public class FanInMetricProvider extends MetricProvider {
                     }
                     String finalType = type;
                     if (type != null && (configuration.getBasePackages().length == 0 || Arrays.stream(configuration.getBasePackages()).anyMatch(y -> finalType.startsWith(y + ".")))) {
-                        addMethod(type, methodName);
+                        var classComponents = Arrays.stream(type.split("\\.")).toList();
+                        addMethod(classComponents.get(classComponents.size()-1), methodName);
                     }
                 }
             } catch (Exception ignored) {

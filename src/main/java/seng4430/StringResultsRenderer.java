@@ -15,10 +15,10 @@ public class StringResultsRenderer implements ResultsRender<String> {
 
         results.forEach(
                 metricResultSet -> {
-                    builder.append("\n");
                     builder.append(metricResultSet.getMetricName());
                     metricResultSet.getResults().forEach(
                             (k, result) -> addResult(result, builder));
+                    builder.append("\n");
                 });
 
         return builder.toString();

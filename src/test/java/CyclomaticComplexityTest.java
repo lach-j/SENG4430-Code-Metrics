@@ -1,10 +1,8 @@
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.CyclomaticComplexityProvider;
-import seng4430.metricProviders.LengthOfIdentifiersMetricProvider;
 import seng4430.metricProviders.MetricResultSet;
 import seng4430.parsing.ProjectParser;
 
@@ -17,7 +15,7 @@ public class CyclomaticComplexityTest {
     @BeforeAll
     public static void arrange() throws IOException {
         var CCProvider = new CyclomaticComplexityProvider();
-        List<ParseResult<CompilationUnit>> parseResults = ProjectParser.parse("./src/test/java/TestProject");
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/CyclomaticComplexityTestProject");
         results = CCProvider.runAnalysis(parseResults);
     }
 

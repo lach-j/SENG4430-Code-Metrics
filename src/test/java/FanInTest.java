@@ -37,16 +37,16 @@ public class FanInTest {
         }
 
         var expectedResults = new HashMap<String, HashMap<String, Integer>>() {{
-            put("FanInTestProject.TestClass", new HashMap<>() {{
+            put("TestClass", new HashMap<>() {{
                 put("getName", 2);
                 put("doNothing", 1);
                 put("isTime", 1);
                 put("isBad", 1);
             }});
-            put("FanInTestProject.TestClass2", new HashMap<>() {{
+            put("TestClass2", new HashMap<>() {{
                 put("tryMethods", 2);
             }});
-            put("FanInTestProject.TestClass3", new HashMap<>() {{
+            put("TestClass3", new HashMap<>() {{
                 put("getName", 1);
                 put("isBad", 1);
             }});

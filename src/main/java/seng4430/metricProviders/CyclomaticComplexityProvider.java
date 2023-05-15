@@ -7,7 +7,6 @@ Description: Assignment 2*/
 
 package seng4430.metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ConditionalExpr;
@@ -16,7 +15,7 @@ import com.github.javaparser.ast.stmt.*;
 import java.util.*;
 
 
-public class CyclomaticComplexityProvider implements MetricProvider {
+public class CyclomaticComplexityProvider extends MetricProvider {
     private int numEdges = 0;
     private int numNodes = 0;
     private int numComponents = 0;
@@ -27,15 +26,14 @@ public class CyclomaticComplexityProvider implements MetricProvider {
 
 
     @Override
-    public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
         int SumNumEdges = 0;
         int SumNumNodes = 0;
         int SumNumComponents = 0;
         int SumCyclomaticComplexity = 0;
 
-        for (ParseResult<CompilationUnit> parseResult : parseResults) {
-            CompilationUnit compilationUnit = parseResult.getResult().orElseThrow();
+        for (CompilationUnit compilationUnit : parseResults) {
 
             Set<Node> nodes = new HashSet<>();
             Set<Statement> entryPoints = new HashSet<>();

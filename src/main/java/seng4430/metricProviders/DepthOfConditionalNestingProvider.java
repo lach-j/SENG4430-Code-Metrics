@@ -1,27 +1,21 @@
 package seng4430.metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.BinaryExpr;
-import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class DepthOfConditionalNestingProvider implements MetricProvider{
+public class DepthOfConditionalNestingProvider extends MetricProvider{
 
     
     @Override
-    public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
         int maxDepth = 0;
 
-        for (ParseResult<CompilationUnit> parseResult : parseResults) {
-
-            CompilationUnit cu = parseResult.getResult().get();
+        for (CompilationUnit cu : parseResults) {
 
             DepthOfConditionalNestingVisitor visitor = new DepthOfConditionalNestingVisitor();
             visitor.visit(cu, null);
@@ -117,6 +111,7 @@ public class DepthOfConditionalNestingProvider implements MetricProvider{
             return maxDepth;
         }
     }
+
     @Override
     public String metricName() {
         return "Depth Of Conditional Nesting";

@@ -1,4 +1,4 @@
-package TestProject;
+package CyclomaticComplexityTestProject.TestProject;
 
 public class ConditionalNestingTestClass {
     public static void main(String[] args) {
