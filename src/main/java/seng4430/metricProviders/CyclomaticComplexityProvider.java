@@ -7,92 +7,51 @@ Description: Assignment 2*/
 
 package seng4430.metricProviders;
 
+
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.stmt.*;
 
-import java.util.*;
-
+import java.util.List;
 
 public class CyclomaticComplexityProvider extends MetricProvider {
-    private int numEdges = 0;
-    private int numNodes = 0;
-    private int numComponents = 0;
-    @Override
-    public String metricName() {
-        return "Cylcomatic Complexity";
-    }
-
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-
-        int SumNumEdges = 0;
-        int SumNumNodes = 0;
-        int SumNumComponents = 0;
-        int SumCyclomaticComplexity = 0;
-
-        for (CompilationUnit compilationUnit : parseResults) {
-
-            Set<Node> nodes = new HashSet<>();
-            Set<Statement> entryPoints = new HashSet<>();
-
-            // Collect nodes and entry points
-            compilationUnit.walk(node -> {
-                if (node instanceof Statement && !(node instanceof BlockStmt)) {
-                    nodes.add(node);
-                    entryPoints.add((Statement) node);
-                }
-            });
-
-            // Calculate number of edges
-            for (Node node : nodes) {
-                if (node instanceof IfStmt || node instanceof SwitchStmt || node instanceof ForStmt ||
-                        node instanceof WhileStmt || node instanceof DoStmt ||
-                        node instanceof ConditionalExpr) {
-                    numEdges += 2;
-                    numNodes++;
-                } else if (node instanceof BreakStmt || node instanceof ContinueStmt || node instanceof ReturnStmt) {
-                    numEdges += 1;
-                    numNodes++;
-                }
-            }
-
-            // Calculate number of disconnected parts
-            Set<Node> visited = new HashSet<>();
-            int numDisconnectedParts = 0;
-            for (Statement entryPoint : entryPoints) {
-                if (!visited.contains(entryPoint)) {
-                    numDisconnectedParts++;
-                    depthFirstSearch(entryPoint, nodes, visited);
-                }
-            }
-            numComponents = numDisconnectedParts;
-            // Calculate cyclomatic complexity
-            int cyclomaticComplexity = numEdges - numNodes + 2 * numComponents;
-
-            SumNumEdges += numEdges;
-            SumNumNodes += numNodes;
-            SumNumComponents += numComponents;
-            SumCyclomaticComplexity += cyclomaticComplexity;
+        MetricResultSet results = new MetricResultSet(this.metricName());
+        for (CompilationUnit unit : parseResults) {
+            int complexity = calculateCyclomaticComplexity(unit);
+            results.addResult("Complexity", new SummaryResult<>("Cyclomatic complexity", complexity));
         }
-
-        return new MetricResultSet(this.metricName())
-                .addResult("Edges", new SummaryResult<>("Number of edges", SumNumEdges))
-                .addResult("Nodes", new SummaryResult<>("Number of nodes", SumNumNodes))
-                .addResult("Components", new SummaryResult<>("Disconnected Components", SumNumComponents))
-                .addResult("Complexity", new SummaryResult<>("Cyclomatic complexity", SumCyclomaticComplexity));
+        return results;
     }
 
-    private void depthFirstSearch(Statement node, Set<Node> nodes, Set<Node> visited) {
-        visited.add(node);
-
-        for (Node neighbor : node.getChildNodes()) {
-            if (nodes.contains(neighbor) && !visited.contains(neighbor)) {
-                depthFirstSearch((Statement) neighbor, nodes, visited);
-            }
-        }
+    @Override
+    public String metricName() {
+        return "Cyclomatic Complexity";
     }
 
+    private int calculateCyclomaticComplexity(CompilationUnit unit) {
+        int complexity = 1;
+        List<IfStmt> ifs = unit.findAll(IfStmt.class);
+        List<SwitchStmt> switches = unit.findAll(SwitchStmt.class);
+        List<WhileStmt> whiles = unit.findAll(WhileStmt.class);
+        List<DoStmt> dos = unit.findAll(DoStmt.class);
+        List<ForStmt> fors = unit.findAll(ForStmt.class);
+        List<ConditionalExpr> ternaries = unit.findAll(ConditionalExpr.class);
+
+        complexity += ifs.size();
+        complexity += switches.size();
+        complexity += whiles.size();
+        complexity += dos.size();
+        complexity += fors.size();
+        complexity += ternaries.size();
+
+        return complexity;
+    }
 }
+
+
+
+
+

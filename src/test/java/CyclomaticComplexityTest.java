@@ -20,23 +20,8 @@ public class CyclomaticComplexityTest {
     }
 
     @Test
-    public void returnsNumberOfEdges() {
-        Assertions.assertEquals(17, results.getResult("Edges").value());
-    }
-
-    @Test
-    public void returnsNumberOfNodes() {
-        Assertions.assertEquals(11, results.getResult("Nodes").value());
-    }
-
-    @Test
-    public void returnsNumberOfComponents() {
-        Assertions.assertEquals(15, results.getResult("Components").value());
-    }
-
-    @Test
     public void returnsCyclomaticComplexity() {
-        Assertions.assertEquals(36, results.getResult("Complexity").value());
+        Assertions.assertEquals(4, results.getResult("Complexity").value());
     }
 
 }
