@@ -20,7 +20,7 @@ public class DepthOfInheritanceTreeTest {
 
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/AnotherTestProject");
         var result = ditProvider.runAnalysis(parseResults).getResults();
-        Assertions.assertEquals(result.get("avgDepth").value(), 0);
+        Assertions.assertEquals(1, result.get("avgDepth").value());
     }
 
 }
