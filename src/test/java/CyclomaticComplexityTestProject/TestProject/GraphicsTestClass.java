@@ -53,6 +53,7 @@ import java.awt.image.ImageObserver;
  * @version %I%, %G%
  * @since 1.0
  */
+@SuppressWarnings("removal")
 public abstract class GraphicsTestClass {
 
     /**
@@ -102,7 +103,7 @@ public abstract class GraphicsTestClass {
      * a Graphics object only if it was created directly from a
      * Component or another Graphics object.
      *
-     * @see #create(int, int, int, int)
+     * @see # create(int, int, int, int)
      * @see #finalize()
      * @see Component#getGraphics()
      * @see Component#paint(Graphics)

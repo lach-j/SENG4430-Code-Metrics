@@ -1,6 +1,7 @@
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -13,19 +14,27 @@ public class DepthOfConditionalNestingProvider extends MetricProvider{
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
-        int maxDepth = 0;
 
+        MetricResultSet results = new MetricResultSet(this.metricName());
+        var totalDepthOfConditionalNesting = new ClassResult<Integer>("Depth of conditional nesting", "depth");
         for (CompilationUnit cu : parseResults) {
 
-            DepthOfConditionalNestingVisitor visitor = new DepthOfConditionalNestingVisitor();
-            visitor.visit(cu, null);
+
+            var classes = cu.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
+
+            for (var clazz : classes) {
+                DepthOfConditionalNestingVisitor visitor = new DepthOfConditionalNestingVisitor();
+                visitor.visit(clazz, null);
 
 
-            maxDepth = Math.max(maxDepth, visitor.getMaxDepth());
+                int maxDepth = visitor.getMaxDepth();
+                totalDepthOfConditionalNesting.addResult(clazz.getNameAsString(),maxDepth);
+            }
+
+            results.addResult("TotalDepth", totalDepthOfConditionalNesting);
         }
 
-        return new MetricResultSet(this.metricName())
-                .addResult("MaxDepth", new SummaryResult<>("Depth of conditional nesting", maxDepth)) ;
+        return results;
     }
 
     private static class DepthOfConditionalNestingVisitor extends VoidVisitorAdapter<Void> {

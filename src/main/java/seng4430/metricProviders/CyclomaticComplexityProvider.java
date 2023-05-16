@@ -7,92 +7,76 @@ Description: Assignment 2*/
 
 package seng4430.metricProviders;
 
+
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.stmt.*;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CyclomaticComplexityProvider extends MetricProvider {
-    private int numEdges = 0;
-    private int numNodes = 0;
+
+
+    @Override
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+
+        MetricResultSet results = new MetricResultSet(this.metricName());
+        var totalComplexityResult = new ClassResult<Integer>("Cyclomatic complexity", "complexity");
+        for (CompilationUnit unit : parseResults) {
+
+
+            var classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
+
+            for (var clazz : classes) {
+                int complexity = calculateCyclomaticComplexity(clazz);
+                totalComplexityResult.addResult(clazz.getNameAsString(),complexity);
+            }
+
+
+
+            results.addResult("TotalComplexity", totalComplexityResult);
+        }
+
+        return results;
+    }
 
     @Override
     public String metricName() {
         return "Cyclomatic Complexity";
     }
 
+    private int calculateCyclomaticComplexity(ClassOrInterfaceDeclaration clazz) {
 
-    @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
-        int SumNumEdges = 0;
-        int SumNumNodes = 0;
-        int SumNumComponents = 0;
-        int SumCyclomaticComplexity = 0;
+        int complexity = 1;
+        List<IfStmt> ifs = clazz.findAll(IfStmt.class);
+        List<SwitchStmt> switches = clazz.findAll(SwitchStmt.class);
+        List<WhileStmt> whiles = clazz.findAll(WhileStmt.class);
+        List<DoStmt> dos = clazz.findAll(DoStmt.class);
+        List<ForStmt> fors = clazz.findAll(ForStmt.class);
+        List<ConditionalExpr> ternaries = clazz.findAll(ConditionalExpr.class);
 
-        for (CompilationUnit compilationUnit : parseResults) {
+        complexity += ifs.size();
+        complexity += switches.size();
+        complexity += whiles.size();
+        complexity += dos.size();
+        complexity += fors.size();
+        complexity += ternaries.size();
 
-            Set<Node> nodes = new HashSet<>();
-            Set<Statement> entryPoints = new HashSet<>();
-
-            // Collect nodes and entry points
-            compilationUnit.walk(node -> {
-                if (node instanceof Statement && !(node instanceof BlockStmt)) {
-                    nodes.add(node);
-                    entryPoints.add((Statement) node);
-                }
-            });
-
-            // Calculate number of edges
-            for (Node node : nodes) {
-                if (node instanceof IfStmt || node instanceof SwitchStmt || node instanceof ForStmt ||
-                        node instanceof WhileStmt || node instanceof DoStmt ||
-                        node instanceof ConditionalExpr) {
-                    numEdges += 2;
-                    numNodes++;
-                } else if (node instanceof BreakStmt || node instanceof ContinueStmt || node instanceof ReturnStmt) {
-                    numEdges += 1;
-                    numNodes++;
-                }
-            }
-
-            // Calculate number of disconnected parts
-            Set<Node> visited = new HashSet<>();
-            int numDisconnectedParts = 0;
-            for (Statement entryPoint : entryPoints) {
-                if (!visited.contains(entryPoint)) {
-                    numDisconnectedParts++;
-                    depthFirstSearch(entryPoint, nodes, visited);
-                }
-            }
-            int numComponents = numDisconnectedParts;
-            // Calculate cyclomatic complexity
-            int cyclomaticComplexity = numEdges - numNodes + 2 * numComponents;
-
-            SumNumEdges += numEdges;
-            SumNumNodes += numNodes;
-            SumNumComponents += numComponents;
-            SumCyclomaticComplexity += cyclomaticComplexity;
-        }
-
-        return new MetricResultSet(this.metricName())
-                .addResult("Edges", new SummaryResult<>("Number of edges", SumNumEdges))
-                .addResult("Nodes", new SummaryResult<>("Number of nodes", SumNumNodes))
-                .addResult("Components", new SummaryResult<>("Disconnected Components", SumNumComponents))
-                .addResult("Complexity", new SummaryResult<>("Cyclomatic complexity", SumCyclomaticComplexity));
+        return complexity;
     }
-
-    private void depthFirstSearch(Statement node, Set<Node> nodes, Set<Node> visited) {
-        visited.add(node);
-
-        for (Node neighbor : node.getChildNodes()) {
-            if (nodes.contains(neighbor) && !visited.contains(neighbor)) {
-                depthFirstSearch((Statement) neighbor, nodes, visited);
-            }
-        }
-    }
-
 }
+
+
+
+
+
