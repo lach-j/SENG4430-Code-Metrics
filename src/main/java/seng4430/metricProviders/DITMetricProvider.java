@@ -17,7 +17,7 @@ import java.util.Map;
 public class DITMetricProvider extends MetricProvider {
     private int clazzCount = 0;
     private int totalDepth = 0;
-    private LinkedHashMap<String, String> childClazzes = new LinkedHashMap<String, String>();
+    private final LinkedHashMap<String, String> childClazzes = new LinkedHashMap<>();
 
     @Override
     public String metricName() {
@@ -47,7 +47,7 @@ public class DITMetricProvider extends MetricProvider {
                     parentClazz = c.getNameAsString();
                 }
             }
-            else if (implemented.size() > 0) {
+            else {
                 for (ClassOrInterfaceType c : implemented) {
                     parentClazz = c.getNameAsString();
                 }
