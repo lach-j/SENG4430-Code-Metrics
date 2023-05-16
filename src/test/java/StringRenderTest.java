@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import seng4430.StringResultsRenderer;
+import seng4430.interfaces.cli.StringResultsRenderer;
 import seng4430.metricProviders.ClassResult;
 import seng4430.metricProviders.MethodResult;
 import seng4430.metricProviders.MetricResultSet;

@@ -1,5 +1,6 @@
-package seng4430;
+package seng4430.interfaces.cli;
 
+import seng4430.interfaces.ResultsRender;
 import seng4430.metricProviders.ClassResult;
 import seng4430.metricProviders.MethodResult;
 import seng4430.metricProviders.MetricResult;

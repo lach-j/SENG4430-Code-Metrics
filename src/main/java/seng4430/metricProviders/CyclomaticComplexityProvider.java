@@ -18,10 +18,10 @@ import java.util.*;
 public class CyclomaticComplexityProvider extends MetricProvider {
     private int numEdges = 0;
     private int numNodes = 0;
-    private int numComponents = 0;
+
     @Override
     public String metricName() {
-        return "Cylcomatic Complexity";
+        return "Cyclomatic Complexity";
     }
 
 
@@ -68,7 +68,7 @@ public class CyclomaticComplexityProvider extends MetricProvider {
                     depthFirstSearch(entryPoint, nodes, visited);
                 }
             }
-            numComponents = numDisconnectedParts;
+            int numComponents = numDisconnectedParts;
             // Calculate cyclomatic complexity
             int cyclomaticComplexity = numEdges - numNodes + 2 * numComponents;
 

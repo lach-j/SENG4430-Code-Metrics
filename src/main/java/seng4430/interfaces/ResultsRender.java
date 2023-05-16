@@ -1,4 +1,4 @@
-package seng4430;
+package seng4430.interfaces;
 
 import seng4430.metricProviders.MetricResultSet;
 

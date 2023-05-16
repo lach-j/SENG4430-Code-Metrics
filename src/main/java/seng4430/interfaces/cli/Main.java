@@ -1,28 +1,15 @@
-package seng4430.cli;
+package seng4430.interfaces.cli;
 
 import org.apache.commons.cli.*;
 import seng4430.StaticAnalyser;
-import seng4430.StringResultsRenderer;
+import seng4430.interfaces.gui.MetricResultsFrame;
 import seng4430.metricProviders.*;
 
 import java.io.IOException;
 import java.util.*;
 
 public class Main {
-
-    private static final Map<String, MetricProvider> metricLookup = new HashMap<>() {
-        {
-            put("loi", new LengthOfIdentifiersMetricProvider());
-            put("comments", new CommentsMetricProvider());
-            put("dit", new DITMetricProvider());
-            put("fanin", new FanInMetricProvider());
-            put("fanout", new FanOutMetricProvider());
-            put("lcom", new LCOMMetricProvider());
-        }
-    };
-
     public static void main(String... args) throws IOException {
-
         if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"}).noneMatch(x -> x.equals(args[0]))) {
             System.err.println("no valid command specified");
             System.out.println("usage: java codemetrics <command> [options]");
@@ -38,7 +25,7 @@ public class Main {
 
         if (args[0].equals("ls")) {
             System.out.println("Available Metrics:");
-            metricLookup.forEach((alias, provider) -> System.out.printf("  %-10s : %s%n", alias, provider.metricName()));
+            Metrics.metricProviders.forEach((alias, provider) -> System.out.printf("  %-10s : %s%n", alias, provider.metricName()));
             System.exit(0);
             return;
         }
@@ -74,22 +61,23 @@ public class Main {
         String inputFilePath = cmd.getOptionValue("input");
         var basePackages = Optional.ofNullable(cmd.getOptionValues("base-package")).orElse(new String[]{});
         var projectRoots = Optional.ofNullable(cmd.getOptionValues("root")).orElse(new String[]{inputFilePath});
-        var providers = Optional.ofNullable(cmd.getOptionValues("metric")).orElse(metricLookup.keySet().toArray(String[]::new));
+        var providers = Optional.ofNullable(cmd.getOptionValues("metric")).orElse(Metrics.metricProviders.keySet().toArray(String[]::new));
 
         var analyser = new StaticAnalyser(inputFilePath, projectRoots);
         var results = analyser.runAnalysis(getProviders(providers), new AnalysisConfiguration(basePackages));
 
         var resultsString = new StringResultsRenderer().render(results);
+        new MetricResultsFrame(results);
         System.out.println(resultsString);
     }
 
     private static List<MetricProvider> getProviders(String[] providers) {
 
         if (providers.length == 0)
-            return metricLookup.values().stream().toList();
+            return Metrics.metricProviders.values().stream().toList();
 
         return Arrays.stream(providers)
-                .map(p -> metricLookup.getOrDefault(p, null))
+                .map(p -> Metrics.metricProviders.getOrDefault(p, null))
                 .filter(Objects::nonNull)
                 .toList();
     }
