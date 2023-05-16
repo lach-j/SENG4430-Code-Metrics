@@ -18,6 +18,8 @@ public class Main {
             put("fanin", new FanInMetricProvider());
             put("fanout", new FanOutMetricProvider());
             put("lcom", new LCOMMetricProvider());
+            put("cc", new CyclomaticComplexityProvider());
+            put("docn", new DepthOfConditionalNestingProvider());
         }
     };
 
