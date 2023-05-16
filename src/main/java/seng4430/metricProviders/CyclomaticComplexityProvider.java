@@ -8,20 +8,12 @@ Description: Assignment 2*/
 package seng4430.metricProviders;
 
 
-import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.stmt.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CyclomaticComplexityProvider extends MetricProvider {
 
@@ -40,8 +32,6 @@ public class CyclomaticComplexityProvider extends MetricProvider {
                 int complexity = calculateCyclomaticComplexity(clazz);
                 totalComplexityResult.addResult(clazz.getNameAsString(),complexity);
             }
-
-
 
             results.addResult("TotalComplexity", totalComplexityResult);
         }

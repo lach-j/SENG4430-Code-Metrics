@@ -1,7 +1,5 @@
 package seng4430.metricProviders;
 
-import seng4430.metricProviders.*;
-
 import java.util.HashMap;
 
 public class Metrics {
@@ -13,6 +11,8 @@ public class Metrics {
             put("fanin", new FanInMetricProvider());
             put("fanout", new FanOutMetricProvider());
             put("lcom", new LCOMMetricProvider());
+            put("cc", new CyclomaticComplexityProvider());
+            put("docn", new DepthOfConditionalNestingProvider());
         }
     };
 }

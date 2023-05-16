@@ -3,10 +3,15 @@ package seng4430.interfaces.cli;
 import org.apache.commons.cli.*;
 import seng4430.StaticAnalyser;
 import seng4430.interfaces.gui.MetricResultsFrame;
-import seng4430.metricProviders.*;
+import seng4430.metricProviders.AnalysisConfiguration;
+import seng4430.metricProviders.MetricProvider;
+import seng4430.metricProviders.Metrics;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class Main {
     public static void main(String... args) throws IOException {

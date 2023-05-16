@@ -1,6 +1,6 @@
 package seng4430.interfaces.gui;
 
-import seng4430.metricProviders.*;
+import seng4430.metricProviders.Metrics;
 
 import javax.swing.*;
 

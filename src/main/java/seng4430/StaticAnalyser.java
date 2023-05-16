@@ -7,7 +7,9 @@ import seng4430.metricProviders.MetricResultSet;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class StaticAnalyser {
 
