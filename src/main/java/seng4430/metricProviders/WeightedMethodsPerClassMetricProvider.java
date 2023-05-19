@@ -52,7 +52,6 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     private int calculateMethodComplexity(MethodDeclaration method) { //calculate method complexity based on the number of characters
         String methodBody = method.getBody().map(body -> body.toString().replaceAll("\\s+", "")).orElse("");
-        int methodComplexity = methodBody.length();
-        return methodComplexity;
+        return methodBody.length();
     }
 }
