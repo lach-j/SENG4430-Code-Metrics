@@ -33,7 +33,13 @@ public class WeightedMethodsPerClassMetricProvider implements MetricProvider {
             List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); //find all class or interface declarations
             for (ClassOrInterfaceDeclaration clazz : classes) { //iterate for each class
                 List<MethodDeclaration> methods = clazz.getMethods(); //find method declarations within the class
-                int wmc = methods.size(); //increment WMC by the number of methods in class
+                int wmc = 0; //WMC for current class
+
+                for (MethodDeclaration method : methods) {
+                    int methodComplexity = calculateMethodComplexity(method);
+                    wmc += methodComplexity;
+                }
+
                 totalWmc += wmc;
                 classCount++; //increment
             }
@@ -43,5 +49,11 @@ public class WeightedMethodsPerClassMetricProvider implements MetricProvider {
 
         return new MetricResultSet(this.metricName()) //return metric results
                 .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc));
+    }
+
+    private int calculateMethodComplexity(MethodDeclaration method) { //calculate method complexity based on the number of characters
+        String methodBody = method.getBody().map(body -> body.toString().replaceAll("\\s+", "")).orElse("");
+        int methodComplexity = methodBody.length();
+        return methodComplexity;
     }
 }
