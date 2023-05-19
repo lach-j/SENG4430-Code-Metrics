@@ -4,15 +4,13 @@ Author: George Davis (c3350434)
 Date: 26/5/23
 Description: Assignment 2*/
 
-package metricProviders;
+package seng4430.metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import java.util.*;
 
-public class NumberOfChildrenMetricProvider implements MetricProvider {
+public class NumberOfChildrenMetricProvider extends MetricProvider {
 
     @Override
     public String metricName() {
@@ -20,11 +18,10 @@ public class NumberOfChildrenMetricProvider implements MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         List<Integer> numberOfChildrenList = new ArrayList<>();
 
-        for (ParseResult<CompilationUnit> parseResult : parseResults) { //iterate for each parsed compilation unit
-            CompilationUnit cu = parseResult.getResult().orElse(null);
+        for (CompilationUnit cu : parseResults) { //iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }

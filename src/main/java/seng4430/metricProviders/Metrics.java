@@ -13,6 +13,7 @@ public class Metrics {
             put("lcom", new LCOMMetricProvider());
             put("cc", new CyclomaticComplexityProvider());
             put("docn", new DepthOfConditionalNestingProvider());
+            put("noc", new NumberOfChildrenMetricProvider());
         }
     };
 }
