@@ -14,6 +14,7 @@ public class Metrics {
             put("cc", new CyclomaticComplexityProvider());
             put("docn", new DepthOfConditionalNestingProvider());
             put("noc", new NumberOfChildrenMetricProvider());
+            put("wmc", new WeightedMethodsPerClassMetricProvider());
         }
     };
 }
