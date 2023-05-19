@@ -4,15 +4,15 @@ Author: George Davis (c3350434)
 Date: 26/5/23
 Description: Assignment 2*/
 
-package metricProviders;
+package seng4430.metricProviders;
 
-import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+
 import java.util.*;
 
-public class WeightedMethodsPerClassMetricProvider implements MetricProvider {
+public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
     public String metricName() {
@@ -20,12 +20,11 @@ public class WeightedMethodsPerClassMetricProvider implements MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<ParseResult<CompilationUnit>> parseResults) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         int totalWmc = 0; //total Weighted Methods per Class
         int classCount = 0; //class count
 
-        for (ParseResult<CompilationUnit> parseResult : parseResults) { //iterate for each parsed compilation unit
-            CompilationUnit cu = parseResult.getResult().orElse(null);
+        for (CompilationUnit cu : parseResults) { //iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }
