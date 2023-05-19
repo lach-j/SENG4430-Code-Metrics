@@ -9,10 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FanOutMetricProvider extends MetricProvider {
+import static seng4430.util.CollectionHelper.calculateAverage;
 
-    private final Map<String, Map<String, Integer>> totalFanOut = new HashMap<>();
-    private final Map<String, Map<String, Integer>> uniqueFanOut = new HashMap<>();
+public class FanOutMetricProvider extends MetricProvider {
 
     @Override
     public String metricName() {
@@ -21,6 +20,9 @@ public class FanOutMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+
+        Map<String, Map<String, Integer>> totalFanOut = new HashMap<>();
+        Map<String, Map<String, Integer>> uniqueFanOut = new HashMap<>();
 
         for (CompilationUnit unit : parseResults) {
 
@@ -59,6 +61,10 @@ public class FanOutMetricProvider extends MetricProvider {
         var totalFanOutResult = new MethodResult<Integer>("Total Fan Out", "calls");
         totalFanOut.forEach((clazz, methods) -> methods.forEach((method, calls) -> totalFanOutResult.addResult(clazz, method, calls)));
         results.addResult("totFanOut", totalFanOutResult);
+
+        var averageFanOutPerClassResult = new ClassResult<Double>("Average Total Fan Out Per Method Per Class", "calls");
+        totalFanOut.forEach((clazz, methods) -> averageFanOutPerClassResult.addResult(clazz, calculateAverage(methods.values())));
+        results.addResult("avgFanOutClass", averageFanOutPerClassResult);
 
         var uniqueFanOutResult = new MethodResult<Integer>("Unique Fan Out", "calls");
         uniqueFanOut.forEach((clazz, methods) -> methods.forEach((method, calls) -> uniqueFanOutResult.addResult(clazz, method, calls)));

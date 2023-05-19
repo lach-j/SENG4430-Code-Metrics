@@ -2,9 +2,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import seng4430.metricProviders.FanOutMetricProvider;
-import seng4430.metricProviders.MethodResult;
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.metricProviders.*;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
@@ -27,6 +25,7 @@ public class FanOutTest {
     public void hasResults() {
         Assertions.assertNotNull(results.getResult("totFanOut"));
         Assertions.assertNotNull(results.getResult("unqFanOut"));
+        Assertions.assertNotNull(results.getResult("avgFanOutClass"));
     }
 
     @Test
@@ -37,8 +36,21 @@ public class FanOutTest {
         }
 
         var expectedResults = new HashMap<String, HashMap<String, Integer>>() {{
-            put("TestClass1", new HashMap<>() {{
-                put("main", 3);
+            put("TestClass", new HashMap<>() {{
+                put("isTime", 0);
+                put("isBad", 0);
+                put("getName", 0);
+                put("doNothing", 1);
+            }});
+            put("TestClass2", new HashMap<>() {{
+                put("tryMethods", 3);
+                put("tryOtherMethods", 2);
+            }});
+            put("TestClass3", new HashMap<>() {{
+                put("isTime", 1);
+                put("isBad", 1);
+                put("getName", 1);
+                put("doNothing", 0);
             }});
         }};
 
@@ -55,6 +67,22 @@ public class FanOutTest {
         var expectedResults = new HashMap<String, HashMap<String, Integer>>() {{
             put("TestClass1", new HashMap<>() {{
                 put("main", 2);
+            }});
+        }};
+
+        Assertions.assertEquals(expectedResults, methodResult.value());
+    }
+
+    @Test
+    public void providesCorrectAverageFanOutResults() {
+        if (!(results.getResult("avgFanOutClass") instanceof ClassResult<?> methodResult)) {
+            Assertions.fail("avgFanOutClass not an instance of ClassResult");
+            return;
+        }
+
+        var expectedResults = new HashMap<String, HashMap<String, Integer>>() {{
+            put("TestClass1", new HashMap<>() {{
+                put("main", 3);
             }});
         }};
 
