@@ -6,10 +6,6 @@ Description: Assignment 2
     avgWmc 
         = totalWmc/classCount
         = characters/methods
-    
-    private int calculateMethodComplexity(MethodDeclaration method) { //calculate method complexity based on the number of characters
-        String methodBody = method.getBody().map(body -> body.toString().replaceAll("\\s+", "")).orElse("");
-        return methodBody.length();
     }*/
 
 package WeightedMethodsPerClassTestProject;
