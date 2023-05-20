@@ -16,5 +16,8 @@ public class TestClass {
     public void doNothing() {
         var test = new TestClass2();
         test.tryMethods();
+        test.tryMethods();
+        test.tryMethods();
+
     }
 }
