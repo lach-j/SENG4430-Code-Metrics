@@ -2,10 +2,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import seng4430.metricProviders.AnalysisConfiguration;
-import seng4430.metricProviders.FanInMetricProvider;
-import seng4430.metricProviders.MethodResult;
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.metricProviders.*;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
@@ -50,6 +47,22 @@ public class FanInTest {
                 put("getName", 1);
                 put("isBad", 1);
             }});
+        }};
+
+        Assertions.assertEquals(expectedResults, methodResult.value());
+    }
+
+    @Test
+    public void providesCorrectAverageFanInResults() {
+        if (!(results.getResult("avgFanInClass") instanceof ClassResult<?> methodResult)) {
+            Assertions.fail("avgFanInClass not an instance of ClassResult");
+            return;
+        }
+
+        var expectedResults = new HashMap<String, Double>() {{
+            put("TestClass", 1.25);
+            put("TestClass2", 2.0);
+            put("TestClass3", 1.0);
         }};
 
         Assertions.assertEquals(expectedResults, methodResult.value());
