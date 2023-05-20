@@ -24,8 +24,8 @@ public class ConfigurationFrame extends JFrame {
     private JLabel altSymbolLabel;
     private JButton runAnalysisButton;
 
-    public ConfigurationFrame(Collection<MetricProvider> metricProviders) {
-        setContentPane(formPanel);
+    public void startWithMetrics(Collection<MetricProvider> metricProviders) {
+        setContentPane(new ConfigurationFrame().formPanel);
         setTitle("Code Metrics");
         setSize(500, 500);
         setMaximumSize(new Dimension(500, 400));
