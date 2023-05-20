@@ -36,10 +36,10 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
                 for (MethodDeclaration method : methods) {
                     int methodComplexity = calculateMethodComplexity(method);
-                    wmc += methodComplexity;
+                    wmc += methodComplexity; //wmc = wmc + methodComplexity;
                 }
 
-                totalWmc += wmc;
+                totalWmc += wmc; //totalWmc = totalWmc + wmc
                 classCount++; //increment
             }
         }
