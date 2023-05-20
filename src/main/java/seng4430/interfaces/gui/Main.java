@@ -11,6 +11,6 @@ public class Main {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
         } catch (Exception ignored) {}
 
-        new ConfigurationFrame().startWithMetrics(Metrics.metricProviders.values());
+        new ConfigurationFrame(Metrics.metricProviders.values());
     }
 }
