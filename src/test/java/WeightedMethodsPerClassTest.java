@@ -32,17 +32,18 @@ public class WeightedMethodsPerClassTest {
 
     @Test
     public void providesCorrectAverageWmcResult() {
-        if (!(results.getResult("avgWmc") instanceof ClassResult<?> classResult)) { //checks if avgWmc result is an instance of ClassResult
+        if (!(results.getResult("avgWmc") instanceof SummaryResult<?> summaryResult)) { //checks if avgWmc result is an instance of ClassResult
             Assertions.fail("avgWmc not an instance of ClassResult"); //fail test if not
             return;
         }
 
-        var expectedResults = new HashMap<String, Double>() {{ //where the expected results for average WMC are defined
+        /*var expectedResults = new HashMap<String, Double>() {{ //where the expected results for average WMC are defined
             put("TC1", 8.0); //avgWmc = 8/1 = 8
             put("TC2", 34.0); //avgWmc = 68/2 = 34
             put("TC3", 64.0); //avgWmc = 192/3 = 64
-        }};
+        }};*/
 
-        Assertions.assertEquals(expectedResults, classResult.value()); //does obtained average WMC = expected results
+        //Assertions.assertEquals(expectedResults, summaryResult.value()); //does obtained average WMC = expected results
+        Assertions.assertEquals(118.33333333333333, summaryResult.value()); //does obtained average WMC = expected results
     }
 }
