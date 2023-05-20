@@ -40,7 +40,7 @@ public class FanOutTest {
                 put("isTime", 0);
                 put("isBad", 0);
                 put("getName", 0);
-                put("doNothing", 1);
+                put("doNothing", 3);
             }});
             put("TestClass2", new HashMap<>() {{
                 put("tryMethods", 3);
@@ -65,8 +65,21 @@ public class FanOutTest {
         }
 
         var expectedResults = new HashMap<String, HashMap<String, Integer>>() {{
-            put("TestClass1", new HashMap<>() {{
-                put("main", 2);
+            put("TestClass", new HashMap<>() {{
+                put("isTime", 0);
+                put("isBad", 0);
+                put("getName", 0);
+                put("doNothing", 1);
+            }});
+            put("TestClass2", new HashMap<>() {{
+                put("tryMethods", 3);
+                put("tryOtherMethods", 2);
+            }});
+            put("TestClass3", new HashMap<>() {{
+                put("isTime", 1);
+                put("isBad", 1);
+                put("getName", 1);
+                put("doNothing", 0);
             }});
         }};
 
@@ -80,10 +93,10 @@ public class FanOutTest {
             return;
         }
 
-        var expectedResults = new HashMap<String, HashMap<String, Integer>>() {{
-            put("TestClass1", new HashMap<>() {{
-                put("main", 3);
-            }});
+        var expectedResults = new HashMap<String, Double>() {{
+            put("TestClass", 0.75);
+            put("TestClass2", 2.5);
+            put("TestClass3", 0.75);
         }};
 
         Assertions.assertEquals(expectedResults, methodResult.value());
