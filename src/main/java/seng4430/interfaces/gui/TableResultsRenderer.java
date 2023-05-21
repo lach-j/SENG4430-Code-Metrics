@@ -26,7 +26,7 @@ public class TableResultsRenderer implements ResultsRender<TableModel> {
 
         List<String[]> data = new ArrayList<>();
 
-        for (var metricResult : results) {
+        for (MetricResultSet metricResult : results) {
             data.add(new String[]{metricResult.getMetricName(), ""});
             metricResult.getResults().forEach((key, result) -> {
                 if (result instanceof ClassResult<?> classResult) {

@@ -4,12 +4,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Extends the {@link MetricProvider} to provide the Weighted Methods Per Class metric across the given parsed project.
- * @version 26/05/2023
+ *
  * @author George Davis (c3350434)
+ * @version 26/05/2023
  */
 public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
@@ -19,11 +20,11 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         int totalWmc = 0; //total Weighted Methods per Class
         int classCount = 0; //class count
 
-        for (CompilationUnit cu : parseResults) { //iterate for each parsed compilation unit
+        for (CompilationUnit cu : compilationUnits) { //iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }

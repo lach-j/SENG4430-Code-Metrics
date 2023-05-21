@@ -19,48 +19,6 @@ import java.util.regex.Pattern;
 
 public class CommentsMetricProvider extends MetricProvider {
 
-    @Override
-    public String metricName() {
-        return "JavaDoc Coverage";
-    }
-
-    @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-
-        List<MethodDeclaration> methods = new ArrayList<>();
-        List<Comment> comments = new ArrayList<>();
-        List<CommentMethodPair> commentMethodPairs = new ArrayList<>();
-        int fileCount = 0;
-        int hasAuthorCount = 0;
-        for (var parseResult : parseResults) {
-            fileCount++;
-            if (parseResult == null) continue;
-            VoidVisitor<List<MethodDeclaration>> methodVisitor = new MethodVisitor();
-            if (hasAuthor(parseResult.getAllContainedComments())) {
-                hasAuthorCount++;
-            }
-            comments.addAll(parseResult.getAllContainedComments());
-            methodVisitor.visit(parseResult, methods);
-            commentMethodPairs.addAll(getCommentMethodPairs(comments));
-        }
-
-        var fogIndex = fogIndex(comments.toString());
-        // Calculate total number of method pairs covered by JavaDocs
-        var jdCoverageCount = (int) commentMethodPairs.stream().filter(CommentsMetricProvider::isMethodCovered).count();
-        // Calculate total number of comments
-        var totalJdCoverage = jdCoverageCount + "/" + methods.size();
-
-        var results = new MetricResultSet(metricName());
-
-        results.addResult("javaDocMethodCoverage", new SummaryResult<>("Overall JavaDoc Method Coverage", totalJdCoverage));
-        results.addResult("authorJavaDocCoverage", new SummaryResult<>("Files with Author JavaDoc", hasAuthorCount, "/" + fileCount));
-        results.addResult("totalId", new SummaryResult<>("Total Number of Comments", comments.size()));
-        results.addResult("fileCount", new SummaryResult<>("Total Number of Files", fileCount));
-        results.addResult("fogIndex", new SummaryResult<>("Fog index", fogIndex));
-        // Calculate and return average identifier name
-        return results;
-    }
-
     private static double fogIndex(String text) {
         text = removeCommentArtifacts(text);
         String[] sentences = text.split("[.!?]");
@@ -102,14 +60,6 @@ public class CommentsMetricProvider extends MetricProvider {
             }
         }
         return numComplexWords;
-    }
-
-    private static class MethodVisitor extends VoidVisitorAdapter<List<MethodDeclaration>> {
-        @Override
-        public void visit(MethodDeclaration md, List<MethodDeclaration> collector) {
-            super.visit(md, collector);
-            collector.add(md);
-        }
     }
 
     private static List<CommentMethodPair> getCommentMethodPairs(List<Comment> comments) {
@@ -156,6 +106,56 @@ public class CommentsMetricProvider extends MetricProvider {
             }
         }
         return true;
+    }
+
+    @Override
+    public String metricName() {
+        return "JavaDoc Coverage";
+    }
+
+    @Override
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
+
+        List<MethodDeclaration> methods = new ArrayList<>();
+        List<Comment> comments = new ArrayList<>();
+        List<CommentMethodPair> commentMethodPairs = new ArrayList<>();
+        int fileCount = 0;
+        int hasAuthorCount = 0;
+        for (CompilationUnit cu : compilationUnits) {
+            fileCount++;
+            if (cu == null) continue;
+            VoidVisitor<List<MethodDeclaration>> methodVisitor = new MethodVisitor();
+            if (hasAuthor(cu.getAllContainedComments())) {
+                hasAuthorCount++;
+            }
+            comments.addAll(cu.getAllContainedComments());
+            methodVisitor.visit(cu, methods);
+            commentMethodPairs.addAll(getCommentMethodPairs(comments));
+        }
+
+        double fogIndex = fogIndex(comments.toString());
+        // Calculate total number of method pairs covered by JavaDocs
+        int jdCoverageCount = (int) commentMethodPairs.stream().filter(CommentsMetricProvider::isMethodCovered).count();
+        // Calculate total number of comments
+        String totalJdCoverage = jdCoverageCount + "/" + methods.size();
+
+        MetricResultSet results = new MetricResultSet(metricName());
+
+        results.addResult("javaDocMethodCoverage", new SummaryResult<>("Overall JavaDoc Method Coverage", totalJdCoverage));
+        results.addResult("authorJavaDocCoverage", new SummaryResult<>("Files with Author JavaDoc", hasAuthorCount, "/" + fileCount));
+        results.addResult("totalId", new SummaryResult<>("Total Number of Comments", comments.size()));
+        results.addResult("fileCount", new SummaryResult<>("Total Number of Files", fileCount));
+        results.addResult("fogIndex", new SummaryResult<>("Fog index", fogIndex));
+        // Calculate and return average identifier name
+        return results;
+    }
+
+    private static class MethodVisitor extends VoidVisitorAdapter<List<MethodDeclaration>> {
+        @Override
+        public void visit(MethodDeclaration md, List<MethodDeclaration> collector) {
+            super.visit(md, collector);
+            collector.add(md);
+        }
     }
 
     private record CommentMethodPair(JavadocComment comment, MethodDeclaration method) {

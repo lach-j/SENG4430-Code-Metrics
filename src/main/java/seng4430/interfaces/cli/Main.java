@@ -5,13 +5,11 @@ import seng4430.StaticAnalyser;
 import seng4430.interfaces.gui.MetricResultsFrame;
 import seng4430.metricProviders.AnalysisConfiguration;
 import seng4430.metricProviders.MetricProvider;
+import seng4430.metricProviders.MetricResultSet;
 import seng4430.metricProviders.Metrics;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Main {
     public static void main(String... args) throws IOException {
@@ -64,14 +62,14 @@ public class Main {
         }
 
         String inputFilePath = cmd.getOptionValue("input");
-        var basePackages = Optional.ofNullable(cmd.getOptionValues("base-package")).orElse(new String[]{});
-        var projectRoots = Optional.ofNullable(cmd.getOptionValues("root")).orElse(new String[]{inputFilePath});
-        var providers = Optional.ofNullable(cmd.getOptionValues("metric")).orElse(Metrics.metricProviders.keySet().toArray(String[]::new));
+        String[] basePackages = Optional.ofNullable(cmd.getOptionValues("base-package")).orElse(new String[]{});
+        String[] projectRoots = Optional.ofNullable(cmd.getOptionValues("root")).orElse(new String[]{inputFilePath});
+        String[] providers = Optional.ofNullable(cmd.getOptionValues("metric")).orElse(Metrics.metricProviders.keySet().toArray(String[]::new));
 
-        var analyser = new StaticAnalyser(inputFilePath, projectRoots);
-        var results = analyser.runAnalysis(getProviders(providers), new AnalysisConfiguration(basePackages));
+        StaticAnalyser analyser = new StaticAnalyser(inputFilePath, projectRoots);
+        Collection<MetricResultSet> results = analyser.runAnalysis(getProviders(providers), new AnalysisConfiguration(basePackages));
 
-        var resultsString = new StringResultsRenderer().render(results);
+        String resultsString = new StringResultsRenderer().render(results);
         new MetricResultsFrame(results);
         System.out.println(resultsString);
     }
@@ -88,7 +86,7 @@ public class Main {
     }
 
     private static Options buildOptions() {
-        var options = new Options();
+        Options options = new Options();
 
         Option input = new Option("i", "input", true, "Path to parse.");
         input.setRequired(true);

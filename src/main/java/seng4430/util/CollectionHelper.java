@@ -8,14 +8,15 @@ import java.util.Collection;
 public class CollectionHelper {
     /**
      * Calculates the average of all {@link Integer}s within a {@link Collection}.
+     *
      * @param list The {@link Collection} of {@link Integer}s to be averaged.
      * @return The average of all {@link Integer}s within the {@link Collection}.
      */
     public static Double calculateAverage(Collection<Integer> list) {
-        var total = sumValues(list);
+        Integer total = sumValues(list);
         if (total == 0) return 0.0;
 
-        return ((double)total) / list.size();
+        return ((double) total) / list.size();
     }
 
     /**

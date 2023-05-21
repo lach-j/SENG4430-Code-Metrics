@@ -13,8 +13,9 @@ import static seng4430.util.CollectionHelper.calculateAverage;
 
 /**
  * Extends the {@link MetricProvider} to provide the Fan Out metric across the given parsed project.
- * @version 13/05/2023
+ *
  * @author Lachlan Johnson (c3350131)
+ * @version 13/05/2023
  */
 public class FanOutMetricProvider extends MetricProvider {
 
@@ -24,36 +25,36 @@ public class FanOutMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 
         Map<String, Map<String, Integer>> totalFanOut = new HashMap<>();
         Map<String, Map<String, Integer>> uniqueFanOut = new HashMap<>();
 
-        for (CompilationUnit unit : parseResults) {
+        for (CompilationUnit unit : compilationUnits) {
 
-            var classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
 
-            for (var clazz : classes) {
-                var methods = clazz.findAll(MethodDeclaration.class);
-                var className = clazz.getNameAsString();
+            for (ClassOrInterfaceDeclaration clazz : classes) {
+                List<MethodDeclaration> methods = clazz.findAll(MethodDeclaration.class);
+                String className = clazz.getNameAsString();
                 if (!totalFanOut.containsKey(className))
                     totalFanOut.put(className, new HashMap<>());
 
                 if (!uniqueFanOut.containsKey(className))
                     uniqueFanOut.put(className, new HashMap<>());
 
-                for (var method : methods) {
-                    var methodCalls = method.findAll(MethodCallExpr.class);
+                for (MethodDeclaration method : methods) {
+                    List<MethodCallExpr> methodCalls = method.findAll(MethodCallExpr.class);
 
-                    var methodName = method.getNameAsString();
+                    String methodName = method.getNameAsString();
                     if (!totalFanOut.get(className).containsKey(methodName))
                         totalFanOut.get(className).put(methodName, 0);
 
                     if (!uniqueFanOut.get(className).containsKey(methodName))
                         uniqueFanOut.get(className).put(methodName, 0);
 
-                    var currCount = totalFanOut.get(className).get(methodName);
-                    var currUniqueCount = totalFanOut.get(className).get(methodName);
+                    Integer currCount = totalFanOut.get(className).get(methodName);
+                    Integer currUniqueCount = totalFanOut.get(className).get(methodName);
 
                     totalFanOut.get(className).put(methodName, currCount + methodCalls.size());
                     uniqueFanOut.get(className).put(methodName, currUniqueCount + ((int) methodCalls.stream().distinct().count()));
@@ -61,17 +62,17 @@ public class FanOutMetricProvider extends MetricProvider {
             }
         }
 
-        var results = new MetricResultSet(this.metricName());
+        MetricResultSet results = new MetricResultSet(this.metricName());
 
-        var totalFanOutResult = new MethodResult<Integer>("Total Fan Out", "calls");
+        MethodResult<Integer> totalFanOutResult = new MethodResult<>("Total Fan Out", "calls");
         totalFanOut.forEach((clazz, methods) -> methods.forEach((method, calls) -> totalFanOutResult.addResult(clazz, method, calls)));
         results.addResult("totFanOut", totalFanOutResult);
 
-        var averageFanOutPerClassResult = new ClassResult<Double>("Average Total Fan Out Per Method Per Class", "calls");
+        ClassResult<Double> averageFanOutPerClassResult = new ClassResult<>("Average Total Fan Out Per Method Per Class", "calls");
         totalFanOut.forEach((clazz, methods) -> averageFanOutPerClassResult.addResult(clazz, calculateAverage(methods.values())));
         results.addResult("avgFanOutClass", averageFanOutPerClassResult);
 
-        var uniqueFanOutResult = new MethodResult<Integer>("Unique Fan Out", "calls");
+        MethodResult<Integer> uniqueFanOutResult = new MethodResult<>("Unique Fan Out", "calls");
         uniqueFanOut.forEach((clazz, methods) -> methods.forEach((method, calls) -> uniqueFanOutResult.addResult(clazz, method, calls)));
         results.addResult("unqFanOut", uniqueFanOutResult);
 

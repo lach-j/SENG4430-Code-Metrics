@@ -9,7 +9,8 @@ public class Main {
 
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         new ConfigurationFrame(Metrics.metricProviders.values());
     }

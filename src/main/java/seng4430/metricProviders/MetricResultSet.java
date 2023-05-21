@@ -43,7 +43,7 @@ public class MetricResultSet {
     }
 
     /**
-     * @param key Unique key to store the result against. If this key already exists within the result set it will be overridden.
+     * @param key    Unique key to store the result against. If this key already exists within the result set it will be overridden.
      * @param result The {@link MetricResult} to add to the result set.
      * @return This {@code MetricResultSet} instance with the added result.
      */

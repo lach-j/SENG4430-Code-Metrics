@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * A {@link MetricResult} that allows the same metric type to be reported on across multiple classes.
+ *
  * @param <T> Type of the result being reported on per class.
  */
 public class ClassResult<T> extends MetricResult<Map<String, T>> {
@@ -18,7 +19,7 @@ public class ClassResult<T> extends MetricResult<Map<String, T>> {
 
     /**
      * @param resultLabel Name of the metric result being reported on.
-     * @param unitLabel Unit associated with the result set.
+     * @param unitLabel   Unit associated with the result set.
      */
     public ClassResult(String resultLabel, String unitLabel) {
         super(resultLabel, new LinkedHashMap<>(), unitLabel);
@@ -26,11 +27,11 @@ public class ClassResult<T> extends MetricResult<Map<String, T>> {
 
     /**
      * @param className Name of the class being reported on.
-     * @param result Value of the result for the specified class.
+     * @param result    Value of the result for the specified class.
      * @return This {@code ClassResult} instance with the added result.
      */
     public ClassResult<T> addResult(String className, T result) {
-        var classes = value();
+        Map<String, T> classes = value();
         classes.put(className, result);
 
         return this;

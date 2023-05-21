@@ -4,6 +4,7 @@ import java.util.Optional;
 
 /**
  * Base result type to be included in a {@link MetricResultSet}. Extend this type to implement custom result types.
+ *
  * @param <T> The type of the data structure storing results in the implemented {@code MetricResult}.
  * @see ClassResult
  * @see MethodResult
@@ -36,7 +37,7 @@ public abstract class MetricResult<T> {
     }
 
     /**
-     * @param label Name of the metric result being reported on.
+     * @param label     Name of the metric result being reported on.
      * @param unitLabel Unit associated with the result set.
      */
     protected MetricResult(String label, T value, String unitLabel) {

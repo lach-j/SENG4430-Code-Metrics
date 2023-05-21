@@ -2,12 +2,16 @@ package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Extends the {@link MetricProvider} to provide the Number of Children metric across the given parsed project.
- * @version 26/05/2023
+ *
  * @author George Davis (c3350434)
+ * @version 26/05/2023
  */
 public class NumberOfChildrenMetricProvider extends MetricProvider {
 
@@ -17,10 +21,10 @@ public class NumberOfChildrenMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         List<Integer> numberOfChildrenList = new ArrayList<>();
 
-        for (CompilationUnit cu : parseResults) { //iterate for each parsed compilation unit
+        for (CompilationUnit cu : compilationUnits) { //iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }

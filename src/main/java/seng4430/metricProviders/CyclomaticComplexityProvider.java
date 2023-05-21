@@ -10,25 +10,26 @@ import java.util.List;
 
 /**
  * Extends the {@link MetricProvider} to analyse the Cyclomatic Complexity of the given parsed project.
- * @version 14/05/2023
+ *
  * @author Alex Waddell (c3330987)
+ * @version 14/05/2023
  */
 public class CyclomaticComplexityProvider extends MetricProvider {
 
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 
         MetricResultSet results = new MetricResultSet(this.metricName());
-        var totalComplexityResult = new ClassResult<Integer>("Cyclomatic complexity", "complexity");
-        for (CompilationUnit unit : parseResults) {
+        ClassResult<Integer> totalComplexityResult = new ClassResult<>("Cyclomatic complexity", "complexity");
+        for (CompilationUnit unit : compilationUnits) {
 
 
-            var classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
 
-            for (var clazz : classes) {
+            for (ClassOrInterfaceDeclaration clazz : classes) {
                 int complexity = calculateCyclomaticComplexity(clazz);
-                totalComplexityResult.addResult(clazz.getNameAsString(),complexity);
+                totalComplexityResult.addResult(clazz.getNameAsString(), complexity);
             }
 
             results.addResult("TotalComplexity", totalComplexityResult);

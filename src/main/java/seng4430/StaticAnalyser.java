@@ -16,6 +16,7 @@ public class StaticAnalyser {
     /**
      * List of {@link CompilationUnit} resulting from project parsing.
      * These units will be used in each {@link MetricProvider} provided for analysis.
+     *
      * @see ProjectParser
      */
     private final List<CompilationUnit> parsingResults;
@@ -25,15 +26,15 @@ public class StaticAnalyser {
     }
 
     /**
-     * @param providers A List of {@link MetricProvider} that will be used during analysis.
+     * @param providers     A List of {@link MetricProvider} that will be used during analysis.
      * @param configuration The configuration to be applied for all metrics.
      * @return A Collection of {@link MetricResultSet} containing the analysis results for each metric.
      */
     public Collection<MetricResultSet> runAnalysis(List<MetricProvider> providers, AnalysisConfiguration configuration) {
-        var analysisResults = new ArrayList<MetricResultSet>();
+        ArrayList<MetricResultSet> analysisResults = new ArrayList<>();
 
-        for (var provider : providers) {
-            var results = provider.runAnalysis(parsingResults, configuration);
+        for (MetricProvider provider : providers) {
+            MetricResultSet results = provider.runAnalysis(parsingResults, configuration);
             analysisResults.add(results);
         }
 
