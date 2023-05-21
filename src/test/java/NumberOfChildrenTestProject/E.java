@@ -1,6 +1,9 @@
 package NumberOfChildrenTestProject;
 
-public class E extends C { //Class E is an immediate subclass of C, which is an immediate subclass of A.
+//Class E is an immediate subclass of C, which is an immediate subclass of A.
+//number of immediate subclasses for class A = 2 = C + E
+
+public class E extends C { 
     public void method6() {
         method1();
         // do something new

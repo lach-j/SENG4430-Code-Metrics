@@ -1,6 +1,9 @@
 package NumberOfChildrenTestProject;
 
-public class A { //Class A has no immediate subclasses.
+//Class A has no immediate subclasses.
+//number of immediate subclasses for class A = 0
+
+public class A { 
     public void method1(){
         //do something;
     }
