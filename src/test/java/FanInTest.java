@@ -15,10 +15,10 @@ public class FanInTest {
 
     @BeforeAll
     public static void arrange() throws IOException {
-        var loiProvider = new FanInMetricProvider();
+        FanInMetricProvider loiProvider = new FanInMetricProvider();
 
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/FanInTestProject", "./src/test/java", "./src/main/java");
-        results = loiProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"FanInTestProject"}));
+        List<CompilationUnit> compilationUnits = ProjectParser.parse("./src/test/java/FanInTestProject", "./src/test/java", "./src/main/java");
+        results = loiProvider.runAnalysis(compilationUnits, new AnalysisConfiguration(new String[]{"FanInTestProject"}));
     }
 
     @Test

@@ -5,19 +5,17 @@ import seng4430.StaticAnalyser;
 import seng4430.interfaces.gui.MetricResultsFrame;
 import seng4430.metricProviders.AnalysisConfiguration;
 import seng4430.metricProviders.MetricProvider;
+import seng4430.metricProviders.MetricResultSet;
 import seng4430.metricProviders.Metrics;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class Main {
     public static void main(String... args) throws IOException {
         if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"}).noneMatch(x -> x.equals(args[0]))) {
             System.err.println("no valid command specified");
-            System.out.println("usage: java codemetrics <command> [options]");
+            System.out.println("usage: java seng4430.interfaces.cli.Main <command> [options]");
             System.out.println(
                     """
                             available commands:
@@ -39,7 +37,7 @@ public class Main {
         Options runOptions = buildOptions();
 
         if (args.length < 2) {
-            formatter.printHelp("codemetrics run <>", runOptions);
+            formatter.printHelp("seng4430.interfaces.cli.Main run <>", runOptions);
 
             System.exit(1);
             return;
@@ -58,20 +56,20 @@ public class Main {
             cmd = parser.parse(runOptions, argv);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            formatter.printHelp("codemetrics run", runOptions);
+            formatter.printHelp("seng4430.interfaces.cli.Main run", runOptions);
 
             System.exit(1);
         }
 
         String inputFilePath = cmd.getOptionValue("input");
-        var basePackages = Optional.ofNullable(cmd.getOptionValues("base-package")).orElse(new String[]{});
-        var projectRoots = Optional.ofNullable(cmd.getOptionValues("root")).orElse(new String[]{inputFilePath});
-        var providers = Optional.ofNullable(cmd.getOptionValues("metric")).orElse(Metrics.metricProviders.keySet().toArray(String[]::new));
+        String[] basePackages = Optional.ofNullable(cmd.getOptionValues("base-package")).orElse(new String[]{});
+        String[] projectRoots = Optional.ofNullable(cmd.getOptionValues("root")).orElse(new String[]{inputFilePath});
+        String[] providers = Optional.ofNullable(cmd.getOptionValues("metric")).orElse(Metrics.metricProviders.keySet().toArray(String[]::new));
 
-        var analyser = new StaticAnalyser(inputFilePath, projectRoots);
-        var results = analyser.runAnalysis(getProviders(providers), new AnalysisConfiguration(basePackages));
+        StaticAnalyser analyser = new StaticAnalyser(inputFilePath, projectRoots);
+        Collection<MetricResultSet> results = analyser.runAnalysis(getProviders(providers), new AnalysisConfiguration(basePackages));
 
-        var resultsString = new StringResultsRenderer().render(results);
+        String resultsString = new StringResultsRenderer().render(results);
         new MetricResultsFrame(results);
         System.out.println(resultsString);
     }
@@ -88,7 +86,7 @@ public class Main {
     }
 
     private static Options buildOptions() {
-        var options = new Options();
+        Options options = new Options();
 
         Option input = new Option("i", "input", true, "Path to parse.");
         input.setRequired(true);

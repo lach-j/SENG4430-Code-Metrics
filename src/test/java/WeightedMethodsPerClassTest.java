@@ -5,6 +5,12 @@ Date: 26/5/23
 Description: Assignment 2
 */
 
+/*
+File: WeightedMethodsPerClassTest.java
+Author: George Davis (c3350434)
+Date: 26/5/23
+Description: Assignment 2*/
+
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,16 +31,14 @@ public class WeightedMethodsPerClassTest {
 
     @BeforeAll
     public static void arrange() throws IOException {
-        var wmcProvider = new WeightedMethodsPerClassMetricProvider(); //instantiate
-        //parse project files for analysis
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/WeightedMethodsPerClassTestProject", "./src/test/java", "./src/main/java");
-        //run analysis using WMC provider and config
-        results = wmcProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"WeightedMethodsPerClassTestProject"}));
+        WeightedMethodsPerClassMetricProvider wmcProvider = new WeightedMethodsPerClassMetricProvider(); //instantiate
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/WeightedMethodsPerClassTestProject", "./src/test/java", "./src/main/java"); //parse project files
+        results = wmcProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"WeightedMethodsPerClassTestProject"})); //run analysis using WMC provider + configuration
     }
 
     //make sure avgWmc isn't null
     @Test
-    public void hasResults() { 
+    public void hasResults() {
         Assertions.assertNotNull(results.getResult("avgWmc"));
     }
 
@@ -59,11 +63,10 @@ public class WeightedMethodsPerClassTest {
             put("TC3", 184.0/3.0); //61.3333...
         }};
     
-        //get actual average
-        var actualAvgWmc = (Double) summaryResult.value();
+        // Get the actual average WMC value
+        Double actualAvgWmc = (Double) summaryResult.value();
 
-        //calculate expected average, using the helper method
-        var expectedAvgWmc = calculateDoubleAverage(expectedResults.values());
+        Double expectedAvgWmc = calculateDoubleAverage(expectedResults.values());
 
         //make sure actual = expected
         Assertions.assertEquals(expectedAvgWmc, actualAvgWmc);

@@ -15,10 +15,10 @@ public class FanOutTest {
 
     @BeforeAll
     public static void arrange() throws IOException {
-        var loiProvider = new FanOutMetricProvider();
+        FanOutMetricProvider loiProvider = new FanOutMetricProvider();
 
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/FanOutTestProject", "./src/test/java", "./src/main/java");
-        results = loiProvider.runAnalysis(parseResults);
+        List<CompilationUnit> compilationUnits = ProjectParser.parse("./src/test/java/FanOutTestProject", "./src/test/java", "./src/main/java");
+        results = loiProvider.runAnalysis(compilationUnits);
     }
 
     @Test

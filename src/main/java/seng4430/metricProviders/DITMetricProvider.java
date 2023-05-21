@@ -15,9 +15,9 @@ import java.util.Map;
  * @author Keenan Groves
  */
 public class DITMetricProvider extends MetricProvider {
+    private final LinkedHashMap<String, String> childClazzes = new LinkedHashMap<>();
     private int clazzCount = 0;
     private int totalDepth = 0;
-    private final LinkedHashMap<String, String> childClazzes = new LinkedHashMap<>();
 
     @Override
     public String metricName() {
@@ -25,15 +25,15 @@ public class DITMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
-        for (CompilationUnit cu : parseResults) {
+        for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 DITCalculator(clazz, resultSet);
             }
         }
         findRemainingDepths(resultSet);
-        resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", totalDepth/clazzCount, "Layers"));
+        resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", totalDepth / clazzCount, "Layers"));
         return resultSet;
     }
 
@@ -41,13 +41,12 @@ public class DITMetricProvider extends MetricProvider {
         NodeList<ClassOrInterfaceType> extended = clazz.getExtendedTypes();
         NodeList<ClassOrInterfaceType> implemented = clazz.getImplementedTypes();
         String parentClazz = "";
-        if (implemented.size() > 0 || extended.size() > 0) {
-            if (extended.size() > 0) {
+        if (!implemented.isEmpty() || !extended.isEmpty()) {
+            if (!extended.isEmpty()) {
                 for (ClassOrInterfaceType c : extended) {
                     parentClazz = c.getNameAsString();
                 }
-            }
-            else {
+            } else {
                 for (ClassOrInterfaceType c : implemented) {
                     parentClazz = c.getNameAsString();
                 }
@@ -62,7 +61,7 @@ public class DITMetricProvider extends MetricProvider {
     }
 
     private void findRemainingDepths(MetricResultSet resultSet) {
-        if (childClazzes.size() == 0) {
+        if (childClazzes.isEmpty()) {
             return;
         }
         for (Map.Entry<String, String> clazzInfo : childClazzes.entrySet()) {

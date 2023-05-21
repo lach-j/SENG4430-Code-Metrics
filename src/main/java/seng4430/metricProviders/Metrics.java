@@ -2,6 +2,9 @@ package seng4430.metricProviders;
 
 import java.util.HashMap;
 
+/**
+ * Provides the set of all current metrics.
+ */
 public class Metrics {
     public static HashMap<String, MetricProvider> metricProviders = new HashMap<>() {
         {
@@ -15,6 +18,7 @@ public class Metrics {
             put("docn", new DepthOfConditionalNestingProvider());
             put("noc", new NumberOfChildrenMetricProvider());
             put("wmc", new WeightedMethodsPerClassMetricProvider());
+            put("rfc", new ResponseForClassProvider());
         }
     };
 }

@@ -8,33 +8,43 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.List;
 
-public class DepthOfConditionalNestingProvider extends MetricProvider{
+/**
+ * Extends the {@link MetricProvider} to analyse the Depth of Conditional Nesting across the given parsed project.
+ *
+ * @author Alex Waddell (c3330987)
+ * @version 16/05/2023
+ */
+public class DepthOfConditionalNestingProvider extends MetricProvider {
 
-    
+
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 
 
         MetricResultSet results = new MetricResultSet(this.metricName());
-        var totalDepthOfConditionalNesting = new ClassResult<Integer>("Depth of conditional nesting", "depth");
-        for (CompilationUnit cu : parseResults) {
+        ClassResult<Integer> totalDepthOfConditionalNesting = new ClassResult<>("Depth of conditional nesting", "depth");
+        for (CompilationUnit cu : compilationUnits) {
 
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
 
-            var classes = cu.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
-
-            for (var clazz : classes) {
+            for (ClassOrInterfaceDeclaration clazz : classes) {
                 DepthOfConditionalNestingVisitor visitor = new DepthOfConditionalNestingVisitor();
                 visitor.visit(clazz, null);
 
 
                 int maxDepth = visitor.getMaxDepth();
-                totalDepthOfConditionalNesting.addResult(clazz.getNameAsString(),maxDepth);
+                totalDepthOfConditionalNesting.addResult(clazz.getNameAsString(), maxDepth);
             }
 
             results.addResult("TotalDepth", totalDepthOfConditionalNesting);
         }
 
         return results;
+    }
+
+    @Override
+    public String metricName() {
+        return "Depth Of Conditional Nesting";
     }
 
     private static class DepthOfConditionalNestingVisitor extends VoidVisitorAdapter<Void> {
@@ -119,10 +129,5 @@ public class DepthOfConditionalNestingProvider extends MetricProvider{
         public int getMaxDepth() {
             return maxDepth;
         }
-    }
-
-    @Override
-    public String metricName() {
-        return "Depth Of Conditional Nesting";
     }
 }

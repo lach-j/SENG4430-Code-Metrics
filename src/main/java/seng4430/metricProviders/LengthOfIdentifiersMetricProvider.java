@@ -11,7 +11,14 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Length of Identifiers metric across the given parsed project.
+ *
+ * @author Lachlan Johnson (c3350131)
+ * @version 08/05/2023
+ */
 public class LengthOfIdentifiersMetricProvider extends MetricProvider {
 
     @Override
@@ -20,8 +27,8 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-        var identifiers = new ArrayList<String>();
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
+        ArrayList<String> identifiers = new ArrayList<>();
 
         List<Class<? extends Node>> classes =
                 new ArrayList<>() {
@@ -34,31 +41,31 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
                 };
 
         // Parse Java file
-        for (var parseResult : parseResults) {
-            if (parseResult == null) continue;
+        for (CompilationUnit cu : compilationUnits) {
+            if (cu == null) continue;
 
             for (Class<? extends Node> clazz : classes) {
                 if (!NodeWithSimpleName.class.isAssignableFrom(clazz))
                     throw new IllegalArgumentException(
                             clazz.getName() + " does not contain a getNameAsString definition");
 
-                parseResult.findAll(clazz)
+                cu.findAll(clazz)
                         .forEach(node -> identifiers.add(((NodeWithSimpleName<?>) node).getNameAsString()));
             }
         }
 
         // Calculate total number of characters
-        var total = identifiers.stream().map(String::length).reduce(Integer::sum);
+        Optional<Integer> total = identifiers.stream().map(String::length).reduce(Integer::sum);
 
         // Calculate average number of characters per identifier
-        var avgIdLength = Double.valueOf((total.orElse(0))) / identifiers.size();
+        double avgIdLength = Double.valueOf((total.orElse(0))) / identifiers.size();
 
         // Find longest identifier
-        var maxIdLength =
+        int maxIdLength =
                 identifiers.stream().max(Comparator.comparing(String::length)).orElse("").length();
 
         // Find shortest identifier
-        var minIdLength =
+        int minIdLength =
                 identifiers.stream().min(Comparator.comparing(String::length)).orElse("").length();
 
         // Return identifier length metric results;

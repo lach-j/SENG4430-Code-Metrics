@@ -10,11 +10,18 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Weighted Methods Per Class metric across the given parsed project.
+ *
+ * @author George Davis (c3350434)
+ * @version 26/05/2023
+ */
 public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
@@ -25,41 +32,41 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         //total complexity of methods in class
-        double totalWmc = 0; 
+        double totalWmc = 0;
         //total methods in class
-        int classCount = 0; 
+        int classCount = 0;
 
-        var wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
+        ClassResult<Double> wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
 
         //iterate for each parsed compilation unit
-        for (CompilationUnit cu : parseResults) { 
+        for (CompilationUnit cu : parseResults) {
             if (cu == null) {
                 continue;
             }
 
             // find all class or interface declarations
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); 
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
 
             //iterate for each class
-            for (ClassOrInterfaceDeclaration clazz : classes) { 
+            for (ClassOrInterfaceDeclaration clazz : classes) {
                 //find method declarations within the class
-                List<MethodDeclaration> methods = clazz.getMethods(); 
+                List<MethodDeclaration> methods = clazz.getMethods();
                 //WMC for current class
-                double wmc = calculateClassWmc(methods); 
+                double wmc = calculateClassWmc(methods);
 
                 wmcPerClass.addResult(clazz.getNameAsString(), wmc);
 
                 totalWmc += wmc;
                 //increment method count
-                classCount++; 
+                classCount++;
             }
         }
 
         //finds average = total complexity/number of methods (handles division by 0)
-        double avgWmc = classCount > 0 ? totalWmc / classCount : 0; 
+        double avgWmc = classCount > 0 ? totalWmc / classCount : 0;
 
         //metric results
-        return new MetricResultSet(this.metricName()) 
+        return new MetricResultSet(this.metricName())
                 .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc))
                 .addResult("wmcPerClass", wmcPerClass);
     }
@@ -71,20 +78,20 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
             int methodComplexity = calculateMethodComplexity(method);
             wmc += methodComplexity;
         }
-        return wmc/methods.size();
+        return wmc / methods.size();
     }
-    
+
     //calculates method complexity by counting the number of characters in the method body that are not comments
     private int calculateMethodComplexity(MethodDeclaration method) {
-        var comments = method.getAllContainedComments();
+        List<Comment> comments = method.getAllContainedComments();
 
-        //find number of comment characters in method
+        // Find the number of comment characters in the method.
         int commentsLength = comments.
                 stream()
                 .map(comment -> comment.asString().replaceAll("[\\s\\n]+", "").length())
                 .reduce(0, Integer::sum);
 
-        //get number of ALL characters in method
+        // Get the number of ALL characters in the method.
         int methodBodyLength = method
                 .getBody()
                 .map(Node::getChildNodes).orElse(new ArrayList<>())
@@ -93,7 +100,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
                 .collect(Collectors.joining())
                 .length();
 
-        //number of characters in method that are not comments
+        // Return the number of characters in the method that are not comments.
         return methodBodyLength - commentsLength;
     }     
 }

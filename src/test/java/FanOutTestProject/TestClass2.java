@@ -2,15 +2,15 @@ package FanOutTestProject;
 
 public class TestClass2 {
     public void tryMethods() {
-        var test = new TestClass();
+        TestClass test = new TestClass();
 
         test.getName();
         test.doNothing();
-        var isTime = test.isTime();
+        boolean isTime = test.isTime();
     }
 
     public void tryOtherMethods() {
-        var test = new TestClass3();
+        TestClass3 test = new TestClass3();
 
         test.isBad();
         test.getName();
