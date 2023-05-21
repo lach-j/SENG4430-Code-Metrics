@@ -1,3 +1,10 @@
+/*
+File: C.java
+Author: George Davis (c3350434)
+Date: 26/5/23
+Description: Assignment 2
+*/
+
 package NumberOfChildrenTestProject;
 
 //Class C is an immediate subclass of A.

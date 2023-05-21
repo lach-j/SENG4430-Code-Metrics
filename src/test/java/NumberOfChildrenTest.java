@@ -23,16 +23,17 @@ public class NumberOfChildrenTest {
 
     @Test
     public void testNumberOfChildrenMetric() throws IOException {
-        // Create an instance of the NumberOfChildrenMetricProvider
+        //create instance of NumberOfChildrenMetricProvider
         NumberOfChildrenMetricProvider nocProvider = new NumberOfChildrenMetricProvider();
 
-        // Parse the source code files using the ProjectParser
+        //parse source code files using ProjectParser
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/NumberOfChildrenTestProject");
 
-        // Run the analysis and get the metric results
+        //run analysis and get metric results
         Map<String, MetricResult<?>> result = nocProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"seng4430"})).getResults();
 
-        // Verify the metric results
+        //verify metric results
+        
         //average number of immediate subclasses: (2 + 1 + 1 + 0) / 5 = 0.8
         Assertions.assertEquals(0.8, result.get("avgNOC").value());
         //minimum number of immediate subclasses: 0
