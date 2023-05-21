@@ -10,7 +10,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-import java.util.*;
+import java.util.List;
 
 public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
@@ -21,37 +21,42 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-        int totalWmc = 0; //total Weighted Methods per Class
-        int classCount = 0; //class count
+        int totalWmc = 0; // total Weighted Methods per Class
+        int methodCount = 0; // method count
 
-        for (CompilationUnit cu : parseResults) { //iterate for each parsed compilation unit
+        for (CompilationUnit cu : parseResults) { // iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }
 
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); //find all class or interface declarations
-            for (ClassOrInterfaceDeclaration clazz : classes) { //iterate for each class
-                List<MethodDeclaration> methods = clazz.getMethods(); //find method declarations within the class
-                int wmc = 0; //WMC for current class
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); // find all class or interface declarations
 
-                for (MethodDeclaration method : methods) {
-                    int methodComplexity = calculateMethodComplexity(method);
-                    wmc += methodComplexity; //wmc = wmc + methodComplexity;
-                }
+            for (ClassOrInterfaceDeclaration clazz : classes) { // iterate for each class
+                List<MethodDeclaration> methods = clazz.getMethods(); // find method declarations within the class
+                int wmc = calculateClassWmc(methods); // WMC for current class
 
-                totalWmc += wmc; //totalWmc = totalWmc + wmc
-                classCount++; //increment
+                totalWmc += wmc;
+                methodCount += methods.size(); // increment method count
             }
         }
 
-        double avgWmc = (double) totalWmc / classCount; //find average WMC
+        double avgWmc = methodCount > 0 ? (double) totalWmc / methodCount : 0; // find average WMC, handle division by zero case
 
-        return new MetricResultSet(this.metricName()) //return metric results
+        return new MetricResultSet(this.metricName()) // return metric results
                 .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc));
     }
 
-    private int calculateMethodComplexity(MethodDeclaration method) { //calculate method complexity based on the number of characters
+    private int calculateClassWmc(List<MethodDeclaration> methods) {
+        int wmc = 0;
+        for (MethodDeclaration method : methods) {
+            int methodComplexity = calculateMethodComplexity(method);
+            wmc += methodComplexity;
+        }
+        return wmc;
+    }
+    
+    private int calculateMethodComplexity(MethodDeclaration method) {
         String methodBody = method.getBody().map(body -> body.toString().replaceAll("\\s+", "")).orElse("");
         return methodBody.length();
-    }
+    }     
 }

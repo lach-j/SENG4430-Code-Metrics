@@ -2,6 +2,13 @@
 File: WeightedMethodsPerClassTest.java
 Author: George Davis (c3350434)
 Date: 26/5/23
+Description: Assignment 2
+*/
+
+/*
+File: WeightedMethodsPerClassTest.java
+Author: George Davis (c3350434)
+Date: 26/5/23
 Description: Assignment 2*/
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -25,6 +32,7 @@ public class WeightedMethodsPerClassTest {
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/WeightedMethodsPerClassTestProject", "./src/test/java", "./src/main/java"); //parse project files
         results = wmcProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"WeightedMethodsPerClassTestProject"})); //run analysis using WMC provider + configuration
     }
+
     @Test
     public void hasResults() { //make sure avgWmc isn't null
         Assertions.assertNotNull(results.getResult("avgWmc"));
@@ -32,18 +40,28 @@ public class WeightedMethodsPerClassTest {
 
     @Test
     public void providesCorrectAverageWmcResult() {
-        if (!(results.getResult("avgWmc") instanceof SummaryResult<?> summaryResult)) { //checks if avgWmc result is an instance of ClassResult
-            Assertions.fail("avgWmc not an instance of ClassResult"); //fail test if not
+        if (!(results.getResult("avgWmc") instanceof SummaryResult<?>)) {
+            Assertions.fail("avgWmc not an instance of SummaryResult");
             return;
         }
-
-        /*var expectedResults = new HashMap<String, Double>() {{ //where the expected results for average WMC are defined
-            put("TC1", 8.0); //avgWmc = 8/1 = 8
-            put("TC2", 34.0); //avgWmc = 68/2 = 34
-            put("TC3", 64.0); //avgWmc = 192/3 = 64
-        }};*/
-
-        //Assertions.assertEquals(expectedResults, summaryResult.value()); //does obtained average WMC = expected results
-        Assertions.assertEquals(118.33333333333333, summaryResult.value()); //does obtained average WMC = expected results
-    }
+    
+        SummaryResult<?> summaryResult = (SummaryResult<?>) results.getResult("avgWmc");
+        var expectedResults = new HashMap<String, Double>() {{
+            put("TC1", 8.0);
+            put("TC2", 34.0);
+            put("TC3", 64.0);
+        }};
+    
+        // Get the actual average WMC value
+        var actualAvgWmc = (Double) summaryResult.value();
+    
+        Assertions.assertEquals(expectedResults.get("TC1"), actualAvgWmc);
+    
+        // Get the actual average WMC values for TC2 and TC3
+        var actualAvgWmcTC2 = (Double) results.getResult("avgWmc").value();
+        var actualAvgWmcTC3 = (Double) results.getResult("avgWmc").value();
+    
+        Assertions.assertEquals(expectedResults.get("TC2"), actualAvgWmcTC2);
+        Assertions.assertEquals(expectedResults.get("TC3"), actualAvgWmcTC3);
+    }     
 }
