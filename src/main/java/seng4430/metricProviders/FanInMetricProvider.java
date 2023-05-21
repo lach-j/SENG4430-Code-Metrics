@@ -5,7 +5,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 
 import java.util.*;
 
-import static seng4430.util.CollectionHelper.calculateAverage;
+import static seng4430.util.CollectionHelper.calculateIntegerAverage;
 
 public class FanInMetricProvider extends MetricProvider {
 
@@ -48,7 +48,7 @@ public class FanInMetricProvider extends MetricProvider {
         var averageFanInPerClass = new ClassResult<Double>("Average Fan In Per Method Per Class", "calls");
 
         numMethodCalls.forEach((clazz, result) -> result.forEach((method, calls) -> totalFanIn.addResult(clazz, method, calls)));
-        numMethodCalls.forEach((clazz, result) -> averageFanInPerClass.addResult(clazz, calculateAverage(result.values())));
+        numMethodCalls.forEach((clazz, result) -> averageFanInPerClass.addResult(clazz, calculateIntegerAverage(result.values())));
 
         results.addResult("totFanIn", totalFanIn);
         results.addResult("avgFanInClass", averageFanInPerClass);

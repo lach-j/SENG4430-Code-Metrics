@@ -10,17 +10,17 @@ Description: Assignment 2
 
 package WeightedMethodsPerClassTestProject;
 
-public class TC3 { //avgWmc = (60+60+72)/3 = 64
+public class TC3 { //avgWmc = (56+56+72)/3 = 61.3333...
     int x = 0;
     int y = 0;
 
-    public void method1() { //8+26+26 = 60chars
+    public void method1() { //4+26+26 = 56chars
         x++;
         System.out.println("abc");
         System.out.println("abc");
     }
 
-    public void method2() { //8+26+26 = 60chars
+    public void method2() { //4+26+26 = 56chars
         y++;
         System.out.println("def");
         System.out.println("def");

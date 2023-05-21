@@ -7,10 +7,13 @@ Description: Assignment 2*/
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
@@ -21,8 +24,10 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-        int totalWmc = 0; // total Weighted Methods per Class
-        int methodCount = 0; // method count
+        double totalWmc = 0; // total Weighted Methods per Class
+        int classCount = 0; // class count
+
+        var wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
 
         for (CompilationUnit cu : parseResults) { // iterate for each parsed compilation unit
             if (cu == null) {
@@ -33,30 +38,35 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
             for (ClassOrInterfaceDeclaration clazz : classes) { // iterate for each class
                 List<MethodDeclaration> methods = clazz.getMethods(); // find method declarations within the class
-                int wmc = calculateClassWmc(methods); // WMC for current class
+                double wmc = calculateClassWmc(methods); // WMC for current class
+
+                wmcPerClass.addResult(clazz.getNameAsString(), wmc);
 
                 totalWmc += wmc;
-                methodCount += methods.size(); // increment method count
+                classCount++; // increment method count
             }
         }
 
-        double avgWmc = methodCount > 0 ? (double) totalWmc / methodCount : 0; // find average WMC, handle division by zero case
+        double avgWmc = classCount > 0 ? totalWmc / classCount : 0; // find average WMC, handle division by zero case
 
         return new MetricResultSet(this.metricName()) // return metric results
-                .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc));
+                .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc))
+                .addResult("wmcPerClass", wmcPerClass);
     }
 
-    private int calculateClassWmc(List<MethodDeclaration> methods) {
-        int wmc = 0;
+    private double calculateClassWmc(List<MethodDeclaration> methods) {
+        double wmc = 0;
         for (MethodDeclaration method : methods) {
             int methodComplexity = calculateMethodComplexity(method);
             wmc += methodComplexity;
         }
-        return wmc;
+        return wmc/methods.size();
     }
     
     private int calculateMethodComplexity(MethodDeclaration method) {
-        String methodBody = method.getBody().map(body -> body.toString().replaceAll("\\s+", "")).orElse("");
-        return methodBody.length();
+        var comments = method.getAllContainedComments();
+        var commentsLength = comments.stream().map(comment -> comment.asString().replaceAll("[\\s\\n]+", "").length()).reduce(0, Integer::sum);
+        String methodBody = method.getBody().map(Node::getChildNodes).orElse(new ArrayList<>()).stream().map(x -> x.toString().replaceAll("[\\s\\n]+", "")).collect(Collectors.joining());
+        return methodBody.length() - commentsLength;
     }     
 }

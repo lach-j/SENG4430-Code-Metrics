@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import static seng4430.util.CollectionHelper.calculateDoubleAverage;
+
 public class WeightedMethodsPerClassTest {
     
     private static MetricResultSet results;
@@ -46,22 +48,20 @@ public class WeightedMethodsPerClassTest {
         }
     
         SummaryResult<?> summaryResult = (SummaryResult<?>) results.getResult("avgWmc");
+        ClassResult<?> wmcPerClass = (ClassResult<?>) results.getResult("wmcPerClass");
         var expectedResults = new HashMap<String, Double>() {{
             put("TC1", 8.0);
-            put("TC2", 34.0);
-            put("TC3", 64.0);
+            put("TC2", 30.0);
+            put("TC3", 184.0/3.0);
         }};
     
         // Get the actual average WMC value
         var actualAvgWmc = (Double) summaryResult.value();
+
+        var expectedAvgWmc = calculateDoubleAverage(expectedResults.values());
+
+        Assertions.assertEquals(expectedAvgWmc, actualAvgWmc);
     
-        Assertions.assertEquals(expectedResults.get("TC1"), actualAvgWmc);
-    
-        // Get the actual average WMC values for TC2 and TC3
-        var actualAvgWmcTC2 = (Double) results.getResult("avgWmc").value();
-        var actualAvgWmcTC3 = (Double) results.getResult("avgWmc").value();
-    
-        Assertions.assertEquals(expectedResults.get("TC2"), actualAvgWmcTC2);
-        Assertions.assertEquals(expectedResults.get("TC3"), actualAvgWmcTC3);
+        Assertions.assertEquals(expectedResults, wmcPerClass.value());
     }     
 }
