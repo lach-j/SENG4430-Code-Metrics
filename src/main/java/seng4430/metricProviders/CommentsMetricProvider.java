@@ -34,18 +34,18 @@ public class CommentsMetricProvider extends MetricProvider {
     }
 
     private static String removeCommentArtifacts(String code) {
-        //Remove * from javadocs
+        // Remove * from javadocs
         code = code.replaceAll("\\*", "");
-        //Remove slash symbols
+        // Remove slash symbols
         code = code.replaceAll("[*/]", "");
-        //Remove anything enclosed in <tags>
+        // Remove anything enclosed in <tags>
         code = code.replaceAll("<[^>]*>", "");
         return code;
     }
 
     private static int countSyllables(String[] words) {
         int numComplexWords = 0;
-        //Regex for syllables
+        // Regex for syllables
         String regex = "(?i)[aiou][aeiou]*|e[aeiou]*(?!d?\\b)";
         Pattern pattern = Pattern.compile(regex);
         for (String word : words) {

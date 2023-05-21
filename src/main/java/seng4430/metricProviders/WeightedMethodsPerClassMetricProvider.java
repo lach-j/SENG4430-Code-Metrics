@@ -21,18 +21,18 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
-        int totalWmc = 0; //total Weighted Methods per Class
-        int classCount = 0; //class count
+        int totalWmc = 0; // total Weighted Methods per Class
+        int classCount = 0; // class count
 
-        for (CompilationUnit cu : compilationUnits) { //iterate for each parsed compilation unit
+        for (CompilationUnit cu : compilationUnits) { // iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }
 
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); //find all class or interface declarations
-            for (ClassOrInterfaceDeclaration clazz : classes) { //iterate for each class
-                List<MethodDeclaration> methods = clazz.getMethods(); //find method declarations within the class
-                int wmc = 0; //WMC for current class
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); // find all class or interface declarations
+            for (ClassOrInterfaceDeclaration clazz : classes) { // iterate for each class
+                List<MethodDeclaration> methods = clazz.getMethods(); // find method declarations within the class
+                int wmc = 0; // WMC for current class
 
                 for (MethodDeclaration method : methods) {
                     int methodComplexity = calculateMethodComplexity(method);
@@ -40,17 +40,17 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
                 }
 
                 totalWmc += wmc;
-                classCount++; //increment
+                classCount++; // increment
             }
         }
 
-        double avgWmc = (double) totalWmc / classCount; //find average WMC
+        double avgWmc = (double) totalWmc / classCount; // find average WMC
 
-        return new MetricResultSet(this.metricName()) //return metric results
+        return new MetricResultSet(this.metricName()) // return metric results
                 .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc));
     }
 
-    private int calculateMethodComplexity(MethodDeclaration method) { //calculate method complexity based on the number of characters
+    private int calculateMethodComplexity(MethodDeclaration method) { // calculate method complexity based on the number of characters
         String methodBody = method.getBody().map(body -> body.toString().replaceAll("\\s+", "")).orElse("");
         return methodBody.length();
     }
