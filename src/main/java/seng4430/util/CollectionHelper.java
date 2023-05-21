@@ -28,11 +28,11 @@ public class CollectionHelper {
         return list.stream().reduce(0, Integer::sum);
     }
 
-    public static int calculateMinInteger(Collection<Integer> values) { //calculate minimum
+    public static int calculateMinInteger(Collection<Integer> values) { // calculate minimum
         return values.stream().min(Comparator.naturalOrder()).orElse(0);
     }
 
-    public static int calculateMaxInteger(Collection<Integer> values) { //calculate maximum
+    public static int calculateMaxInteger(Collection<Integer> values) { // calculate maximum
         return values.stream().max(Comparator.naturalOrder()).orElse(0);
     }
 

@@ -23,55 +23,55 @@ import static seng4430.util.CollectionHelper.*;
  */
 public class NumberOfChildrenMetricProvider extends MetricProvider {
 
-    //gets name of metric
+    // gets name of metric
     @Override
     public String metricName() {
         return "Number of Children (NOC)";
     }
 
-    //runs analysis for NOC calculation
+    // runs analysis for NOC calculation
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
-        //map stores number of direct children for each class
+        // map stores number of direct children for each class
         Map<String, Integer> directChildren = new HashMap<>();
 
-        //iterate for each parsed compilation unit
+        // iterate for each parsed compilation unit
         for (CompilationUnit cu : compilationUnits) {
             if (cu == null) {
                 continue;
             }
 
-            //find all class or interface declarations
+            // find all class or interface declarations
             List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
             for (ClassOrInterfaceDeclaration clazz : classes) {
-                //add current class to map if it doesn't exist
+                // add current class to map if it doesn't exist
                 addExtendsIfMissing(directChildren, clazz.getNameAsString());
-                //process each extended type of class
+                // process each extended type of class
                 clazz.getExtendedTypes().forEach(type -> {
-                    //increment map count for extended type
+                    // increment map count for extended type
                     addExtends(directChildren, type.getNameAsString());
                 });
             }
         }
 
-        //find average number of children
+        // find average number of children
         double averageNumberOfChildren = calculateIntegerAverage(directChildren.values());
-        //find minimum number of children
+        // find minimum number of children
         int minNumberOfChildren = calculateMinInteger(directChildren.values());
-        //find maximum number of children
+        // find maximum number of children
         int maxNumberOfChildren = calculateMaxInteger(directChildren.values());
 
-        //create and return MetricResultSet with metric results
+        // create and return MetricResultSet with metric results
         return new MetricResultSet(this.metricName())
                 .addResult("avgNOC", new SummaryResult<>("Average Number of Children", averageNumberOfChildren))
                 .addResult("minNOC", new SummaryResult<>("Minimum Number of Children", minNumberOfChildren))
                 .addResult("maxNOC", new SummaryResult<>("Maximum Number of Children", maxNumberOfChildren));
     }
 
-    //increments the count for the given class in the map
+    // increments the count for the given class in the map
     private void addExtends(Map<String, Integer> classes, String clazz) {
-        //classes = the map storing the class and its number of children
-        //clazz   = the name of the class to increment
+        // classes = the map storing the class and its number of children
+        // clazz   = the name of the class to increment
         if (!classes.containsKey(clazz)) {
             classes.put(clazz, 1);
             return;
@@ -81,7 +81,7 @@ public class NumberOfChildrenMetricProvider extends MetricProvider {
         classes.put(clazz, current + 1);
     }
 
-    //add class to the map if it doesn't exist, ensuring all classes are included even if no other class extends this class
+    // add class to the map if it doesn't exist, ensuring all classes are included even if no other class extends this class
     private void addExtendsIfMissing(Map<String, Integer> classes, String clazz) {
         if (!classes.containsKey(clazz)) {
             classes.put(clazz, 0);
