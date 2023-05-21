@@ -5,12 +5,6 @@ Date: 26/5/23
 Description: Assignment 2
 */
 
-/*
-File: WeightedMethodsPerClassTest.java
-Author: George Davis (c3350434)
-Date: 26/5/23
-Description: Assignment 2*/
-
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
