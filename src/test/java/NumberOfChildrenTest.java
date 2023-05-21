@@ -31,8 +31,7 @@ public class NumberOfChildrenTest {
         var result = nocProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"seng4430"})).getResults();
 
         // Verify the metric results
-        //number of immediate subclasses for class A is 4
-        //average number of immediate subclasses: 4 / 5 = 0.8
+        //average number of immediate subclasses: (2 + 1 + 1 + 0) / 5 = 0.8
         Assertions.assertEquals(0.8, result.get("avgNOC").value());
         //minimum number of immediate subclasses: 0
         Assertions.assertEquals(0, result.get("minNOC").value());
