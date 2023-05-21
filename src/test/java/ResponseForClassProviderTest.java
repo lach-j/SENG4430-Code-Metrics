@@ -18,7 +18,7 @@ class ResponseForClassProviderTest {
     @BeforeAll
     public static void arrange() throws IOException {
         var responseForClassProvider = new ResponseForClassProvider();
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java");
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/RfcCboTestProject");
         results = responseForClassProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"ResponseForClassProviderTest"}));
     }
     //Test 1 Retrieving and validating header for Result
@@ -34,8 +34,7 @@ class ResponseForClassProviderTest {
             return;
         }
 
-        Assertions.assertEquals(classResult.value().get("LengthOfIdentifiersTest"), 6);
-        Assertions.assertEquals(classResult.value().get("GraphicsTestClass"), 3);
-        Assertions.assertEquals(classResult.value().get("AnotherTestClass"), 1);
+        Assertions.assertEquals(classResult.value().get("LengthOfIdentifiersMetricProvider"), 19);
+        Assertions.assertEquals(classResult.value().get("CyclomaticComplexityProvider"), 11);
     }
 }
