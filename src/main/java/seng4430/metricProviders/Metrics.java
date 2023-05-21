@@ -15,6 +15,7 @@ public class Metrics {
             put("docn", new DepthOfConditionalNestingProvider());
             put("noc", new NumberOfChildrenMetricProvider());
             put("wmc", new WeightedMethodsPerClassMetricProvider());
+            put("rfc", new ResponseForClassProvider());
         }
     };
 }

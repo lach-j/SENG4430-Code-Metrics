@@ -16,17 +16,17 @@ public class ResponseForClassProvider extends MetricProvider {
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
         var resultSet = new MetricResultSet(metricName());
+        var classResult = new ClassResult<Integer>("Class names", "method calls");
         for (CompilationUnit cu : parseResults) {
             for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                Set<String> s = collectMethodCallExpr(classOrInterfaceDeclaration, new HashSet<>());
-                for (MethodDeclaration m : classOrInterfaceDeclaration.getMethods()) {
-                    s.add(m.getNameAsString());
+                Set<String> methodNames = collectMethodCallExpr(classOrInterfaceDeclaration, new HashSet<>());
+                for (MethodDeclaration methodDeclaration : classOrInterfaceDeclaration.getMethods()) {
+                    methodNames.add(methodDeclaration.getNameAsString());
                 }
-                var classResult = new ClassResult<Integer>("Response for a class", "rfc");
-                classResult.addResult(classOrInterfaceDeclaration.getNameAsString(), s.size());
-                resultSet.addResult(classOrInterfaceDeclaration.getNameAsString(), classResult);
+                classResult.addResult(classOrInterfaceDeclaration.getNameAsString(), methodNames.size());
             }
         }
+        resultSet.addResult("Response for a class", classResult);
         return resultSet;
     }
 
@@ -46,6 +46,6 @@ public class ResponseForClassProvider extends MetricProvider {
 
     @Override
     public String metricName() {
-        return "Response for class metric";
+        return "Response for Class";
     }
 }
