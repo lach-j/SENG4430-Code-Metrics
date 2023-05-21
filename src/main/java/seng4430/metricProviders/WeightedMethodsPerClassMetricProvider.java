@@ -24,36 +24,47 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-        double totalWmc = 0; // total Weighted Methods per Class
-        int classCount = 0; // class count
+        //total complexity of methods in class
+        double totalWmc = 0; 
+        //total methods in class
+        int classCount = 0; 
 
         var wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
 
-        for (CompilationUnit cu : parseResults) { // iterate for each parsed compilation unit
+        //iterate for each parsed compilation unit
+        for (CompilationUnit cu : parseResults) { 
             if (cu == null) {
                 continue;
             }
 
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); // find all class or interface declarations
+            // find all class or interface declarations
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); 
 
-            for (ClassOrInterfaceDeclaration clazz : classes) { // iterate for each class
-                List<MethodDeclaration> methods = clazz.getMethods(); // find method declarations within the class
-                double wmc = calculateClassWmc(methods); // WMC for current class
+            //iterate for each class
+            for (ClassOrInterfaceDeclaration clazz : classes) { 
+                //find method declarations within the class
+                List<MethodDeclaration> methods = clazz.getMethods(); 
+                //WMC for current class
+                double wmc = calculateClassWmc(methods); 
 
                 wmcPerClass.addResult(clazz.getNameAsString(), wmc);
 
                 totalWmc += wmc;
-                classCount++; // increment method count
+                //increment method count
+                classCount++; 
             }
         }
 
-        double avgWmc = classCount > 0 ? totalWmc / classCount : 0; // find average WMC, handle division by zero case
+        //finds average = total complexity/number of methods (handles division by 0)
+        double avgWmc = classCount > 0 ? totalWmc / classCount : 0; 
 
-        return new MetricResultSet(this.metricName()) // return metric results
+        //metric results
+        return new MetricResultSet(this.metricName()) 
                 .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc))
                 .addResult("wmcPerClass", wmcPerClass);
     }
 
+    //calculates the total weighted methods complexity of a class
     private double calculateClassWmc(List<MethodDeclaration> methods) {
         double wmc = 0;
         for (MethodDeclaration method : methods) {
@@ -63,16 +74,17 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
         return wmc/methods.size();
     }
     
+    //calculates method complexity by counting the number of characters in the method body that are not comments
     private int calculateMethodComplexity(MethodDeclaration method) {
         var comments = method.getAllContainedComments();
 
-        // Find the number of comment characters in the method.
+        //find number of comment characters in method
         int commentsLength = comments.
                 stream()
                 .map(comment -> comment.asString().replaceAll("[\\s\\n]+", "").length())
                 .reduce(0, Integer::sum);
 
-        // Get the number of ALL characters in the method.
+        //get number of ALL characters in method
         int methodBodyLength = method
                 .getBody()
                 .map(Node::getChildNodes).orElse(new ArrayList<>())
@@ -81,7 +93,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
                 .collect(Collectors.joining())
                 .length();
 
-        // Return the number of characters in the method that are not comments.
+        //number of characters in method that are not comments
         return methodBodyLength - commentsLength;
     }     
 }
