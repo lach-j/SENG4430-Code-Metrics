@@ -1,3 +1,9 @@
+/*
+File: WeightedMethodsPerClassMetricProvider.java
+Author: George Davis (c3350434)
+Date: 26/5/23
+Description: Assignment 2*/
+
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -25,36 +31,47 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-        double totalWmc = 0; // total Weighted Methods per Class
-        int classCount = 0; // class count
+        // total complexity of methods in class
+        double totalWmc = 0;
+        // total methods in class
+        int classCount = 0;
 
         ClassResult<Double> wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
 
-        for (CompilationUnit cu : parseResults) { // iterate for each parsed compilation unit
+        // iterate for each parsed compilation unit
+        for (CompilationUnit cu : parseResults) {
             if (cu == null) {
                 continue;
             }
 
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); // find all class or interface declarations
+            // find all class or interface declarations
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
 
-            for (ClassOrInterfaceDeclaration clazz : classes) { // iterate for each class
-                List<MethodDeclaration> methods = clazz.getMethods(); // find method declarations within the class
-                double wmc = calculateClassWmc(methods); // WMC for current class
+            // iterate for each class
+            for (ClassOrInterfaceDeclaration clazz : classes) {
+                // find method declarations within the class
+                List<MethodDeclaration> methods = clazz.getMethods();
+                // WMC for current class
+                double wmc = calculateClassWmc(methods);
 
                 wmcPerClass.addResult(clazz.getNameAsString(), wmc);
 
                 totalWmc += wmc;
-                classCount++; // increment method count
+                // increment method count
+                classCount++;
             }
         }
 
-        double avgWmc = classCount > 0 ? totalWmc / classCount : 0; // find average WMC, handle division by zero case
+        // finds average = total complexity/number of methods (handles division by 0)
+        double avgWmc = classCount > 0 ? totalWmc / classCount : 0;
 
-        return new MetricResultSet(this.metricName()) // return metric results
+        // metric results
+        return new MetricResultSet(this.metricName())
                 .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc))
                 .addResult("wmcPerClass", wmcPerClass);
     }
 
+    // calculates the total weighted methods complexity of a class
     private double calculateClassWmc(List<MethodDeclaration> methods) {
         double wmc = 0;
         for (MethodDeclaration method : methods) {
@@ -64,6 +81,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
         return wmc / methods.size();
     }
 
+    // calculates method complexity by counting the number of characters in the method body that are not comments
     private int calculateMethodComplexity(MethodDeclaration method) {
         List<Comment> comments = method.getAllContainedComments();
 

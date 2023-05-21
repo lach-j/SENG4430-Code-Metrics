@@ -21,6 +21,6 @@ public class A {
     }
 
     public void method5() {
-        //do something
+        // do something
     }
 }

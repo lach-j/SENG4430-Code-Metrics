@@ -2,7 +2,7 @@ package DITTestProject;
 
 public class A {
     public void method1(){
-        //do something;
+        // do something;
     }
 
     public void method2() {

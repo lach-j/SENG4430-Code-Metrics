@@ -7,8 +7,8 @@ Description: Assignment 2
 
 package NumberOfChildrenTestProject;
 
-//Class E is an immediate subclass of C, which is an immediate subclass of A.
-//number of immediate subclasses for class A = 2 = C + E
+// Class E is an immediate subclass of C, which is an immediate subclass of A.
+// number of immediate subclasses for class A = 2 = C + E
 
 public class E extends C { 
     

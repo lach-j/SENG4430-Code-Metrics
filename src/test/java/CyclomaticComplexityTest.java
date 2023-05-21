@@ -15,6 +15,7 @@ import java.util.List;
 
 public class CyclomaticComplexityTest {
     private static MetricResultSet results;
+
     @BeforeAll
     public static void arrange() throws IOException {
         CyclomaticComplexityProvider CCProvider = new CyclomaticComplexityProvider();
@@ -35,11 +36,11 @@ public class CyclomaticComplexityTest {
             return;
         }
 
-        var expectedResults = new HashMap<String, Integer>(){{
-            put("AnotherTestClass",1);
-            put("ConditionalNestingTestClass",4);
-            put("GraphicsTestClass",1);
-            put("TestClass",1);
+        var expectedResults = new HashMap<String, Integer>() {{
+            put("AnotherTestClass", 1);
+            put("ConditionalNestingTestClass", 4);
+            put("GraphicsTestClass", 1);
+            put("TestClass", 1);
 
         }};
 

@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class StringRenderTest {
+    private static String makeUniform(String val) {
+        return Pattern.compile("\\s+?$", Pattern.MULTILINE).matcher(val).replaceAll("").replaceAll("\r\n", "\n");
+    }
+
     @Test
     public void stringRenderTest() {
         MetricResultSet aResults = new MetricResultSet("First Set of Metrics");
@@ -84,9 +88,5 @@ public class StringRenderTest {
                      """;
 
         Assertions.assertEquals(makeUniform(expected), makeUniform(renderedResult));
-    }
-
-    private static String makeUniform(String val) {
-        return Pattern.compile("\\s+?$", Pattern.MULTILINE).matcher(val).replaceAll("").replaceAll("\r\n", "\n");
     }
 }
