@@ -65,8 +65,23 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
     
     private int calculateMethodComplexity(MethodDeclaration method) {
         var comments = method.getAllContainedComments();
-        var commentsLength = comments.stream().map(comment -> comment.asString().replaceAll("[\\s\\n]+", "").length()).reduce(0, Integer::sum);
-        String methodBody = method.getBody().map(Node::getChildNodes).orElse(new ArrayList<>()).stream().map(x -> x.toString().replaceAll("[\\s\\n]+", "")).collect(Collectors.joining());
-        return methodBody.length() - commentsLength;
+
+        // Find the number of comment characters in the method.
+        int commentsLength = comments.
+                stream()
+                .map(comment -> comment.asString().replaceAll("[\\s\\n]+", "").length())
+                .reduce(0, Integer::sum);
+
+        // Get the number of ALL characters in the method.
+        int methodBodyLength = method
+                .getBody()
+                .map(Node::getChildNodes).orElse(new ArrayList<>())
+                .stream()
+                .map(x -> x.toString().replaceAll("[\\s\\n]+", ""))
+                .collect(Collectors.joining())
+                .length();
+
+        // Return the number of characters in the method that are not comments.
+        return methodBodyLength - commentsLength;
     }     
 }
