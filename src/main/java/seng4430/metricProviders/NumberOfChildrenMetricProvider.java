@@ -1,19 +1,20 @@
-/*
-File: NumberOfChildrenMetricProvider.java
-Author: George Davis (c3350434)
-Date: 26/5/23
-Description: Assignment 2*/
-
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import java.util.*;
 
-import static seng4430.util.CollectionHelper.calculateIntegerAverage;
-import static seng4430.util.CollectionHelper.calculateMinInteger;
-import static seng4430.util.CollectionHelper.calculateMaxInteger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static seng4430.util.CollectionHelper.*;
+
+/**
+ * Extends the {@link MetricProvider} to provide the Number of Children metric across the given parsed project.
+ *
+ * @author George Davis (c3350434)
+ * @version 26/05/2023
+ */
 public class NumberOfChildrenMetricProvider extends MetricProvider {
 
     @Override
@@ -22,15 +23,15 @@ public class NumberOfChildrenMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         Map<String, Integer> directChildren = new HashMap<>();
 
-        for (CompilationUnit cu : parseResults) { //iterate for each parsed compilation unit
+        for (CompilationUnit cu : compilationUnits) { // iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }
 
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); //find all class or interface declarations
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); // find all class or interface declarations
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 addExtendsIfMissing(directChildren, clazz.getNameAsString());
                 clazz.getExtendedTypes().forEach(type -> {

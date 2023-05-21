@@ -1,20 +1,21 @@
-/*
-File: WeightedMethodsPerClassMetricProvider.java
-Author: George Davis (c3350434)
-Date: 26/5/23
-Description: Assignment 2*/
-
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Weighted Methods Per Class metric across the given parsed project.
+ *
+ * @author George Davis (c3350434)
+ * @version 26/05/2023
+ */
 public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
@@ -27,7 +28,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
         double totalWmc = 0; // total Weighted Methods per Class
         int classCount = 0; // class count
 
-        var wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
+        ClassResult<Double> wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
 
         for (CompilationUnit cu : parseResults) { // iterate for each parsed compilation unit
             if (cu == null) {
@@ -60,11 +61,11 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
             int methodComplexity = calculateMethodComplexity(method);
             wmc += methodComplexity;
         }
-        return wmc/methods.size();
+        return wmc / methods.size();
     }
-    
+
     private int calculateMethodComplexity(MethodDeclaration method) {
-        var comments = method.getAllContainedComments();
+        List<Comment> comments = method.getAllContainedComments();
 
         // Find the number of comment characters in the method.
         int commentsLength = comments.
@@ -83,5 +84,5 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
         // Return the number of characters in the method that are not comments.
         return methodBodyLength - commentsLength;
-    }     
+    }
 }

@@ -2,16 +2,28 @@ package seng4430.util;
 
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
 
+/**
+ * A utility class providing helper methods for collections.
+ */
 public class CollectionHelper {
+    /**
+     * Calculates the average of all {@link Integer}s within a {@link Collection}.
+     *
+     * @param list The {@link Collection} of {@link Integer}s to be averaged.
+     * @return The average of all {@link Integer}s within the {@link Collection}.
+     */
     public static Double calculateIntegerAverage(Collection<Integer> list) {
-        var total = sumIntegerValues(list);
+        Integer total = sumIntegerValues(list);
         if (total == 0) return 0.0;
 
-        return ((double)total) / list.size();
+        return ((double) total) / list.size();
     }
 
+    /**
+     * @param list The {@link Collection} of {@link Integer}s to be summed.
+     * @return The sum of all {@link Integer}s.
+     */
     public static Integer sumIntegerValues(Collection<Integer> list) {
         return list.stream().reduce(0, Integer::sum);
     }
@@ -25,10 +37,10 @@ public class CollectionHelper {
     }
 
     public static Double calculateDoubleAverage(Collection<Double> list) {
-        var total = sumDoubleValues(list);
+        Double total = sumDoubleValues(list);
         if (total == 0) return 0.0;
 
-        return ((double)total) / list.size();
+        return total / list.size();
     }
 
     public static Double sumDoubleValues(Collection<Double> list) {

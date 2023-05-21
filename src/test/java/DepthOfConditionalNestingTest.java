@@ -15,9 +15,9 @@ public class DepthOfConditionalNestingTest {
     private static MetricResultSet results;
     @BeforeAll
     public static void arrange() throws IOException {
-        var DOCNProvider = new DepthOfConditionalNestingProvider();
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/CyclomaticComplexityTestProject");
-        results = DOCNProvider.runAnalysis(parseResults);
+        DepthOfConditionalNestingProvider DOCNProvider = new DepthOfConditionalNestingProvider();
+        List<CompilationUnit> compilationUnits = ProjectParser.parse("./src/test/java/CyclomaticComplexityTestProject");
+        results = DOCNProvider.runAnalysis(compilationUnits);
     }
 
     @Test

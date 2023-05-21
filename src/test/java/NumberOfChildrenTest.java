@@ -8,11 +8,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.AnalysisConfiguration;
+import seng4430.metricProviders.MetricResult;
 import seng4430.metricProviders.NumberOfChildrenMetricProvider;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Test to ensure that the Number of Children (NOC) metric is calculated correctly.
@@ -22,13 +24,13 @@ public class NumberOfChildrenTest {
     @Test
     public void testNumberOfChildrenMetric() throws IOException {
         // Create an instance of the NumberOfChildrenMetricProvider
-        var nocProvider = new NumberOfChildrenMetricProvider();
+        NumberOfChildrenMetricProvider nocProvider = new NumberOfChildrenMetricProvider();
 
         // Parse the source code files using the ProjectParser
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/NumberOfChildrenTestProject");
 
         // Run the analysis and get the metric results
-        var result = nocProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"seng4430"})).getResults();
+        Map<String, MetricResult<?>> result = nocProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"seng4430"})).getResults();
 
         // Verify the metric results
         //average number of immediate subclasses: (2 + 1 + 1 + 0) / 5 = 0.8
