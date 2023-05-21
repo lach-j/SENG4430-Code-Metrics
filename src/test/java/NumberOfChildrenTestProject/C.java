@@ -8,7 +8,7 @@ Description: Assignment 2
 package NumberOfChildrenTestProject;
 
 //Class C is an immediate subclass of A.
-//number of immediate subclasses for class A = 1 = C
+//number of immediate subclasses for class A = 2 = B and C
 
 public class C extends A { 
 

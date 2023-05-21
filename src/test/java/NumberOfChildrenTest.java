@@ -34,11 +34,19 @@ public class NumberOfChildrenTest {
 
         //verify metric results
         
-        //average number of immediate subclasses: (2 + 1 + 1 + 0) / 5 = 0.8
+        //average number of immediate subclasses: 
+        //  = (A        + B + C + D + E) / 5 
+        //  = ((B + C)  + D + E + 0 + 0) / 5
+        //  = (2        + 1 + 1 + 0 + 0) / 5 
+        //  = 0.8
         Assertions.assertEquals(0.8, result.get("avgNOC").value());
-        //minimum number of immediate subclasses: 0
+        //minimum number of immediate subclasses: 
+        // = D and E
+        // = 0
         Assertions.assertEquals(0, result.get("minNOC").value());
-        //maximum number of immediate subclasses: 2
+        //maximum number of immediate subclasses: 
+        //  = A
+        //  = 2
         Assertions.assertEquals(2, result.get("maxNOC").value());        
     }
 }
