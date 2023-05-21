@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static seng4430.util.CollectionHelper.calculateAverage;
+import static seng4430.util.CollectionHelper.calculateIntegerAverage;
 
 /**
  * Extends the {@link MetricProvider} to provide the Fan Out metric across the given parsed project.
@@ -68,8 +68,8 @@ public class FanOutMetricProvider extends MetricProvider {
         totalFanOut.forEach((clazz, methods) -> methods.forEach((method, calls) -> totalFanOutResult.addResult(clazz, method, calls)));
         results.addResult("totFanOut", totalFanOutResult);
 
-        ClassResult<Double> averageFanOutPerClassResult = new ClassResult<>("Average Total Fan Out Per Method Per Class", "calls");
-        totalFanOut.forEach((clazz, methods) -> averageFanOutPerClassResult.addResult(clazz, calculateAverage(methods.values())));
+        ClassResult<Double> averageFanOutPerClassResult = new ClassResult<Double>("Average Total Fan Out Per Method Per Class", "calls");
+        totalFanOut.forEach((clazz, methods) -> averageFanOutPerClassResult.addResult(clazz, calculateIntegerAverage(methods.values())));
         results.addResult("avgFanOutClass", averageFanOutPerClassResult);
 
         MethodResult<Integer> uniqueFanOutResult = new MethodResult<>("Unique Fan Out", "calls");

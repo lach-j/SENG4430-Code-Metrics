@@ -1,10 +1,14 @@
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.comments.Comment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Extends the {@link MetricProvider} to provide the Weighted Methods Per Class metric across the given parsed project.
@@ -20,38 +24,65 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
-        int totalWmc = 0; // total Weighted Methods per Class
+    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+        double totalWmc = 0; // total Weighted Methods per Class
         int classCount = 0; // class count
 
-        for (CompilationUnit cu : compilationUnits) { // iterate for each parsed compilation unit
+        ClassResult<Double> wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
+
+        for (CompilationUnit cu : parseResults) { // iterate for each parsed compilation unit
             if (cu == null) {
                 continue;
             }
 
             List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); // find all class or interface declarations
+
             for (ClassOrInterfaceDeclaration clazz : classes) { // iterate for each class
                 List<MethodDeclaration> methods = clazz.getMethods(); // find method declarations within the class
-                int wmc = 0; // WMC for current class
+                double wmc = calculateClassWmc(methods); // WMC for current class
 
-                for (MethodDeclaration method : methods) {
-                    int methodComplexity = calculateMethodComplexity(method);
-                    wmc += methodComplexity;
-                }
+                wmcPerClass.addResult(clazz.getNameAsString(), wmc);
 
                 totalWmc += wmc;
-                classCount++; // increment
+                classCount++; // increment method count
             }
         }
 
-        double avgWmc = (double) totalWmc / classCount; // find average WMC
+        double avgWmc = classCount > 0 ? totalWmc / classCount : 0; // find average WMC, handle division by zero case
 
         return new MetricResultSet(this.metricName()) // return metric results
-                .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc));
+                .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc))
+                .addResult("wmcPerClass", wmcPerClass);
     }
 
-    private int calculateMethodComplexity(MethodDeclaration method) { // calculate method complexity based on the number of characters
-        String methodBody = method.getBody().map(body -> body.toString().replaceAll("\\s+", "")).orElse("");
-        return methodBody.length();
+    private double calculateClassWmc(List<MethodDeclaration> methods) {
+        double wmc = 0;
+        for (MethodDeclaration method : methods) {
+            int methodComplexity = calculateMethodComplexity(method);
+            wmc += methodComplexity;
+        }
+        return wmc / methods.size();
+    }
+
+    private int calculateMethodComplexity(MethodDeclaration method) {
+        List<Comment> comments = method.getAllContainedComments();
+
+        // Find the number of comment characters in the method.
+        int commentsLength = comments.
+                stream()
+                .map(comment -> comment.asString().replaceAll("[\\s\\n]+", "").length())
+                .reduce(0, Integer::sum);
+
+        // Get the number of ALL characters in the method.
+        int methodBodyLength = method
+                .getBody()
+                .map(Node::getChildNodes).orElse(new ArrayList<>())
+                .stream()
+                .map(x -> x.toString().replaceAll("[\\s\\n]+", ""))
+                .collect(Collectors.joining())
+                .length();
+
+        // Return the number of characters in the method that are not comments.
+        return methodBodyLength - commentsLength;
     }
 }

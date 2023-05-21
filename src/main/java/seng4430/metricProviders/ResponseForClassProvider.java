@@ -15,8 +15,8 @@ public class ResponseForClassProvider extends MetricProvider {
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
-        var resultSet = new MetricResultSet(metricName());
-        var classResult = new ClassResult<Integer>("Class names", "method calls");
+        MetricResultSet resultSet = new MetricResultSet(metricName());
+        ClassResult<Integer> classResult = new ClassResult<Integer>("Class names", "method calls");
         for (CompilationUnit cu : parseResults) {
             for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 Set<String> methodNames = collectMethodCallExpr(classOrInterfaceDeclaration, new HashSet<>());
@@ -31,11 +31,11 @@ public class ResponseForClassProvider extends MetricProvider {
     }
 
     private Set<String> collectMethodCallExpr(Node node, Set<String> methodCallExpressions) {
-        if(node.getChildNodes().isEmpty()) {
+        if (node.getChildNodes().isEmpty()) {
             return methodCallExpressions;
         } else {
-            for(Node child : node.getChildNodes()){
-                if(child instanceof MethodCallExpr) {
+            for (Node child : node.getChildNodes()) {
+                if (child instanceof MethodCallExpr) {
                     methodCallExpressions.add(((MethodCallExpr) child).getNameAsString());
                 }
                 methodCallExpressions.addAll(collectMethodCallExpr(child, methodCallExpressions));
