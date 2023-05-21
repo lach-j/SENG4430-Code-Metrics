@@ -25,7 +25,7 @@ public class WeightedMethodsPerClassTest {
 
     @BeforeAll
     public static void arrange() throws IOException {
-        var wmcProvider = new WeightedMethodsPerClassMetricProvider(); //instantiate
+        WeightedMethodsPerClassMetricProvider wmcProvider = new WeightedMethodsPerClassMetricProvider(); //instantiate
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/WeightedMethodsPerClassTestProject", "./src/test/java", "./src/main/java"); //parse project files
         results = wmcProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"WeightedMethodsPerClassTestProject"})); //run analysis using WMC provider + configuration
     }
@@ -58,9 +58,9 @@ public class WeightedMethodsPerClassTest {
         }};
     
         // Get the actual average WMC value
-        var actualAvgWmc = (Double) summaryResult.value();
+        Double actualAvgWmc = (Double) summaryResult.value();
 
-        var expectedAvgWmc = calculateDoubleAverage(expectedResults.values());
+        Double expectedAvgWmc = calculateDoubleAverage(expectedResults.values());
 
         //make sure actual = expected
         Assertions.assertEquals(expectedAvgWmc, actualAvgWmc);
