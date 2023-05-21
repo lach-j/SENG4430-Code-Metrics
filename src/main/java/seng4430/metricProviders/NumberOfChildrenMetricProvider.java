@@ -2,8 +2,7 @@
 File: NumberOfChildrenMetricProvider.java
 Author: George Davis (c3350434)
 Date: 26/5/23
-Description: Assignment 2
-*/
+Description: Assignment 2*/
 
 package seng4430.metricProviders;
 
@@ -26,24 +25,24 @@ public class NumberOfChildrenMetricProvider extends MetricProvider {
 
     //gets name of metric
     @Override
-    public String metricName() { 
+    public String metricName() {
         return "Number of Children (NOC)";
     }
 
     //runs analysis for NOC calculation
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) { 
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         //map stores number of direct children for each class
-        Map<String, Integer> directChildren = new HashMap<>(); 
+        Map<String, Integer> directChildren = new HashMap<>();
 
         //iterate for each parsed compilation unit
-        for (CompilationUnit cu : compilationUnits) { 
+        for (CompilationUnit cu : compilationUnits) {
             if (cu == null) {
                 continue;
             }
 
             //find all class or interface declarations
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class); 
+            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 //add current class to map if it doesn't exist
                 addExtendsIfMissing(directChildren, clazz.getNameAsString());
@@ -56,11 +55,11 @@ public class NumberOfChildrenMetricProvider extends MetricProvider {
         }
 
         //find average number of children
-        double averageNumberOfChildren = calculateIntegerAverage(directChildren.values()); 
+        double averageNumberOfChildren = calculateIntegerAverage(directChildren.values());
         //find minimum number of children
-        int minNumberOfChildren = calculateMinInteger(directChildren.values()); 
+        int minNumberOfChildren = calculateMinInteger(directChildren.values());
         //find maximum number of children
-        int maxNumberOfChildren = calculateMaxInteger(directChildren.values()); 
+        int maxNumberOfChildren = calculateMaxInteger(directChildren.values());
 
         //create and return MetricResultSet with metric results
         return new MetricResultSet(this.metricName())
