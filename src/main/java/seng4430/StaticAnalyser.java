@@ -13,17 +13,27 @@ import java.util.List;
 
 public class StaticAnalyser {
 
-    private final List<CompilationUnit> ParsingResults;
+    /**
+     * List of {@link CompilationUnit} resulting from project parsing.
+     * These units will be used in each {@link MetricProvider} provided for analysis.
+     * @see ProjectParser
+     */
+    private final List<CompilationUnit> parsingResults;
 
     public StaticAnalyser(String parsePath, String[] projectRoots) throws IOException {
-        ParsingResults = ProjectParser.parse(parsePath, projectRoots);
+        parsingResults = ProjectParser.parse(parsePath, projectRoots);
     }
 
+    /**
+     * @param providers A List of {@link MetricProvider} that will be used during analysis.
+     * @param configuration The configuration to be applied for all metrics.
+     * @return A Collection of {@link MetricResultSet} containing the analysis results for each metric.
+     */
     public Collection<MetricResultSet> runAnalysis(List<MetricProvider> providers, AnalysisConfiguration configuration) {
         var analysisResults = new ArrayList<MetricResultSet>();
 
         for (var provider : providers) {
-            var results = provider.runAnalysis(ParsingResults, configuration);
+            var results = provider.runAnalysis(parsingResults, configuration);
             analysisResults.add(results);
         }
 

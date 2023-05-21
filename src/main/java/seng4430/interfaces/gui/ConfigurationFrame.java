@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * A {@link JFrame} containing form fields for configuring and running an instance of {@link StaticAnalyser} in a GUI.
+ */
 public class ConfigurationFrame extends JFrame {
     private JTextField projectPathTextField;
     private JButton projectPathBrowseButton;

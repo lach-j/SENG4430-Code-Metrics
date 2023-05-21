@@ -17,7 +17,7 @@ public class Main {
     public static void main(String... args) throws IOException {
         if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"}).noneMatch(x -> x.equals(args[0]))) {
             System.err.println("no valid command specified");
-            System.out.println("usage: java codemetrics <command> [options]");
+            System.out.println("usage: java seng4430.interfaces.cli.Main <command> [options]");
             System.out.println(
                     """
                             available commands:
@@ -39,7 +39,7 @@ public class Main {
         Options runOptions = buildOptions();
 
         if (args.length < 2) {
-            formatter.printHelp("codemetrics run <>", runOptions);
+            formatter.printHelp("seng4430.interfaces.cli.Main run <>", runOptions);
 
             System.exit(1);
             return;
@@ -58,7 +58,7 @@ public class Main {
             cmd = parser.parse(runOptions, argv);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            formatter.printHelp("codemetrics run", runOptions);
+            formatter.printHelp("seng4430.interfaces.cli.Main run", runOptions);
 
             System.exit(1);
         }

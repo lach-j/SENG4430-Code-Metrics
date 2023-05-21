@@ -11,7 +11,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * A result renderer that returns a {@link TableModel} representation of a collection of {@link MetricResultSet}.
+ * This model can be applied to a {@link javax.swing.JTable} to render these results.
+ */
 public class TableResultsRenderer implements ResultsRender<TableModel> {
+    /**
+     * @param results {@link Collection} of {@link MetricResultSet} that will be rendered.
+     * @return A model of the {@link MetricResultSet} Collection.
+     */
     @Override
     public TableModel render(Collection<MetricResultSet> results) {
         String[] cols = new String[]{"Metric", "Result"};

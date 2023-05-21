@@ -8,8 +8,15 @@ import seng4430.metricProviders.MetricResultSet;
 
 import java.util.Collection;
 
+/**
+ * A result renderer that returns a {@link String} representation of a collection of {@link MetricResultSet}.
+ */
 public class StringResultsRenderer implements ResultsRender<String> {
 
+    /**
+     * @param results {@link Collection} of {@link MetricResultSet} that will be rendered.
+     * @return A String representation of the rendered {@link MetricResultSet} Collection.
+     */
     public String render(Collection<MetricResultSet> results) {
 
         var builder = new StringBuilder();

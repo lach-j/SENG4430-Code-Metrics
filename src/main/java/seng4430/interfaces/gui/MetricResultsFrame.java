@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 
+/**
+ * A frame for displaying a collection of {@link MetricResultSet}.
+ * @see TableResultsRenderer
+ */
 public class MetricResultsFrame {
     private JPanel panel1;
     private JTable table1;
