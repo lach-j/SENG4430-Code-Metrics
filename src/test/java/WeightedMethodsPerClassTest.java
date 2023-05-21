@@ -20,42 +20,53 @@ import static seng4430.util.CollectionHelper.calculateDoubleAverage;
 
 public class WeightedMethodsPerClassTest {
     
+    //stores analysis results
     private static MetricResultSet results;
 
     @BeforeAll
     public static void arrange() throws IOException {
-        WeightedMethodsPerClassMetricProvider wmcProvider = new WeightedMethodsPerClassMetricProvider(); //instantiate
+        var wmcProvider = new WeightedMethodsPerClassMetricProvider(); //instantiate
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/WeightedMethodsPerClassTestProject", "./src/test/java", "./src/main/java"); //parse project files
         results = wmcProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"WeightedMethodsPerClassTestProject"})); //run analysis using WMC provider + configuration
     }
 
+    //make sure avgWmc isn't null
     @Test
-    public void hasResults() { //make sure avgWmc isn't null
+    public void hasResults() { 
         Assertions.assertNotNull(results.getResult("avgWmc"));
     }
 
     @Test
     public void providesCorrectAverageWmcResult() {
+        //check if avgWmc result is an instance of SummaryResult
         if (!(results.getResult("avgWmc") instanceof SummaryResult<?>)) {
             Assertions.fail("avgWmc not an instance of SummaryResult");
             return;
         }
     
+        //get avgWmc summary result
         SummaryResult<?> summaryResult = (SummaryResult<?>) results.getResult("avgWmc");
+        //get wmcPerClass class result
         ClassResult<?> wmcPerClass = (ClassResult<?>) results.getResult("wmcPerClass");
         var expectedResults = new HashMap<String, Double>() {{
+            // Expected WMC for class TC1
             put("TC1", 8.0);
+            // Expected WMC for class TC2
             put("TC2", 30.0);
-            put("TC3", 184.0/3.0);
+            // Expected WMC for class TC3
+            put("TC3", 184.0/3.0); //61.3333...
         }};
     
         // Get the actual average WMC value
-        Double actualAvgWmc = (Double) summaryResult.value();
+        var actualAvgWmc = (Double) summaryResult.value();
 
-        Double expectedAvgWmc = calculateDoubleAverage(expectedResults.values());
+        var expectedAvgWmc = calculateDoubleAverage(expectedResults.values());
 
+        //make sure actual = expected
+        Assertions.assertEquals(expectedAvgWmc, actualAvgWmc);
         Assertions.assertEquals(expectedAvgWmc, actualAvgWmc);
     
+        //make sure actual = expected
         Assertions.assertEquals(expectedResults, wmcPerClass.value());
     }     
 }
