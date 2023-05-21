@@ -1,6 +1,8 @@
 package seng4430.util;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 public class CollectionHelper {
     public static Double calculateIntegerAverage(Collection<Integer> list) {
@@ -12,6 +14,14 @@ public class CollectionHelper {
 
     public static Integer sumIntegerValues(Collection<Integer> list) {
         return list.stream().reduce(0, Integer::sum);
+    }
+
+    public static int calculateMinInteger(Collection<Integer> values) { //calculate minimum
+        return values.stream().min(Comparator.naturalOrder()).orElse(0);
+    }
+
+    public static int calculateMaxInteger(Collection<Integer> values) { //calculate maximum
+        return values.stream().max(Comparator.naturalOrder()).orElse(0);
     }
 
     public static Double calculateDoubleAverage(Collection<Double> list) {

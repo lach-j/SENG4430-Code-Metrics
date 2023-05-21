@@ -7,6 +7,7 @@ Description: Assignment 2
 import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import seng4430.metricProviders.AnalysisConfiguration;
 import seng4430.metricProviders.NumberOfChildrenMetricProvider;
 import seng4430.parsing.ProjectParser;
 
@@ -27,7 +28,7 @@ public class NumberOfChildrenTest {
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/NumberOfChildrenTestProject");
 
         // Run the analysis and get the metric results
-        var result = nocProvider.runAnalysis(parseResults).getResults();
+        var result = nocProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"seng4430"})).getResults();
 
         // Verify the metric results
         //number of immediate subclasses for class A is 4
