@@ -24,18 +24,18 @@ public class LCOMMetricProvider extends MetricProvider {
     }
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
 
         ClassResult<Integer> result = new ClassResult<>("LCOM Score Per Class", "LCOM Score");
         resultSet.addResult("lcomPerClass", result);
 
-        for (CompilationUnit cu : parseResults) {
+        for (CompilationUnit cu : compilationUnits) {
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 LCOMCalculator(clazz, result);
             }
         }
-        resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", totalLCOM/clazzCount));
+        resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", totalLCOM / clazzCount));
         return resultSet;
     }
 
@@ -83,7 +83,7 @@ public class LCOMMetricProvider extends MetricProvider {
                 if (methodMap.get(methodName) != null) {
                     for (String methodOrVariable : methodMap.get(methodName)) {
                         if (!methodOrVariable.equals(methodName) && !visitedMethods.contains(methodOrVariable)) {
-                            if(methodMap.containsKey(methodOrVariable)) {
+                            if (methodMap.containsKey(methodOrVariable)) {
                                 visitedMethods.add(methodOrVariable);
                                 recursiveCheck(methodOrVariable);
                             } else {

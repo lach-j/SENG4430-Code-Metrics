@@ -17,9 +17,9 @@ public class CyclomaticComplexityTest {
     private static MetricResultSet results;
     @BeforeAll
     public static void arrange() throws IOException {
-        var CCProvider = new CyclomaticComplexityProvider();
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/CyclomaticComplexityTestProject");
-        results = CCProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"CyclomaticComplexityTestProject"}));
+        CyclomaticComplexityProvider CCProvider = new CyclomaticComplexityProvider();
+        List<CompilationUnit> compilationUnits = ProjectParser.parse("./src/test/java/CyclomaticComplexityTestProject");
+        results = CCProvider.runAnalysis(compilationUnits, new AnalysisConfiguration(new String[]{"CyclomaticComplexityTestProject"}));
     }
 
     @Test

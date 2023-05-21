@@ -1,4 +1,4 @@
-package seng4430.metricProviders;
+package RfcCboTestProject;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -7,6 +7,10 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import seng4430.metricProviders.AnalysisConfiguration;
+import seng4430.metricProviders.MetricProvider;
+import seng4430.metricProviders.MetricResultSet;
+import seng4430.metricProviders.SummaryResult;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -14,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Extends the {@link MetricProvider} to provide the Length of Identifiers metric across the given parsed project.
+ *  Keeping this here only for testing RFC and CBO
  *
  * @author Lachlan Johnson (c3350131)
  * @version 08/05/2023

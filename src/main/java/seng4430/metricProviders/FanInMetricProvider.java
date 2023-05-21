@@ -1,27 +1,34 @@
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 
 import java.util.*;
 
 import static seng4430.util.CollectionHelper.calculateAverage;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Fan In metric across the given parsed project.
+ *
+ * @author Lachlan Johnson (c3350131)
+ * @version 13/05/2023
+ */
 public class FanInMetricProvider extends MetricProvider {
 
     private final Map<String, Map<String, Integer>> numMethodCalls = new HashMap<>();
 
     @Override
-    public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
+    public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 
-        for (var unit : parseResults) {
+        for (CompilationUnit unit : compilationUnits) {
 
             try {
-                var calls = unit.findAll(MethodCallExpr.class);
+                List<MethodCallExpr> calls = unit.findAll(MethodCallExpr.class);
                 for (MethodCallExpr call : calls) {
-                    var methodName = call.getNameAsString();
+                    String methodName = call.getNameAsString();
 
-                    var scope = call.getScope();
+                    Optional<Expression> scope = call.getScope();
 
                     if (scope.isEmpty())
                         continue;
@@ -33,7 +40,7 @@ public class FanInMetricProvider extends MetricProvider {
                     }
                     String finalType = type;
                     if (type != null && (configuration.getBasePackages().length == 0 || Arrays.stream(configuration.getBasePackages()).anyMatch(y -> finalType.startsWith(y + ".")))) {
-                        var classComponents = Arrays.stream(type.split("\\.")).toList();
+                        List<String> classComponents = Arrays.stream(type.split("\\.")).toList();
                         addMethod(classComponents.get(classComponents.size() - 1), methodName);
                     }
                 }
@@ -42,10 +49,10 @@ public class FanInMetricProvider extends MetricProvider {
             }
         }
 
-        var results = new MetricResultSet(metricName());
+        MetricResultSet results = new MetricResultSet(metricName());
 
-        var totalFanIn = new MethodResult<Integer>("Total Fan In Per Method", "calls");
-        var averageFanInPerClass = new ClassResult<Double>("Average Fan In Per Method Per Class", "calls");
+        MethodResult<Integer> totalFanIn = new MethodResult<>("Total Fan In Per Method", "calls");
+        ClassResult<Double> averageFanInPerClass = new ClassResult<>("Average Fan In Per Method Per Class", "calls");
 
         numMethodCalls.forEach((clazz, result) -> result.forEach((method, calls) -> totalFanIn.addResult(clazz, method, calls)));
         numMethodCalls.forEach((clazz, result) -> averageFanInPerClass.addResult(clazz, calculateAverage(result.values())));
@@ -61,7 +68,7 @@ public class FanInMetricProvider extends MetricProvider {
         if (!numMethodCalls.containsKey(clazz))
             numMethodCalls.put(clazz, new HashMap<>());
 
-        var curr = numMethodCalls.get(clazz).getOrDefault(method, 0);
+        Integer curr = numMethodCalls.get(clazz).getOrDefault(method, 0);
 
         numMethodCalls.get(clazz).put(method, curr + 1);
     }
