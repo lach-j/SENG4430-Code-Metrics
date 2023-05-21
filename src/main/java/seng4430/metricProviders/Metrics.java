@@ -19,6 +19,7 @@ public class Metrics {
             put("noc", new NumberOfChildrenMetricProvider());
             put("wmc", new WeightedMethodsPerClassMetricProvider());
             put("rfc", new ResponseForClassProvider());
+            put("cbo", new CouplingBetweenObjectClassesMetricProvider());
         }
     };
 }
