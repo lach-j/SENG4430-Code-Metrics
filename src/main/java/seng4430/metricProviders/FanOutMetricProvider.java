@@ -11,6 +11,11 @@ import java.util.Map;
 
 import static seng4430.util.CollectionHelper.calculateAverage;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Fan Out metric across the given parsed project.
+ * @version 13/05/2023
+ * @author Lachlan Johnson (c3350131)
+ */
 public class FanOutMetricProvider extends MetricProvider {
 
     @Override

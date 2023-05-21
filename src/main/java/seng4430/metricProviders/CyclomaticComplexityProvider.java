@@ -1,10 +1,3 @@
-/*
-File: CyclomaticComplexity.java
-Author: Alex Waddell (c3330987)
-Date: 14/5/23
-Description: Assignment 2*/
-
-
 package seng4430.metricProviders;
 
 
@@ -15,6 +8,11 @@ import com.github.javaparser.ast.stmt.*;
 
 import java.util.List;
 
+/**
+ * Extends the {@link MetricProvider} to analyse the Cyclomatic Complexity of the given parsed project.
+ * @version 14/05/2023
+ * @author Alex Waddell (c3330987)
+ */
 public class CyclomaticComplexityProvider extends MetricProvider {
 
 

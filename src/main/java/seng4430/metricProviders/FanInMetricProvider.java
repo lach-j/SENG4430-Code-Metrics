@@ -7,6 +7,11 @@ import java.util.*;
 
 import static seng4430.util.CollectionHelper.calculateAverage;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Fan In metric across the given parsed project.
+ * @version 13/05/2023
+ * @author Lachlan Johnson (c3350131)
+ */
 public class FanInMetricProvider extends MetricProvider {
 
     private final Map<String, Map<String, Integer>> numMethodCalls = new HashMap<>();

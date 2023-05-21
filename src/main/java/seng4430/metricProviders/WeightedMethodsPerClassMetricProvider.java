@@ -1,9 +1,3 @@
-/*
-File: WeightedMethodsPerClassMetricProvider.java
-Author: George Davis (c3350434)
-Date: 26/5/23
-Description: Assignment 2*/
-
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -12,6 +6,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 
 import java.util.*;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Weighted Methods Per Class metric across the given parsed project.
+ * @version 26/05/2023
+ * @author George Davis (c3350434)
+ */
 public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override

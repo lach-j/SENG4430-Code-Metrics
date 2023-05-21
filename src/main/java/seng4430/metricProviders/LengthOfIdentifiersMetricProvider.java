@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Length of Identifiers metric across the given parsed project.
+ * @version 08/05/2023
+ * @author Lachlan Johnson (c3350131)
+ */
 public class LengthOfIdentifiersMetricProvider extends MetricProvider {
 
     @Override

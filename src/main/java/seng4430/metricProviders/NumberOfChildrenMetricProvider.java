@@ -1,15 +1,14 @@
-/*
-File: NumberOfChildrenMetricProvider.java
-Author: George Davis (c3350434)
-Date: 26/5/23
-Description: Assignment 2*/
-
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import java.util.*;
 
+/**
+ * Extends the {@link MetricProvider} to provide the Number of Children metric across the given parsed project.
+ * @version 26/05/2023
+ * @author George Davis (c3350434)
+ */
 public class NumberOfChildrenMetricProvider extends MetricProvider {
 
     @Override
