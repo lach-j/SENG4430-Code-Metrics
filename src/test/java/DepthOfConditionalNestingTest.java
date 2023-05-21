@@ -13,6 +13,7 @@ import java.util.List;
 
 public class DepthOfConditionalNestingTest {
     private static MetricResultSet results;
+
     @BeforeAll
     public static void arrange() throws IOException {
         DepthOfConditionalNestingProvider DOCNProvider = new DepthOfConditionalNestingProvider();
@@ -27,11 +28,11 @@ public class DepthOfConditionalNestingTest {
             return;
         }
 
-        var expectedResults = new HashMap<String, Integer>(){{
-            put("AnotherTestClass",0);
-            put("ConditionalNestingTestClass",2);
-            put("GraphicsTestClass",0);
-            put("TestClass",0);
+        var expectedResults = new HashMap<String, Integer>() {{
+            put("AnotherTestClass", 0);
+            put("ConditionalNestingTestClass", 2);
+            put("GraphicsTestClass", 0);
+            put("TestClass", 0);
 
         }};
 

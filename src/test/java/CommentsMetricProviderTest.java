@@ -11,14 +11,14 @@ import java.util.List;
 
 public class CommentsMetricProviderTest {
 
+    private static MetricResultSet resultSet;
+
     @BeforeAll
     public static void arrange() throws IOException {
         CommentsMetricProvider cmProvider = new CommentsMetricProvider();
         List<CompilationUnit> compilationUnits = ProjectParser.parse("./src/test/java/TestProject");
         resultSet = cmProvider.runAnalysis(compilationUnits);
     }
-
-    private static MetricResultSet resultSet;
 
     @Test
     public void returnsTotalComments() {

@@ -31,14 +31,14 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-        //total complexity of methods in class
+        // total complexity of methods in class
         double totalWmc = 0;
-        //total methods in class
+        // total methods in class
         int classCount = 0;
 
         ClassResult<Double> wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
 
-        //iterate for each parsed compilation unit
+        // iterate for each parsed compilation unit
         for (CompilationUnit cu : parseResults) {
             if (cu == null) {
                 continue;
@@ -47,31 +47,31 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
             // find all class or interface declarations
             List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
 
-            //iterate for each class
+            // iterate for each class
             for (ClassOrInterfaceDeclaration clazz : classes) {
-                //find method declarations within the class
+                // find method declarations within the class
                 List<MethodDeclaration> methods = clazz.getMethods();
-                //WMC for current class
+                // WMC for current class
                 double wmc = calculateClassWmc(methods);
 
                 wmcPerClass.addResult(clazz.getNameAsString(), wmc);
 
                 totalWmc += wmc;
-                //increment method count
+                // increment method count
                 classCount++;
             }
         }
 
-        //finds average = total complexity/number of methods (handles division by 0)
+        // finds average = total complexity/number of methods (handles division by 0)
         double avgWmc = classCount > 0 ? totalWmc / classCount : 0;
 
-        //metric results
+        // metric results
         return new MetricResultSet(this.metricName())
                 .addResult("avgWmc", new SummaryResult<>("Average WMC", avgWmc))
                 .addResult("wmcPerClass", wmcPerClass);
     }
 
-    //calculates the total weighted methods complexity of a class
+    // calculates the total weighted methods complexity of a class
     private double calculateClassWmc(List<MethodDeclaration> methods) {
         double wmc = 0;
         for (MethodDeclaration method : methods) {
@@ -81,7 +81,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
         return wmc / methods.size();
     }
 
-    //calculates method complexity by counting the number of characters in the method body that are not comments
+    // calculates method complexity by counting the number of characters in the method body that are not comments
     private int calculateMethodComplexity(MethodDeclaration method) {
         List<Comment> comments = method.getAllContainedComments();
 
@@ -102,5 +102,5 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
 
         // Return the number of characters in the method that are not comments.
         return methodBodyLength - commentsLength;
-    }     
+    }
 }

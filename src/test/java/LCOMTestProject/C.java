@@ -20,6 +20,6 @@ public class C {
     }
 
     public void method5() {
-        //do something
+        // do something
     }
 }

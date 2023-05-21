@@ -10,7 +10,7 @@ Description: Assignment 2
 
 package WeightedMethodsPerClassTestProject;
 
-public class TC1 { //avgWmc = 8/1 = 8
+public class TC1 { // avgWmc = 8/1 = 8
     int x = 0;
     int y = 0;
 

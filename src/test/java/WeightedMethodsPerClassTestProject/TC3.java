@@ -10,7 +10,7 @@ Description: Assignment 2
 
 package WeightedMethodsPerClassTestProject;
 
-public class TC3 { //avgWmc = (56+56+72)/3 = 61.3333...
+public class TC3 { // avgWmc = (56+56+72)/3 = 61.3333...
     int x = 0;
     int y = 0;
 
