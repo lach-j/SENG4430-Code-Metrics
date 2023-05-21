@@ -16,7 +16,7 @@ class CouplingBetweenObjectClassesMetricProviderTest {
     @BeforeAll
     public static void arrange() throws IOException {
         var couplingBetweenObjectClassesMetricProvider = new CouplingBetweenObjectClassesMetricProvider();
-        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java");
+        List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/RfcCboTestProject");
         results = couplingBetweenObjectClassesMetricProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"CouplingBetweenObjectClassesMetricProviderTest"}));
     }
 
@@ -33,7 +33,7 @@ class CouplingBetweenObjectClassesMetricProviderTest {
             return;
         }
 
-        Assertions.assertEquals(classResult.value().get("LengthOfIdentifiersTest.java"), 4);
-        Assertions.assertEquals(classResult.value().get("LCOMMetricProviderTest.java"), 4);
+        Assertions.assertEquals(classResult.value().get("LengthOfIdentifiersMetricProvider"), 11);
+        Assertions.assertEquals(classResult.value().get("CyclomaticComplexityProvider"),  13);
     }
 }

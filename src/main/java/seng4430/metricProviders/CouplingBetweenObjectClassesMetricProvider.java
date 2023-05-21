@@ -13,7 +13,7 @@ public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider{
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         var resultSet = new MetricResultSet(metricName());
-        var classResult = new ClassResult<Integer>("Class names", "referenced objects");
+        var classResult = new ClassResult<Integer>("Coupling Per Class", "referenced objects");
         for(CompilationUnit cu: parseResults) {
             Set<String> referencedClassNames = new HashSet<>();
             CBOMetricVisitor cboVisitor = new CBOMetricVisitor(referencedClassNames);
@@ -21,7 +21,7 @@ public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider{
 
             // Subtract 1 from the total count to exclude self-references
             int cboCount = referencedClassNames.size() > 0 ? referencedClassNames.size() - 1: 0;
-            classResult.addResult(cu.getStorage().map(CompilationUnit.Storage::getFileName).orElse(""), cboCount);
+            classResult.addResult(cu.getType(0).getNameAsString(), cboCount);
         }
         resultSet.addResult("Coupling between objects", classResult);
         return resultSet;
