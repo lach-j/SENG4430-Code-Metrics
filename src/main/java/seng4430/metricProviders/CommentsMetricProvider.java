@@ -152,12 +152,15 @@ public class CommentsMetricProvider extends MetricProvider {
      */
     private static boolean isMethodParamsCovered(List<Parameter> params, List<JavadocBlockTag> javadocBlockTags) {
         for (Parameter param : params) {
-            if (javadocBlockTags.stream()
-                    .map(JavadocBlockTag::getName)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .anyMatch(param.getNameAsString()::equals)) {
-                return true;
+            String s1 = param.getNameAsString();
+            for (JavadocBlockTag javadocBlockTag : javadocBlockTags) {
+                Optional<String> name = javadocBlockTag.getName();
+                if (name.isPresent()) {
+                    String s = name.get();
+                    if (s1.equals(s)) {
+                        return true;
+                    }
+                }
             }
         }
         return true;
@@ -197,8 +200,8 @@ public class CommentsMetricProvider extends MetricProvider {
             }
             comments.addAll(cu.getAllContainedComments());
             methodVisitor.visit(cu, methods);
-            commentMethodPairs.addAll(getCommentMethodPairs(comments));
         }
+        commentMethodPairs.addAll(getCommentMethodPairs(comments));
 
         double fogIndex = fogIndex(comments.toString());
         // Calculate total number of method pairs covered by JavaDocs

@@ -15,15 +15,25 @@ import static seng4430.util.CollectionHelper.calculateIntegerAverage;
  * Extends the {@link MetricProvider} to provide the Fan Out metric across the given parsed project.
  *
  * @author Lachlan Johnson (c3350131)
- * @version 13/05/2023
+ * @version 13 /05/2023
  */
 public class FanOutMetricProvider extends MetricProvider {
-
+    /**
+     * Returns the name of the Fan Out metric.
+     *
+     * @return the metric name
+     */
     @Override
     public String metricName() {
         return "Fan Out";
     }
-
+    /**
+     * Runs the analysis to calculate the Fan Out metric for the given compilation units.
+     *
+     * @param compilationUnits the list of CompilationUnits representing the parsed source code
+     * @param configuration    the analysis configuration
+     * @return the MetricResultSet containing the analysis results
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 

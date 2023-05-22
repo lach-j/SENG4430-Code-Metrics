@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Stores a set of {@link MetricResult} for a given {@link MetricProvider}.
+ * @author Lachlan
  */
 public class MetricResultSet {
 

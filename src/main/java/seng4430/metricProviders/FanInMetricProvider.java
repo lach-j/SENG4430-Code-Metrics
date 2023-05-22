@@ -17,7 +17,13 @@ import static seng4430.util.CollectionHelper.calculateIntegerAverage;
 public class FanInMetricProvider extends MetricProvider {
 
     private final Map<String, Map<String, Integer>> numMethodCalls = new HashMap<>();
-
+    /**
+     * Runs the analysis to calculate the Fan In metric for the given compilation units.
+     *
+     * @param compilationUnits the list of CompilationUnits representing the parsed source code
+     * @param configuration    the analysis configuration
+     * @return the MetricResultSet containing the analysis results
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 
@@ -71,7 +77,13 @@ public class FanInMetricProvider extends MetricProvider {
         return results;
     }
 
-
+    /**
+     * Adds a method call to the count for the specified class and method.
+     * If the class does not exist in the count map, a new entry is created.
+     *
+     * @param clazz  the class name
+     * @param method the method name
+     */
     private void addMethod(String clazz, String method) {
         if (!numMethodCalls.containsKey(clazz))
             numMethodCalls.put(clazz, new HashMap<>());
@@ -80,7 +92,11 @@ public class FanInMetricProvider extends MetricProvider {
 
         numMethodCalls.get(clazz).put(method, curr + 1);
     }
-
+    /**
+     * Returns the name of the Fan In metric.
+     *
+     * @return the metric name
+     */
     @Override
     public String metricName() {
         return "Fan In";

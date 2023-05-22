@@ -16,7 +16,13 @@ import java.util.List;
  */
 public class CyclomaticComplexityProvider extends MetricProvider {
 
-
+    /**
+     * Runs the analysis to calculate the Cyclomatic Complexity metric for the given compilation units.
+     *
+     * @param compilationUnits the list of CompilationUnits representing the parsed source code
+     * @param configuration    the analysis configuration
+     * @return the MetricResultSet containing the analysis results
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 
@@ -39,7 +45,11 @@ public class CyclomaticComplexityProvider extends MetricProvider {
 
         return results;
     }
-
+    /**
+     * Returns the name of the metric.
+     *
+     * @return the name of the metric
+     */
     @Override
     public String metricName() {
         return "Cyclomatic Complexity";
@@ -48,6 +58,12 @@ public class CyclomaticComplexityProvider extends MetricProvider {
     // there are two ways to calculate cyclomatic complexity the first is to
     // sum up the conditionals and the second is to traverse a node tree
     // adding up the nodes and edges within the class to then calculate M = E - N + 2
+    /**
+     * Calculates the Cyclomatic Complexity of a class by counting the number of conditionals.
+     *
+     * @param clazz the ClassOrInterfaceDeclaration representing the class
+     * @return the Cyclomatic Complexity of the class
+     */
     private int calculateCyclomaticComplexity(ClassOrInterfaceDeclaration clazz) {
         // finds all the conditionals within the class
         int complexity = 1;
