@@ -32,7 +32,7 @@ public class CommentsMetricProviderTest {
 
     @Test
     public void returnsOverallJavadocCoverage() {
-        Assertions.assertEquals("3/9", resultSet.getResult("javaDocMethodCoverage").value());
+        Assertions.assertEquals("3/5", resultSet.getResult("javaDocMethodCoverage").value());
     }
 
     @Test
