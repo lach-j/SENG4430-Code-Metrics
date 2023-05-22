@@ -22,16 +22,18 @@ public class CyclomaticComplexityProvider extends MetricProvider {
 
         MetricResultSet results = new MetricResultSet(this.metricName());
         ClassResult<Integer> totalComplexityResult = new ClassResult<>("Cyclomatic complexity", "complexity");
+        // loops through every file in the file location specified
         for (CompilationUnit unit : compilationUnits) {
-
-
+            // gets every class in the find
             List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
-
+            // loops through every class in the file
             for (ClassOrInterfaceDeclaration clazz : classes) {
+                // returns the complexity of that class
                 int complexity = calculateCyclomaticComplexity(clazz);
+                // links the complexity to the specific class it belongs to
                 totalComplexityResult.addResult(clazz.getNameAsString(), complexity);
             }
-
+            // adds all the class complexities to then return them
             results.addResult("TotalComplexity", totalComplexityResult);
         }
 
@@ -43,9 +45,11 @@ public class CyclomaticComplexityProvider extends MetricProvider {
         return "Cyclomatic Complexity";
     }
 
+    // there are two ways to calculate cyclomatic complexity the first is to
+    // sum up the conditionals and the second is to traverse a node tree
+    // adding up the nodes and edges within the class to then calculate M = E - N + 2
     private int calculateCyclomaticComplexity(ClassOrInterfaceDeclaration clazz) {
-
-
+        // finds all the conditionals within the class
         int complexity = 1;
         List<IfStmt> ifs = clazz.findAll(IfStmt.class);
         List<SwitchStmt> switches = clazz.findAll(SwitchStmt.class);
@@ -53,7 +57,7 @@ public class CyclomaticComplexityProvider extends MetricProvider {
         List<DoStmt> dos = clazz.findAll(DoStmt.class);
         List<ForStmt> fors = clazz.findAll(ForStmt.class);
         List<ConditionalExpr> ternaries = clazz.findAll(ConditionalExpr.class);
-
+        // sums up the total number of conditionals within the class
         complexity += ifs.size();
         complexity += switches.size();
         complexity += whiles.size();
