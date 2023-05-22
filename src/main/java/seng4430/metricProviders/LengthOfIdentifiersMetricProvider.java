@@ -20,11 +20,22 @@ import java.util.Optional;
  * @version 08/05/2023
  */
 public class LengthOfIdentifiersMetricProvider extends MetricProvider {
-
+    /**
+     * Returns the name of the Length of Identifiers metric.
+     *
+     * @return the metric name
+     */
     @Override
     public String metricName() {
         return "Length of Identifiers";
     }
+    /**
+     * Runs the analysis to calculate the Length of Identifiers metric for the given compilation units.
+     *
+     * @param compilationUnits the list of CompilationUnits representing the parsed source code
+     * @param configuration    the analysis configuration
+     * @return the MetricResultSet containing the analysis results
+     */
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {

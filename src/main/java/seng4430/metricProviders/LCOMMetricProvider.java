@@ -18,11 +18,22 @@ public class LCOMMetricProvider extends MetricProvider {
     private List<String> visitedMethods = new ArrayList<>();    // list of methods that have been connected to component
     private Map<String, Set<String>> methodMap = new HashMap<>();   // map of methods and their methods/variables called
     // visitedMethods and methodMap are made global for ease
+    /**
+     * Returns the name of the Lack of Cohesion in Methods (LCOM) metric.
+     *
+     * @return the metric name
+     */
     @Override
     public String metricName() {
         return "Lack of Cohesion in Methods";
     }
-
+    /**
+     * Runs the analysis to calculate the LCOM metric for the given compilation units.
+     *
+     * @param compilationUnits the list of CompilationUnits representing the parsed source code
+     * @param configuration    the analysis configuration
+     * @return the MetricResultSet containing the analysis results
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
@@ -38,7 +49,12 @@ public class LCOMMetricProvider extends MetricProvider {
         resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", totalLCOM / clazzCount));
         return resultSet;
     }
-
+    /**
+     * Calculates the LCOM score for a given class.
+     *
+     * @param clazz  the ClassOrInterfaceDeclaration representing the class
+     * @param result the ClassResult to store the LCOM score per class
+     */
     public void LCOMCalculator(ClassOrInterfaceDeclaration clazz, ClassResult<Integer> result) {
         for (MethodDeclaration method : clazz.getMethods()) {   // loops through all methods in class
             methodMap.put(method.getNameAsString(), new HashSet<>());
@@ -72,7 +88,12 @@ public class LCOMMetricProvider extends MetricProvider {
         visitedMethods = new ArrayList<>();
         methodMap = new HashMap<>();
     }
-
+    /**
+     * Performs a recursive check to identify connected methods and variables.
+     * It updates the visitedMethods list to keep track of visited components.
+     *
+     * @param methodName the name of the method to check for connections
+     */
     public void recursiveCheck(String methodName) {
         for (Map.Entry<String, Set<String>> entry : methodMap.entrySet()) {
             // ensures method isn't checking if connected to self & that it isn't already known to be connected, to
@@ -102,7 +123,11 @@ public class LCOMMetricProvider extends MetricProvider {
             }
         }
     }
-
+    /**
+     * Updates the total LCOM and class count for calculating the average LCOM score.
+     *
+     * @param lcom the LCOM score of the class
+     */
     private void averageTracker(int lcom) {
         totalLCOM += lcom;   // accumulates total LCOM score and increments class count for calculating average
         clazzCount++;

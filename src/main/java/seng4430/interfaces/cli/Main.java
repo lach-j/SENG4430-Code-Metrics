@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class Main {
+    /**
+     * The main class for the command-line interface (CLI) application.
+     */
     public static void main(String... args) throws IOException {
         if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"}).noneMatch(x -> x.equals(args[0]))) {
             System.err.println("no valid command specified");
@@ -84,6 +87,11 @@ public class Main {
                 .filter(Objects::nonNull)
                 .toList();
     }
+    /**
+     * Builds the options for the command-line arguments.
+     *
+     * @return The Options object containing the available options.
+     */
 
     private static Options buildOptions() {
         Options options = new Options();

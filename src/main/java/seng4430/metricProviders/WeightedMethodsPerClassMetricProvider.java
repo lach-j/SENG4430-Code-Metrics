@@ -17,12 +17,22 @@ import java.util.stream.Collectors;
  * @version 26/05/2023
  */
 public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
-
+    /**
+     * Gets the name of the metric.
+     *
+     * @return The name of the metric ("Weighted Methods per Class (WMC)").
+     */
     @Override
     public String metricName() {
         return "Weighted Methods per Class (WMC)";
     }
-
+    /**
+     * Runs the analysis to calculate the Weighted Methods Per Class metric.
+     *
+     * @param parseResults    The list of parsed compilation units representing the project's source code.
+     * @param configuration   The analysis configuration.
+     * @return The MetricResultSet containing the metric results.
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         // total complexity of methods in class
@@ -65,7 +75,13 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
                 .addResult("wmcPerClass", wmcPerClass);
     }
 
-    // calculates the total weighted methods complexity of a class
+
+    /**
+     * Calculates the weighted method complexity (WMC) for a class.
+     *
+     * @param methods   The list of methods in the class.
+     * @return The WMC value for the class.
+     */
     private double calculateClassWmc(List<MethodDeclaration> methods) {
         double wmc = 0;
         for (MethodDeclaration method : methods) {
@@ -79,7 +95,12 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
         return wmc / methods.size();
     }
 
-    // calculates method complexity by counting the number of characters in the method body that are not comments
+    /**
+     * Calculates the complexity of a method by counting the number of characters in the method body that are not comments.
+     *
+     * @param method    The method for which to calculate the complexity.
+     * @return The complexity of the method.
+     */
     private int calculateMethodComplexity(MethodDeclaration method) {
         List<Comment> comments = method.getAllContainedComments();
 

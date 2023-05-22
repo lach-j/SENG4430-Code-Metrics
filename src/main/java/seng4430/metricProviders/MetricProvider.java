@@ -3,9 +3,10 @@ package seng4430.metricProviders;
 import com.github.javaparser.ast.CompilationUnit;
 
 import java.util.List;
-
 /**
  * Base class all MetricProviders should inherit from. Provides methods required for running analysis against compiled java classes.
+ * @author Lachlan Johnson (c3350131)
+ * @version 08/05/2023
  */
 public abstract class MetricProvider {
     /**
