@@ -10,6 +10,10 @@ import java.util.Set;
 
 /**
  * The type Coupling between object classes metric provider.
+ *
+ * @author Pravin
+ * @see MetricProvider
+ * @since 1.0
  */
 public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider {
 

@@ -2,7 +2,11 @@ package seng4430.metricProviders;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
+/**
+ *
+ * @author Lachlan Johnson (c3350131)
+ * @version 08/05/2023
+ */
 /**
  * A {@link MetricResult} that allows the same metric type to be reported on across the methods of multiple classes.
  *

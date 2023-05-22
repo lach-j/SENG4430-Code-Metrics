@@ -8,6 +8,7 @@ import java.util.Optional;
  * @param <T> The type of the data structure storing results in the implemented {@code MetricResult}.
  * @see ClassResult
  * @see MethodResult
+ * @author Lachlan
  * @see SummaryResult
  */
 public abstract class MetricResult<T> {

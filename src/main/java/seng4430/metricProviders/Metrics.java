@@ -10,6 +10,8 @@ import java.util.HashMap;
  *
  * This class serves as a centralized location to access all the available metric providers. By adding new entries to the
  * metricProviders map, new metrics can be easily incorporated into the system.
+ *
+ * @author Lachlan
  */
 public class Metrics {
     /**
