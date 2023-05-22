@@ -42,11 +42,15 @@ public class FanOutMetricProvider extends MetricProvider {
 
         for (CompilationUnit unit : compilationUnits) {
 
+            // Get all classes in the file
             List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
 
             for (ClassOrInterfaceDeclaration clazz : classes) {
+                // Find all methods within the class.
                 List<MethodDeclaration> methods = clazz.findAll(MethodDeclaration.class);
                 String className = clazz.getNameAsString();
+
+
                 if (!totalFanOut.containsKey(className))
                     totalFanOut.put(className, new HashMap<>());
 
@@ -54,8 +58,10 @@ public class FanOutMetricProvider extends MetricProvider {
                     uniqueFanOut.put(className, new HashMap<>());
 
                 for (MethodDeclaration method : methods) {
+                    // Find all method calls within each method.
                     List<MethodCallExpr> methodCalls = method.findAll(MethodCallExpr.class);
 
+                    // Set the number of calls to 0 if the method isn't already in the map.
                     String methodName = method.getNameAsString();
                     if (!totalFanOut.get(className).containsKey(methodName))
                         totalFanOut.get(className).put(methodName, 0);
@@ -63,9 +69,11 @@ public class FanOutMetricProvider extends MetricProvider {
                     if (!uniqueFanOut.get(className).containsKey(methodName))
                         uniqueFanOut.get(className).put(methodName, 0);
 
+                    // Get the current number of total and unique calls for the method.
                     Integer currCount = totalFanOut.get(className).get(methodName);
                     Integer currUniqueCount = totalFanOut.get(className).get(methodName);
 
+                    // Add the number of calls to the method.
                     totalFanOut.get(className).put(methodName, currCount + methodCalls.size());
                     uniqueFanOut.get(className).put(methodName, currUniqueCount + ((int) methodCalls.stream().distinct().count()));
                 }
@@ -74,14 +82,17 @@ public class FanOutMetricProvider extends MetricProvider {
 
         MetricResultSet results = new MetricResultSet(this.metricName());
 
+        // Add the total fan out per method to the results
         MethodResult<Integer> totalFanOutResult = new MethodResult<>("Total Fan Out", "calls");
         totalFanOut.forEach((clazz, methods) -> methods.forEach((method, calls) -> totalFanOutResult.addResult(clazz, method, calls)));
         results.addResult("totFanOut", totalFanOutResult);
 
+        // Add the average fan out per method per class to the results
         ClassResult<Double> averageFanOutPerClassResult = new ClassResult<Double>("Average Total Fan Out Per Method Per Class", "calls");
         totalFanOut.forEach((clazz, methods) -> averageFanOutPerClassResult.addResult(clazz, calculateIntegerAverage(methods.values())));
         results.addResult("avgFanOutClass", averageFanOutPerClassResult);
 
+        // Add the unique fan out per method to the results
         MethodResult<Integer> uniqueFanOutResult = new MethodResult<>("Unique Fan Out", "calls");
         uniqueFanOut.forEach((clazz, methods) -> methods.forEach((method, calls) -> uniqueFanOutResult.addResult(clazz, method, calls)));
         results.addResult("unqFanOut", uniqueFanOutResult);
