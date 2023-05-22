@@ -7,7 +7,7 @@ import java.util.HashMap;
  * The Metrics class contains a static HashMap called metricProviders, which stores instances of various MetricProvider
  * classes representing different metrics. The keys in the map are strings representing the metric names, and the values
  * are the corresponding MetricProvider instances.
- *
+ * <p>
  * This class serves as a centralized location to access all the available metric providers. By adding new entries to the
  * metricProviders map, new metrics can be easily incorporated into the system.
  *
