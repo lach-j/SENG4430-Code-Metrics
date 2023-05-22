@@ -63,62 +63,62 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
             // adds to the depth because its going into another conditional
             currentDepth++;
             super.visit(n, arg);
-            // subtracts from the depth because its leaving a conditional
-            currentDepth--;
             // sets a new max depth if one has been reached
             if (currentDepth > maxDepth) {
                 maxDepth = currentDepth;
             }
+            // subtracts from the depth because its leaving a conditional
+            currentDepth--;
         }
 
         @Override
         public void visit(WhileStmt n, Void arg) {
             currentDepth++;
             super.visit(n, arg);
-            currentDepth--;
             if (currentDepth > maxDepth) {
                 maxDepth = currentDepth;
             }
+            currentDepth--;
         }
 
         @Override
         public void visit(DoStmt n, Void arg) {
             currentDepth++;
             super.visit(n, arg);
-            currentDepth--;
             if (currentDepth > maxDepth) {
                 maxDepth = currentDepth;
             }
+            currentDepth--;
         }
 
         @Override
         public void visit(ForStmt n, Void arg) {
             currentDepth++;
             super.visit(n, arg);
-            currentDepth--;
             if (currentDepth > maxDepth) {
                 maxDepth = currentDepth;
             }
+            currentDepth--;
         }
 
         @Override
         public void visit(TryStmt n, Void arg) {
             currentDepth++;
             super.visit(n, arg);
-            currentDepth--;
             if (currentDepth > maxDepth) {
                 maxDepth = currentDepth;
             }
+            currentDepth--;
         }
 
         @Override
         public void visit(SwitchStmt n, Void arg) {
             currentDepth++;
             super.visit(n, arg);
-            currentDepth--;
             if (currentDepth > maxDepth) {
                 maxDepth = currentDepth;
             }
+            currentDepth--;
         }
 
         @Override
@@ -126,10 +126,11 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
             if (n.getOperator() == BinaryExpr.Operator.AND || n.getOperator() == BinaryExpr.Operator.OR) {
                 currentDepth++;
                 super.visit(n, arg);
-                currentDepth--;
+
                 if (currentDepth > maxDepth) {
                     maxDepth = currentDepth;
                 }
+                currentDepth--;
                 // this is if other binary operators trigger this visit, it simply ignores it and continues for example ==
             } else {
                 super.visit(n, arg);

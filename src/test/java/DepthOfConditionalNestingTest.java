@@ -30,7 +30,7 @@ public class DepthOfConditionalNestingTest {
 
         var expectedResults = new HashMap<String, Integer>() {{
             put("AnotherTestClass", 0);
-            put("ConditionalNestingTestClass", 2);
+            put("ConditionalNestingTestClass", 3);
             put("GraphicsTestClass", 0);
             put("TestClass", 0);
 
