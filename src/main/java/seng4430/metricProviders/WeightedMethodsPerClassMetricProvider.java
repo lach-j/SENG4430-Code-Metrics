@@ -1,9 +1,3 @@
-/*
-File: WeightedMethodsPerClassMetricProvider.java
-Author: George Davis (c3350434)
-Date: 26/5/23
-Description: Assignment 2*/
-
 package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -78,6 +72,10 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
             int methodComplexity = calculateMethodComplexity(method);
             wmc += methodComplexity;
         }
+
+        if (methods.isEmpty())
+            return 0.0;
+
         return wmc / methods.size();
     }
 

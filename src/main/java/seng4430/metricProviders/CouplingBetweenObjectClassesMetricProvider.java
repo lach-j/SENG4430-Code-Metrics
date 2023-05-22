@@ -8,23 +8,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider{
+public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider {
 
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
         var resultSet = new MetricResultSet(metricName());
         var classResult = new ClassResult<Integer>("Coupling Per Class", "referenced objects");
-        for(CompilationUnit cu: parseResults) {
+        for (CompilationUnit cu : parseResults) {
             Set<String> referencedClassNames = new HashSet<>();
             CBOMetricVisitor cboVisitor = new CBOMetricVisitor(referencedClassNames);
             cboVisitor.visit(cu, null);
 
             // Subtract 1 from the total count to exclude self-references
-            int cboCount = referencedClassNames.size() > 0 ? referencedClassNames.size() - 1: 0;
+            int cboCount = referencedClassNames.size() > 0 ? referencedClassNames.size() - 1 : 0;
             classResult.addResult(cu.getType(0).getNameAsString(), cboCount);
         }
         resultSet.addResult("Coupling between objects", classResult);
         return resultSet;
+    }
+
+    @Override
+    public String metricName() {
+        return "Coupling between object classes metric";
     }
 
     private static class CBOMetricVisitor extends VoidVisitorAdapter<Void> {
@@ -39,10 +44,5 @@ public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider{
             String className = nameExpr.getName().getIdentifier();
             referencedClassNames.add(className);
         }
-    }
-
-    @Override
-    public String metricName() {
-        return "Coupling between object classes metric";
     }
 }

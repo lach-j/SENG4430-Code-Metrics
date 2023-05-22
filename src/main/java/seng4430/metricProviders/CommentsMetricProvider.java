@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
  * @author Finbar Laffan
  * @see MetricProvider
  * @since 1.0
- *
  */
 public class CommentsMetricProvider extends MetricProvider {
     /**
@@ -45,6 +44,7 @@ public class CommentsMetricProvider extends MetricProvider {
         // Calculate the Fog Index
         return 0.4 * (avgWordsPerSentence + 100 * (double) complexWords / words.length);
     }
+
     /**
      * Removes comment artifacts from code, such as asterisks, slashes, and HTML tags.
      *
@@ -60,6 +60,7 @@ public class CommentsMetricProvider extends MetricProvider {
         code = code.replaceAll("<[^>]*>", "");
         return code;
     }
+
     /**
      * Counts the number of syllables in an array of words.
      *
@@ -84,6 +85,7 @@ public class CommentsMetricProvider extends MetricProvider {
         }
         return numComplexWords;
     }
+
     /**
      * Retrieves a list of CommentMethodPair objects, representing the pairs of Javadoc comments and method declarations.
      *
@@ -103,6 +105,7 @@ public class CommentsMetricProvider extends MetricProvider {
                 .filter(Objects::nonNull)
                 .toList();
     }
+
     /**
      * Checks if any of the comments contain an AUTHOR tag.
      *
@@ -116,6 +119,7 @@ public class CommentsMetricProvider extends MetricProvider {
                 .flatMap(javadocComment -> javadocComment.parse().getBlockTags().stream())
                 .anyMatch(tag -> tag.getType() == JavadocBlockTag.Type.AUTHOR);
     }
+
     /**
      * Checks if a CommentMethodPair is covered by Javadocs.
      *
@@ -128,6 +132,7 @@ public class CommentsMetricProvider extends MetricProvider {
         if (!commentMethod.method.getType().isVoidType() && !isMethodReturnCovered(javadocBlockTags)) return false;
         return isMethodParamsCovered(params, javadocBlockTags);
     }
+
     /**
      * Checks if the Javadocs cover the method return type.
      *
@@ -137,6 +142,7 @@ public class CommentsMetricProvider extends MetricProvider {
     private static boolean isMethodReturnCovered(List<JavadocBlockTag> javadocBlockTags) {
         return javadocBlockTags.stream().anyMatch(tag -> tag.getType() == JavadocBlockTag.Type.RETURN);
     }
+
     /**
      * Checks if the Javadocs cover the method parameters.
      *
@@ -156,6 +162,7 @@ public class CommentsMetricProvider extends MetricProvider {
         }
         return true;
     }
+
     /**
      * Returns the name of the metric.
      *
@@ -165,6 +172,7 @@ public class CommentsMetricProvider extends MetricProvider {
     public String metricName() {
         return "JavaDoc Coverage";
     }
+
     /**
      * Runs the analysis on the provided compilation units.
      *
@@ -208,6 +216,7 @@ public class CommentsMetricProvider extends MetricProvider {
         // Calculate and return average identifier name
         return results;
     }
+
     /**
      * A visitor that collects MethodDeclaration objects from a CompilationUnit.
      */
@@ -224,6 +233,7 @@ public class CommentsMetricProvider extends MetricProvider {
             collector.add(md);
         }
     }
+
     /**
      * Represents a pair of Javadoc comment and MethodDeclaration.
      */

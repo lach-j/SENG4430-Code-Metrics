@@ -39,7 +39,7 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
                 // links the max depth to the specific class it belongs to
                 totalDepthOfConditionalNesting.addResult(clazz.getNameAsString(), maxDepth);
             }
-                // adds all the class max depths to then return them
+            // adds all the class max depths to then return them
             results.addResult("TotalDepth", totalDepthOfConditionalNesting);
         }
 
