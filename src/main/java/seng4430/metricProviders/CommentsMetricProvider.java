@@ -154,7 +154,7 @@ public class CommentsMetricProvider extends MetricProvider {
                 return true;
             }
         }
-        return true;
+        return false;
     }
     /**
      * Returns the name of the metric.
@@ -196,7 +196,7 @@ public class CommentsMetricProvider extends MetricProvider {
         // Calculate total number of method pairs covered by JavaDocs
         int jdCoverageCount = (int) commentMethodPairs.stream().filter(CommentsMetricProvider::isMethodCovered).count();
         // Calculate total number of comments
-        String totalJdCoverage = jdCoverageCount + "/" + methods.size();
+        String totalJdCoverage = jdCoverageCount + "/" + commentMethodPairs.size();
 
         MetricResultSet results = new MetricResultSet(metricName());
 
