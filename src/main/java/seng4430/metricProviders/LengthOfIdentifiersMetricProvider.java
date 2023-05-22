@@ -26,10 +26,18 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
         return "Length of Identifiers";
     }
 
+    /**
+     * Runs the Length of Identifiers metric against the given pared project files.
+     *
+     * @param compilationUnits All parsed compilation units to run analysis against.
+     * @param configuration    Configuration object to use for anaylsis.
+     * @return {@link MetricResultSet} containing the length of identifiers metric results.
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         ArrayList<String> identifiers = new ArrayList<>();
 
+        // List of token declarations to use when getting identifier lengths.
         List<Class<? extends Node>> classes =
                 new ArrayList<>() {
                     {
@@ -40,15 +48,19 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
                     }
                 };
 
-        // Parse Java file
+        // Iterate over parsed java files.
         for (CompilationUnit cu : compilationUnits) {
             if (cu == null) continue;
 
+
             for (Class<? extends Node> clazz : classes) {
+                // Add typechecking to ensure that all items added to
+                // the classes list are able to be cast to NodeWithSimpleName
                 if (!NodeWithSimpleName.class.isAssignableFrom(clazz))
                     throw new IllegalArgumentException(
                             clazz.getName() + " does not contain a getNameAsString definition");
 
+                // For each token type find all identifiers in the file and add their names to the identifiers list.
                 cu.findAll(clazz)
                         .forEach(node -> identifiers.add(((NodeWithSimpleName<?>) node).getNameAsString()));
             }

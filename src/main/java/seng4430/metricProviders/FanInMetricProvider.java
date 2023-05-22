@@ -24,10 +24,13 @@ public class FanInMetricProvider extends MetricProvider {
         for (CompilationUnit unit : compilationUnits) {
 
             try {
+                // Find all method calls in the current file
                 List<MethodCallExpr> calls = unit.findAll(MethodCallExpr.class);
                 for (MethodCallExpr call : calls) {
+                    // Get the name of the method being called.
                     String methodName = call.getNameAsString();
 
+                    // Get the scope of the method i.e., the class that the method belongs to.
                     Optional<Expression> scope = call.getScope();
 
                     if (scope.isEmpty())
@@ -35,11 +38,16 @@ public class FanInMetricProvider extends MetricProvider {
 
                     String type = null;
                     try {
+                        // Try to resolve the class name, this will fail if the class exists outside the symbol paths provided.
                         type = scope.get().calculateResolvedType().asReferenceType().getQualifiedName();
                     } catch (Exception ignored) {
                     }
                     String finalType = type;
-                    if (type != null && (configuration.getBasePackages().length == 0 || Arrays.stream(configuration.getBasePackages()).anyMatch(y -> finalType.startsWith(y + ".")))) {
+
+                    // Check if the class exists within the provided base package.
+                    if (type != null
+                            && (configuration.getBasePackages().length == 0
+                            || Arrays.stream(configuration.getBasePackages()).anyMatch(y -> finalType.startsWith(y + ".")))) {
                         List<String> classComponents = Arrays.stream(type.split("\\.")).toList();
                         addMethod(classComponents.get(classComponents.size() - 1), methodName);
                     }

@@ -5,7 +5,8 @@ import com.github.javaparser.ast.CompilationUnit;
 import java.util.List;
 
 /**
- * Base class all MetricProviders should inherit from. Provides methods required for running analysis against compiled java classes.
+ * Base class all MetricProviders should inherit from.
+ * Provides methods required for running analysis against compiled java classes.
  */
 public abstract class MetricProvider {
     /**
