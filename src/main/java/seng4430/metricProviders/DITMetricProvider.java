@@ -15,9 +15,9 @@ import java.util.Map;
  * @author Keenan Groves
  */
 public class DITMetricProvider extends MetricProvider {
-    private final LinkedHashMap<String, String> childClazzes = new LinkedHashMap<>();
-    private int clazzCount = 0;
-    private int totalDepth = 0;
+    private final LinkedHashMap<String, String> childClazzes = new LinkedHashMap<>();   // map of child classes (key)
+    private int clazzCount = 0;                                                         // and their parent (value)
+    private int totalDepth = 0; // above two variables used for average calculation
 
     @Override
     public String metricName() {
@@ -27,60 +27,60 @@ public class DITMetricProvider extends MetricProvider {
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
-        for (CompilationUnit cu : compilationUnits) {
+        for (CompilationUnit cu : compilationUnits) {       // double for loop checks for all classes
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
                 DITCalculator(clazz, resultSet);
             }
         }
-        findRemainingDepths(resultSet);
+        findRemainingDepths(resultSet); // finds the depth of all the child classes in map
         resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", totalDepth / clazzCount, "Layers"));
         return resultSet;
     }
 
     public void DITCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
         NodeList<ClassOrInterfaceType> extended = clazz.getExtendedTypes();
-        NodeList<ClassOrInterfaceType> implemented = clazz.getImplementedTypes();
-        String parentClazz = "";
+        NodeList<ClassOrInterfaceType> implemented = clazz.getImplementedTypes();   // checks whether class implements
+        String parentClazz = "";                                                    // or extends any classes
         if (!implemented.isEmpty() || !extended.isEmpty()) {
             if (!extended.isEmpty()) {
                 for (ClassOrInterfaceType c : extended) {
-                    parentClazz = c.getNameAsString();
+                    parentClazz = c.getNameAsString();  // sets the parent class name to extended class
                 }
             } else {
                 for (ClassOrInterfaceType c : implemented) {
-                    parentClazz = c.getNameAsString();
+                    parentClazz = c.getNameAsString();  // sets the parent class name to implemented class
                 }
             }
-            childClazzes.put(clazz.getNameAsString(), parentClazz);
+            childClazzes.put(clazz.getNameAsString(), parentClazz); // add child and parent to map
             return;
         }
-        averageTracker(0);
+        averageTracker(0);  // if not a child, class has depth 0 and is added to result set straight away
         ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "Layers");
         result.addResult(clazz.getNameAsString(), 0);
         resultSet.addResult(clazz.getNameAsString(), result);
     }
 
     private void findRemainingDepths(MetricResultSet resultSet) {
-        if (childClazzes.isEmpty()) {
+        if (childClazzes.isEmpty()) {   // skips if all depths are 0
             return;
         }
         for (Map.Entry<String, String> clazzInfo : childClazzes.entrySet()) {
             int depth = 0;
             ClassResult<Integer> result = new ClassResult<>(clazzInfo.getKey(), "Layers");
-            String parent = clazzInfo.getValue();
+            String parent = clazzInfo.getValue();   // gets the parent of the child class and increments depth
             depth++;
-            while (childClazzes.get(parent) != null) {
-                parent = childClazzes.get(parent);
+            while (childClazzes.get(parent) != null) {  // if the parent is also a child class, increment depth and
+                parent = childClazzes.get(parent);      // perform breadth first search to find the ultimate parent node
                 depth++;
             }
-            averageTracker(depth);
+            averageTracker(depth);  // add result to the result set with calculated depth
             result.addResult(clazzInfo.getKey(), depth);
             resultSet.addResult(clazzInfo.getKey(), result);
         }
     }
 
     private void averageTracker(int depth) {
-        totalDepth += depth;
+        totalDepth += depth;    // accumulates total depths and increments class count for calculating average
         clazzCount++;
     }
 }
