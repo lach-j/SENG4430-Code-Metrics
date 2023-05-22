@@ -11,7 +11,13 @@ import java.util.List;
 import java.util.Set;
 
 public class ResponseForClassProvider extends MetricProvider {
-
+    /**
+     * Runs the analysis to calculate the Response for Class metric.
+     *
+     * @param parseResults    The list of parsed compilation units representing the project's source code.
+     * @param configuration   The analysis configuration.
+     * @return The MetricResultSet containing the metric results.
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
 
@@ -29,7 +35,13 @@ public class ResponseForClassProvider extends MetricProvider {
         resultSet.addResult("Response for a class", classResult);
         return resultSet;
     }
-
+    /**
+     * Recursively collects the names of method call expressions within a given node.
+     *
+     * @param node                    The node to traverse and collect method call expressions.
+     * @param methodCallExpressions   The set to store the names of method call expressions.
+     * @return The set of method call expression names.
+     */
     private Set<String> collectMethodCallExpr(Node node, Set<String> methodCallExpressions) {
         if (node.getChildNodes().isEmpty()) {
             return methodCallExpressions;
@@ -43,7 +55,11 @@ public class ResponseForClassProvider extends MetricProvider {
         }
         return methodCallExpressions;
     }
-
+    /**
+     * Gets the name of the metric.
+     *
+     * @return The name of the metric ("Response for Class").
+     */
     @Override
     public String metricName() {
         return "Response for Class";

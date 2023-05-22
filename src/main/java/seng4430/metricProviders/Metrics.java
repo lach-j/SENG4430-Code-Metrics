@@ -4,8 +4,20 @@ import java.util.HashMap;
 
 /**
  * Provides the set of all current metrics.
+ * The Metrics class contains a static HashMap called metricProviders, which stores instances of various MetricProvider
+ * classes representing different metrics. The keys in the map are strings representing the metric names, and the values
+ * are the corresponding MetricProvider instances.
+ *
+ * This class serves as a centralized location to access all the available metric providers. By adding new entries to the
+ * metricProviders map, new metrics can be easily incorporated into the system.
  */
 public class Metrics {
+    /**
+     * A HashMap that stores instances of MetricProvider classes.
+     * The keys are strings representing the metric names, and the values are the corresponding MetricProvider instances.
+     * The metricProviders map is initialized with the current set of metrics by instantiating the respective
+     * MetricProvider classes and adding them to the map.
+     */
     public static HashMap<String, MetricProvider> metricProviders = new HashMap<>() {
         {
             put("loi", new LengthOfIdentifiersMetricProvider());

@@ -12,7 +12,12 @@ import java.util.Collection;
  * A result renderer that returns a {@link String} representation of a collection of {@link MetricResultSet}.
  */
 public class StringResultsRenderer implements ResultsRender<String> {
-
+    /**
+     * Adds a metric result to the StringBuilder.
+     *
+     * @param result  The metric result to add.
+     * @param builder The StringBuilder to append the result.
+     */
     private static void addResult(MetricResult<?> result, StringBuilder builder) {
         if (result instanceof ClassResult<?> classResult) {
             builder.append(

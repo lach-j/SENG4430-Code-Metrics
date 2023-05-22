@@ -16,7 +16,13 @@ import java.util.List;
  */
 public class DepthOfConditionalNestingProvider extends MetricProvider {
 
-
+    /**
+     * Runs the analysis to calculate the Depth of Conditional Nesting metric for the given compilation units.
+     *
+     * @param compilationUnits the list of CompilationUnits representing the parsed source code
+     * @param configuration    the analysis configuration
+     * @return the MetricResultSet containing the analysis results
+     */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
 
@@ -45,12 +51,19 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
 
         return results;
     }
-
+    /**
+     * Returns the name of the metric.
+     *
+     * @return the name of the metric
+     */
     @Override
     public String metricName() {
         return "Depth Of Conditional Nesting";
     }
 
+    /**
+     * A visitor that traverses the AST nodes and calculates the depth of conditional nesting.
+     */
     private static class DepthOfConditionalNestingVisitor extends VoidVisitorAdapter<Void> {
 
         private int currentDepth = 0;
@@ -136,7 +149,11 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
                 super.visit(n, arg);
             }
         }
-
+        /**
+         * Returns the maximum depth of conditional nesting.
+         *
+         * @return the maximum depth of conditional nesting
+         */
         public int getMaxDepth() {
             return maxDepth;
         }
