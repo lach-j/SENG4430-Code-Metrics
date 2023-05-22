@@ -27,17 +27,20 @@ public class DITMetricProvider extends MetricProvider {
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> compilationUnits, AnalysisConfiguration configuration) {
         MetricResultSet resultSet = new MetricResultSet(metricName());
+
+        ClassResult<Integer> result = new ClassResult<>("DIT Per Class", "depth");
+        resultSet.addResult("ditPerClass", result);
         for (CompilationUnit cu : compilationUnits) {       // double for loop checks for all classes
             for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
-                DITCalculator(clazz, resultSet);
+                DITCalculator(clazz, result);
             }
         }
-        findRemainingDepths(resultSet); // finds the depth of all the child classes in map
+        findRemainingDepths(result); // finds the depth of all the child classes in map
         resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", totalDepth / clazzCount, "Layers"));
         return resultSet;
     }
 
-    public void DITCalculator(ClassOrInterfaceDeclaration clazz, MetricResultSet resultSet) {
+    public void DITCalculator(ClassOrInterfaceDeclaration clazz, ClassResult<Integer> result) {
         NodeList<ClassOrInterfaceType> extended = clazz.getExtendedTypes();
         NodeList<ClassOrInterfaceType> implemented = clazz.getImplementedTypes();   // checks whether class implements
         String parentClazz = "";                                                    // or extends any classes
@@ -55,18 +58,15 @@ public class DITMetricProvider extends MetricProvider {
             return;
         }
         averageTracker(0);  // if not a child, class has depth 0 and is added to result set straight away
-        ClassResult<Integer> result = new ClassResult<>(clazz.getNameAsString(), "Layers");
         result.addResult(clazz.getNameAsString(), 0);
-        resultSet.addResult(clazz.getNameAsString(), result);
     }
 
-    private void findRemainingDepths(MetricResultSet resultSet) {
+    private void findRemainingDepths(ClassResult<Integer> result) {
         if (childClazzes.isEmpty()) {   // skips if all depths are 0
             return;
         }
         for (Map.Entry<String, String> clazzInfo : childClazzes.entrySet()) {
             int depth = 0;
-            ClassResult<Integer> result = new ClassResult<>(clazzInfo.getKey(), "Layers");
             String parent = clazzInfo.getValue();   // gets the parent of the child class and increments depth
             depth++;
             while (childClazzes.get(parent) != null) {  // if the parent is also a child class, increment depth and
@@ -75,7 +75,6 @@ public class DITMetricProvider extends MetricProvider {
             }
             averageTracker(depth);  // add result to the result set with calculated depth
             result.addResult(clazzInfo.getKey(), depth);
-            resultSet.addResult(clazzInfo.getKey(), result);
         }
     }
 
