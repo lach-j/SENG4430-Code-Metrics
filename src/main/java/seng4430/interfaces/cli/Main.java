@@ -41,7 +41,7 @@ public class Main {
 
         boolean hasEnoughOptions = args.length >= 2;
         if (!hasEnoughOptions) {
-            formatter.printHelp("seng4430.interfaces.cli.Main run <>", runOptions);
+            formatter.printHelp("run", runOptions);
 
             System.exit(1);
             return;
@@ -60,7 +60,7 @@ public class Main {
             cmd = parser.parse(runOptions, argv);
         } catch (ParseException parseException) {
             System.out.println(parseException.getMessage());
-            formatter.printHelp("seng4430.interfaces.cli.Main run", runOptions);
+            formatter.printHelp("run", runOptions);
 
             System.exit(1);
         }
