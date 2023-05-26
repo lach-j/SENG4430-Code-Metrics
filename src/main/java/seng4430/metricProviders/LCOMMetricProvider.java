@@ -10,6 +10,8 @@ import seng4430.results.SummaryResult;
 
 import java.util.*;
 
+import static seng4430.util.MathsHelper.divideByOrZero;
+
 /**
  * Class that provides metric score for Lack of Cohesion in Methods
  *
@@ -51,7 +53,8 @@ public class LCOMMetricProvider extends MetricProvider {
                 LCOMCalculator(clazz, result);
             }
         }
-        resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", totalLCOM / clazzCount));
+
+        resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", divideByOrZero(totalLCOM, clazzCount)));
         return resultSet;
     }
 

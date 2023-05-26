@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static seng4430.util.MathsHelper.divideByOrZero;
+
 /**
  * The metric provider for all comment-related metrics. Includes fog index and comment coverage
  *
@@ -39,12 +41,12 @@ public class CommentsMetricProvider extends MetricProvider {
         String[] words = text.split("\\s+");
 
         // Calculate the average number of words per sentence
-        double avgWordsPerSentence = (double) words.length / sentences.length;
+        double avgWordsPerSentence = divideByOrZero(words.length, sentences.length);
         // Count the number of words with three or more syllables
         int complexWords = countSyllables(words);
 
         // Calculate the Fog Index
-        return 0.4 * (avgWordsPerSentence + 100 * (double) complexWords / words.length);
+        return 0.4 * (avgWordsPerSentence + 100 * divideByOrZero(complexWords, words.length));
     }
 
     /**

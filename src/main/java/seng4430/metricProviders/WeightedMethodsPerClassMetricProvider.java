@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static seng4430.util.MathsHelper.divideByOrZero;
+
 /**
  * Extends the {@link MetricProvider} to provide the Weighted Methods Per Class metric across the given parsed project.
  *
@@ -71,7 +73,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
         }
 
         // finds average = total complexity/number of methods (handles division by 0)
-        double avgWmc = classCount > 0 ? totalWmc / classCount : 0;
+        double avgWmc = divideByOrZero(totalWmc, classCount);
 
         // metric results
         return new MetricResultSet(this.metricName())
@@ -93,10 +95,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
             wmc += methodComplexity;
         }
 
-        if (methods.isEmpty())
-            return 0.0;
-
-        return wmc / methods.size();
+        return divideByOrZero(wmc, methods.size());
     }
 
     /**

@@ -12,6 +12,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static seng4430.util.MathsHelper.divideByOrZero;
+
 /**
  * Class that provides metric results for the depth of the inheritance tree for all passed classes
  *
@@ -51,7 +53,7 @@ public class DITMetricProvider extends MetricProvider {
             }
         }
         findRemainingDepths(result); // finds the depth of all the child classes in map
-        resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", totalDepth / clazzCount, "Layers"));
+        resultSet.addResult("avgDepth", new SummaryResult<>("Average depth", divideByOrZero(totalDepth, clazzCount), "Layers"));
         return resultSet;
     }
 

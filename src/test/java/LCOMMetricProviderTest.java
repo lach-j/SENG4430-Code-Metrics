@@ -22,6 +22,6 @@ public class LCOMMetricProviderTest {
 
         List<CompilationUnit> compilationUnits = ProjectParser.parse("./src/test/java/LCOMTestProject");
         Map<String, MetricResult<?>> result = lcomProvider.runAnalysis(compilationUnits).getResults();
-        Assertions.assertEquals(2, result.get("avgLCOM").value());
+        Assertions.assertEquals(2.0, result.get("avgLCOM").value());
     }
 }

@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import static seng4430.util.MathsHelper.divideByOrZero;
+
 /**
  * Extends the {@link MetricProvider} to provide the Length of Identifiers metric across the given parsed project.
  *
@@ -75,7 +77,7 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
         Optional<Integer> total = identifiers.stream().map(String::length).reduce(Integer::sum);
 
         // Calculate average number of characters per identifier
-        double avgIdLength = Double.valueOf((total.orElse(0))) / identifiers.size();
+        double avgIdLength = divideByOrZero(Double.valueOf((total.orElse(0))), identifiers.size());
 
         // Find longest identifier
         int maxIdLength =

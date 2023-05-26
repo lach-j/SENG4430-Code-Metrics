@@ -3,6 +3,8 @@ package seng4430.util;
 import java.util.Collection;
 import java.util.Comparator;
 
+import static seng4430.util.MathsHelper.divideByOrZero;
+
 /**
  * A utility class providing helper methods for collections.
  */
@@ -15,9 +17,7 @@ public class CollectionHelper {
      */
     public static Double calculateIntegerAverage(Collection<Integer> list) {
         Integer total = sumIntegerValues(list);
-        if (total == 0) return 0.0;
-
-        return ((double) total) / list.size();
+        return divideByOrZero(total, list.size());
     }
 
     /**
@@ -38,9 +38,7 @@ public class CollectionHelper {
 
     public static Double calculateDoubleAverage(Collection<Double> list) {
         Double total = sumDoubleValues(list);
-        if (total == 0) return 0.0;
-
-        return total / list.size();
+        return divideByOrZero(total, list.size());
     }
 
     public static Double sumDoubleValues(Collection<Double> list) {
