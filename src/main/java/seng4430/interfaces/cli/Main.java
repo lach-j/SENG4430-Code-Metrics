@@ -2,7 +2,6 @@ package seng4430.interfaces.cli;
 
 import org.apache.commons.cli.*;
 import seng4430.StaticAnalyser;
-import seng4430.interfaces.gui.MetricResultsFrame;
 import seng4430.metricProviders.AnalysisConfiguration;
 import seng4430.metricProviders.MetricProvider;
 import seng4430.metricProviders.Metrics;
