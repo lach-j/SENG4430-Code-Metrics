@@ -1,12 +1,14 @@
-package seng4430.metricProviders;
+package seng4430.results;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 /**
  * A {@link MetricResult} that allows the same metric type to be reported on across the methods of multiple classes.
+ *
+ * @param <T> Type of the result being reported on per method.
  * @author Lachlan Johnson (c3350131)
  * @version 08/05/2023
- * @param <T> Type of the result being reported on per method.
  */
 public class MethodResult<T> extends MetricResult<Map<String, Map<String, T>>> {
 

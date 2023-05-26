@@ -1,4 +1,4 @@
-package seng4430.metricProviders;
+package seng4430.results;
 
 import java.util.Optional;
 
@@ -6,9 +6,9 @@ import java.util.Optional;
  * Base result type to be included in a {@link MetricResultSet}. Extend this type to implement custom result types.
  *
  * @param <T> The type of the data structure storing results in the implemented {@code MetricResult}.
+ * @author Lachlan
  * @see ClassResult
  * @see MethodResult
- * @author Lachlan
  * @see SummaryResult
  */
 public abstract class MetricResult<T> {

@@ -3,8 +3,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.AnalysisConfiguration;
-import seng4430.metricProviders.ClassResult;
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.results.ClassResult;
+import seng4430.results.MetricResultSet;
 import seng4430.metricProviders.ResponseForClassProvider;
 import seng4430.parsing.ProjectParser;
 
@@ -17,7 +17,7 @@ class ResponseForClassProviderTest {
     //Selecting the root and path + running test
     @BeforeAll
     public static void arrange() throws IOException {
-        var responseForClassProvider = new ResponseForClassProvider();
+        ResponseForClassProvider responseForClassProvider = new ResponseForClassProvider();
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/RfcCboTestProject");
         results = responseForClassProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"ResponseForClassProviderTest"}));
     }

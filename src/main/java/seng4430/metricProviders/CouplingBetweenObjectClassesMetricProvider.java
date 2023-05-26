@@ -3,6 +3,8 @@ package seng4430.metricProviders;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import seng4430.results.ClassResult;
+import seng4430.results.MetricResultSet;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,26 +22,27 @@ public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider {
     /**
      * Runs the analysis to calculate the Coupling Between Object Classes (CBO) metric.
      *
-     * @param parseResults    the list of CompilationUnits representing the parsed source code
-     * @param configuration   the analysis configuration
+     * @param parseResults  the list of CompilationUnits representing the parsed source code
+     * @param configuration the analysis configuration
      * @return the MetricResultSet containing the analysis results
      */
     @Override
     public MetricResultSet runAnalysis(List<CompilationUnit> parseResults, AnalysisConfiguration configuration) {
-        var resultSet = new MetricResultSet(metricName());
-        var classResult = new ClassResult<Integer>("Coupling Per Class", "referenced objects");
-        for (CompilationUnit cu : parseResults) {
+        MetricResultSet resultSet = new MetricResultSet(metricName());
+        ClassResult<Integer> classResult = new ClassResult<>("Coupling Per Class", "referenced objects");
+        for (CompilationUnit compilationUnit : parseResults) {
             Set<String> referencedClassNames = new HashSet<>();
             CBOMetricVisitor cboVisitor = new CBOMetricVisitor(referencedClassNames);
-            cboVisitor.visit(cu, null);
+            cboVisitor.visit(compilationUnit, null);
 
             // Subtract 1 from the total count to exclude self-references
             int cboCount = referencedClassNames.size() > 0 ? referencedClassNames.size() - 1 : 0;
-            classResult.addResult(cu.getType(0).getNameAsString(), cboCount);
+            classResult.addResult(compilationUnit.getType(0).getNameAsString(), cboCount);
         }
         resultSet.addResult("Coupling between objects", classResult);
         return resultSet;
     }
+
     /**
      * Returns the name of the metric.
      *
@@ -49,6 +52,7 @@ public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider {
     public String metricName() {
         return "Coupling between object classes metric";
     }
+
     /**
      * A visitor implementation to calculate the CBO metric by collecting referenced class names.
      */
@@ -63,6 +67,7 @@ public class CouplingBetweenObjectClassesMetricProvider extends MetricProvider {
         public CBOMetricVisitor(Set<String> referencedClassNames) {
             this.referencedClassNames = referencedClassNames;
         }
+
         /**
          * Visits a NameExpr node and adds the referenced class name to the set.
          *

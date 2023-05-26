@@ -3,9 +3,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.AnalysisConfiguration;
-import seng4430.metricProviders.ClassResult;
+import seng4430.results.ClassResult;
 import seng4430.metricProviders.CouplingBetweenObjectClassesMetricProvider;
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.results.MetricResultSet;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ class CouplingBetweenObjectClassesMetricProviderTest {
     private static MetricResultSet results;
     @BeforeAll
     public static void arrange() throws IOException {
-        var couplingBetweenObjectClassesMetricProvider = new CouplingBetweenObjectClassesMetricProvider();
+        CouplingBetweenObjectClassesMetricProvider couplingBetweenObjectClassesMetricProvider = new CouplingBetweenObjectClassesMetricProvider();
         List<CompilationUnit> parseResults = ProjectParser.parse("./src/test/java/RfcCboTestProject");
         results = couplingBetweenObjectClassesMetricProvider.runAnalysis(parseResults, new AnalysisConfiguration(new String[]{"CouplingBetweenObjectClassesMetricProviderTest"}));
     }

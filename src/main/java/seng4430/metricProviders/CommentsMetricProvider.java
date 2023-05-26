@@ -9,6 +9,8 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.javadoc.JavadocBlockTag;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,16 +70,18 @@ public class CommentsMetricProvider extends MetricProvider {
      * @return the total number of syllables
      */
     private static int countSyllables(String[] words) {
+        int MIN_SYLLABLES_FOR_COMPLEX = 3;
+
         int numComplexWords = 0;
         // Regex for syllables
         String regex = "(?i)[aiou][aeiou]*|e[aeiou]*(?!d?\\b)";
         Pattern pattern = Pattern.compile(regex);
         for (String word : words) {
-            Matcher m = pattern.matcher(word);
+            Matcher matcher = pattern.matcher(word);
             int sylCount = 0;
-            while (m.find()) {
+            while (matcher.find()) {
                 sylCount++;
-                if (sylCount >= 3) {
+                if (sylCount >= MIN_SYLLABLES_FOR_COMPLEX) {
                     numComplexWords++;
                     break;
                 }
@@ -152,12 +156,12 @@ public class CommentsMetricProvider extends MetricProvider {
      */
     private static boolean isMethodParamsCovered(List<Parameter> params, List<JavadocBlockTag> javadocBlockTags) {
         for (Parameter param : params) {
-            String s1 = param.getNameAsString();
+            String paramName = param.getNameAsString();
             for (JavadocBlockTag javadocBlockTag : javadocBlockTags) {
                 Optional<String> name = javadocBlockTag.getName();
                 if (name.isPresent()) {
-                    String s = name.get();
-                    if (s1.equals(s)) {
+                    String javadocBlockName = name.get();
+                    if (paramName.equals(javadocBlockName)) {
                         return true;
                     }
                 }
@@ -191,15 +195,15 @@ public class CommentsMetricProvider extends MetricProvider {
         List<CommentMethodPair> commentMethodPairs = new ArrayList<>();
         int fileCount = 0;
         int hasAuthorCount = 0;
-        for (CompilationUnit cu : compilationUnits) {
+        for (CompilationUnit compilationUnit : compilationUnits) {
             fileCount++;
-            if (cu == null) continue;
+            if (compilationUnit == null) continue;
             VoidVisitor<List<MethodDeclaration>> methodVisitor = new MethodVisitor();
-            if (hasAuthor(cu.getAllContainedComments())) {
+            if (hasAuthor(compilationUnit.getAllContainedComments())) {
                 hasAuthorCount++;
             }
-            comments.addAll(cu.getAllContainedComments());
-            methodVisitor.visit(cu, methods);
+            comments.addAll(compilationUnit.getAllContainedComments());
+            methodVisitor.visit(compilationUnit, methods);
         }
         commentMethodPairs.addAll(getCommentMethodPairs(comments));
 

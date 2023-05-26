@@ -5,6 +5,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import seng4430.results.ClassResult;
+import seng4430.results.MetricResultSet;
 
 import java.util.List;
 
@@ -30,9 +32,9 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
         MetricResultSet results = new MetricResultSet(this.metricName());
         ClassResult<Integer> totalDepthOfConditionalNesting = new ClassResult<>("Depth of conditional nesting", "depth");
         // loops through every file in the file location specified
-        for (CompilationUnit cu : compilationUnits) {
+        for (CompilationUnit compilationUnit : compilationUnits) {
             // gets every class in the find
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(declaration -> !declaration.isInterface()).toList();
             // loops through every class in the file
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 // creates a DepthOfConditionalNestingVisitor, to loop through every node in the class
@@ -51,6 +53,7 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
 
         return results;
     }
+
     /**
      * Returns the name of the metric.
      *
@@ -73,14 +76,14 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
         // for example the IfStmt one occurs if the node is of the type IfStmt provided by javaparser
         @Override
         public void visit(IfStmt n, Void arg) {
-            // adds to the depth because its going into another conditional
+            // adds to the depth because it is going into another conditional
             currentDepth++;
             super.visit(n, arg);
             // sets a new max depth if one has been reached
             if (currentDepth > maxDepth) {
                 maxDepth = currentDepth;
             }
-            // subtracts from the depth because its leaving a conditional
+            // subtracts from the depth because it is leaving a conditional
             currentDepth--;
         }
 
@@ -149,6 +152,7 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
                 super.visit(n, arg);
             }
         }
+
         /**
          * Returns the maximum depth of conditional nesting.
          *

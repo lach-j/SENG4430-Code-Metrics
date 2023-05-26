@@ -3,9 +3,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.AnalysisConfiguration;
-import seng4430.metricProviders.ClassResult;
+import seng4430.results.ClassResult;
 import seng4430.metricProviders.CyclomaticComplexityProvider;
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.results.MetricResultSet;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;

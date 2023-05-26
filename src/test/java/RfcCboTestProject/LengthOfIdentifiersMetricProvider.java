@@ -9,8 +9,8 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import seng4430.metricProviders.AnalysisConfiguration;
 import seng4430.metricProviders.MetricProvider;
-import seng4430.metricProviders.MetricResultSet;
-import seng4430.metricProviders.SummaryResult;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,15 +45,15 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
                 };
 
         // Parse Java file
-        for (CompilationUnit cu : compilationUnits) {
-            if (cu == null) continue;
+        for (CompilationUnit compilationUnit: compilationUnits) {
+            if (compilationUnit== null) continue;
 
             for (Class<? extends Node> clazz : classes) {
                 if (!NodeWithSimpleName.class.isAssignableFrom(clazz))
                     throw new IllegalArgumentException(
                             clazz.getName() + " does not contain a getNameAsString definition");
 
-                cu.findAll(clazz)
+                compilationUnit.findAll(clazz)
                         .forEach(node -> identifiers.add(((NodeWithSimpleName<?>) node).getNameAsString()));
             }
         }

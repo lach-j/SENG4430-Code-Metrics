@@ -3,8 +3,8 @@ package seng4430;
 import com.github.javaparser.ast.CompilationUnit;
 import seng4430.metricProviders.AnalysisConfiguration;
 import seng4430.metricProviders.MetricProvider;
-import seng4430.metricProviders.MetricResultSet;
 import seng4430.parsing.ProjectParser;
+import seng4430.results.MetricResultSet;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,10 +1,13 @@
-package seng4430.metricProviders;
+package seng4430.results;
+
+import seng4430.metricProviders.MetricProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Stores a set of {@link MetricResult} for a given {@link MetricProvider}.
+ *
  * @author Lachlan
  */
 public class MetricResultSet {

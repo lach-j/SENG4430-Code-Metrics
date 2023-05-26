@@ -6,14 +6,14 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.stmt.*;
 import seng4430.metricProviders.AnalysisConfiguration;
-import seng4430.metricProviders.ClassResult;
 import seng4430.metricProviders.MetricProvider;
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.results.ClassResult;
+import seng4430.results.MetricResultSet;
 
 import java.util.List;
 
 /**
- *  Keeping this here only for testing RFC and CBO
+ * Keeping this here only for testing RFC and CBO
  *
  * @author Alex Waddell (c3330987)
  * @version 14/05/2023
@@ -29,7 +29,9 @@ public class CyclomaticComplexityProvider extends MetricProvider {
         for (CompilationUnit unit : compilationUnits) {
 
 
-            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream()
+                    .filter(declaration -> !declaration.isInterface())
+                    .toList();
 
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 int complexity = calculateCyclomaticComplexity(clazz);

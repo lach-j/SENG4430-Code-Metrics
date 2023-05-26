@@ -4,6 +4,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import seng4430.results.ClassResult;
+import seng4430.results.MethodResult;
+import seng4430.results.MetricResultSet;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +30,7 @@ public class FanOutMetricProvider extends MetricProvider {
     public String metricName() {
         return "Fan Out";
     }
+
     /**
      * Runs the analysis to calculate the Fan Out metric for the given compilation units.
      *
@@ -43,7 +47,7 @@ public class FanOutMetricProvider extends MetricProvider {
         for (CompilationUnit unit : compilationUnits) {
 
             // Get all classes in the file
-            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(c -> !c.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(declaration -> !declaration.isInterface()).toList();
 
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 // Find all methods within the class.
@@ -88,7 +92,7 @@ public class FanOutMetricProvider extends MetricProvider {
         results.addResult("totFanOut", totalFanOutResult);
 
         // Add the average fan out per method per class to the results
-        ClassResult<Double> averageFanOutPerClassResult = new ClassResult<Double>("Average Total Fan Out Per Method Per Class", "calls");
+        ClassResult<Double> averageFanOutPerClassResult = new ClassResult<>("Average Total Fan Out Per Method Per Class", "calls");
         totalFanOut.forEach((clazz, methods) -> averageFanOutPerClassResult.addResult(clazz, calculateIntegerAverage(methods.values())));
         results.addResult("avgFanOutClass", averageFanOutPerClassResult);
 

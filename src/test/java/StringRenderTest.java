@@ -1,10 +1,10 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng4430.interfaces.cli.StringResultsRenderer;
-import seng4430.metricProviders.ClassResult;
-import seng4430.metricProviders.MethodResult;
-import seng4430.metricProviders.MetricResultSet;
-import seng4430.metricProviders.SummaryResult;
+import seng4430.results.ClassResult;
+import seng4430.results.MethodResult;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

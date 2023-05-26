@@ -4,6 +4,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import seng4430.results.ClassResult;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.util.*;
 
@@ -18,6 +21,7 @@ public class LCOMMetricProvider extends MetricProvider {
     private List<String> visitedMethods = new ArrayList<>();    // list of methods that have been connected to component
     private Map<String, Set<String>> methodMap = new HashMap<>();   // map of methods and their methods/variables called
     // visitedMethods and methodMap are made global for ease
+
     /**
      * Returns the name of the Lack of Cohesion in Methods (LCOM) metric.
      *
@@ -27,6 +31,7 @@ public class LCOMMetricProvider extends MetricProvider {
     public String metricName() {
         return "Lack of Cohesion in Methods";
     }
+
     /**
      * Runs the analysis to calculate the LCOM metric for the given compilation units.
      *
@@ -41,14 +46,15 @@ public class LCOMMetricProvider extends MetricProvider {
         ClassResult<Integer> result = new ClassResult<>("LCOM Score Per Class", "LCOM Score");
         resultSet.addResult("lcomPerClass", result);
 
-        for (CompilationUnit cu : compilationUnits) {   // // double for loop checks for all classes
-            for (ClassOrInterfaceDeclaration clazz : cu.findAll(ClassOrInterfaceDeclaration.class)) {
+        for (CompilationUnit compilationUnit : compilationUnits) {   // // double for loop checks for all classes
+            for (ClassOrInterfaceDeclaration clazz : compilationUnit.findAll(ClassOrInterfaceDeclaration.class)) {
                 LCOMCalculator(clazz, result);
             }
         }
         resultSet.addResult("avgLCOM", new SummaryResult<>("Average LCOM Score", totalLCOM / clazzCount));
         return resultSet;
     }
+
     /**
      * Calculates the LCOM score for a given class.
      *
@@ -88,6 +94,7 @@ public class LCOMMetricProvider extends MetricProvider {
         visitedMethods = new ArrayList<>();
         methodMap = new HashMap<>();
     }
+
     /**
      * Performs a recursive check to identify connected methods and variables.
      * It updates the visitedMethods list to keep track of visited components.
@@ -105,7 +112,7 @@ public class LCOMMetricProvider extends MetricProvider {
                 }
                 if (methodMap.get(methodName) != null) {    // ensures it is in the methodMap
                     for (String methodOrVariable : methodMap.get(methodName)) { // gets the methods or variables from
-                                                                                // method map
+                        // method map
                         if (!methodOrVariable.equals(methodName) && !visitedMethods.contains(methodOrVariable)) {
                             // checks that it doesn't call itself & isn't an already connected variable
                             if (methodMap.containsKey(methodOrVariable)) {  // if calls a method, it is connected and
@@ -123,6 +130,7 @@ public class LCOMMetricProvider extends MetricProvider {
             }
         }
     }
+
     /**
      * Updates the total LCOM and class count for calculating the average LCOM score.
      *

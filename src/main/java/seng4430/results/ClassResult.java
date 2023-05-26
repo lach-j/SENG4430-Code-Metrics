@@ -1,4 +1,4 @@
-package seng4430.metricProviders;
+package seng4430.results;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

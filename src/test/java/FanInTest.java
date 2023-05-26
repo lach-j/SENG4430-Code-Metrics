@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.*;
 import seng4430.parsing.ProjectParser;
+import seng4430.results.ClassResult;
+import seng4430.results.MethodResult;
+import seng4430.results.MetricResultSet;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,6 +27,7 @@ public class FanInTest {
     @Test
     public void hasResults() {
         Assertions.assertNotNull(results.getResult("totFanIn"));
+        Assertions.assertNotNull(results.getResult("avgFanInClass"));
     }
 
     @Test

@@ -3,6 +3,9 @@ package seng4430.metricProviders;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import seng4430.results.ClassResult;
+import seng4430.results.MethodResult;
+import seng4430.results.MetricResultSet;
 
 import java.util.*;
 
@@ -17,6 +20,7 @@ import static seng4430.util.CollectionHelper.calculateIntegerAverage;
 public class FanInMetricProvider extends MetricProvider {
 
     private final Map<String, Map<String, Integer>> numMethodCalls = new HashMap<>();
+
     /**
      * Runs the analysis to calculate the Fan In metric for the given compilation units.
      *
@@ -53,7 +57,7 @@ public class FanInMetricProvider extends MetricProvider {
                     // Check if the class exists within the provided base package.
                     if (type != null
                             && (configuration.getBasePackages().length == 0
-                            || Arrays.stream(configuration.getBasePackages()).anyMatch(y -> finalType.startsWith(y + ".")))) {
+                            || Arrays.stream(configuration.getBasePackages()).anyMatch(basePackage -> finalType.startsWith(basePackage + ".")))) {
                         List<String> classComponents = Arrays.stream(type.split("\\.")).toList();
                         addMethod(classComponents.get(classComponents.size() - 1), methodName);
                     }
@@ -92,6 +96,7 @@ public class FanInMetricProvider extends MetricProvider {
 
         numMethodCalls.get(clazz).put(method, curr + 1);
     }
+
     /**
      * Returns the name of the Fan In metric.
      *

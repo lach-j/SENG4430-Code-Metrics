@@ -7,6 +7,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,19 +31,12 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
     public String metricName() {
         return "Length of Identifiers";
     }
-    /**
-     * Runs the analysis to calculate the Length of Identifiers metric for the given compilation units.
-     *
-     * @param compilationUnits the list of CompilationUnits representing the parsed source code
-     * @param configuration    the analysis configuration
-     * @return the MetricResultSet containing the analysis results
-     */
 
     /**
      * Runs the Length of Identifiers metric against the given pared project files.
      *
      * @param compilationUnits All parsed compilation units to run analysis against.
-     * @param configuration    Configuration object to use for anaylsis.
+     * @param configuration    Configuration object to use for analysis.
      * @return {@link MetricResultSet} containing the length of identifiers metric results.
      */
     @Override
@@ -60,9 +55,8 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
                 };
 
         // Iterate over parsed java files.
-        for (CompilationUnit cu : compilationUnits) {
-            if (cu == null) continue;
-
+        for (CompilationUnit compilationUnit : compilationUnits) {
+            if (compilationUnit == null) continue;
 
             for (Class<? extends Node> clazz : classes) {
                 // Add typechecking to ensure that all items added to
@@ -72,7 +66,7 @@ public class LengthOfIdentifiersMetricProvider extends MetricProvider {
                             clazz.getName() + " does not contain a getNameAsString definition");
 
                 // For each token type find all identifiers in the file and add their names to the identifiers list.
-                cu.findAll(clazz)
+                compilationUnit.findAll(clazz)
                         .forEach(node -> identifiers.add(((NodeWithSimpleName<?>) node).getNameAsString()));
             }
         }

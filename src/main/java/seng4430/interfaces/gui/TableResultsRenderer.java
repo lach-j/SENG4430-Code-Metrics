@@ -1,9 +1,9 @@
 package seng4430.interfaces.gui;
 
 import seng4430.interfaces.ResultsRender;
-import seng4430.metricProviders.ClassResult;
-import seng4430.metricProviders.MethodResult;
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.results.ClassResult;
+import seng4430.results.MethodResult;
+import seng4430.results.MetricResultSet;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -33,18 +33,18 @@ public class TableResultsRenderer implements ResultsRender<TableModel> {
                     data.add(new String[]{
                             String.format("%n%8s %-40s", "", classResult.label()), ""});
 
-                    classResult.value().forEach((k, v) -> data.add(new String[]{
-                            String.format("%n%16s %-36s", "", k), v + " " + classResult.unitLabel()}));
+                    classResult.value().forEach((className, value) -> data.add(new String[]{
+                            String.format("%n%16s %-36s", "", className), value + " " + classResult.unitLabel()}));
                 } else if (result instanceof MethodResult<?> methodResult) {
                     data.add(new String[]{
                             String.format("%n%8s %-40s", "", methodResult.label()), ""});
 
-                    methodResult.value().forEach((k, v) -> {
+                    methodResult.value().forEach((className, methods) -> {
                         data.add(new String[]{
-                                String.format("%n%16s %-36s", "", k), ""});
+                                String.format("%n%16s %-36s", "", className), ""});
 
-                        v.forEach((method, valueResult) -> data.add(new String[]{
-                                String.format("%n%24s %-31s", "", method), valueResult + " " + methodResult.unitLabel()}));
+                        methods.forEach((methodName, valueResult) -> data.add(new String[]{
+                                String.format("%n%24s %-31s", "", methodName), valueResult + " " + methodResult.unitLabel()}));
                     });
                 } else {
                     data.add(new String[]{

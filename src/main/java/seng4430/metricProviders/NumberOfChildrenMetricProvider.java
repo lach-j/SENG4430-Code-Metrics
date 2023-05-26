@@ -8,6 +8,8 @@ package seng4430.metricProviders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,13 +49,13 @@ public class NumberOfChildrenMetricProvider extends MetricProvider {
         Map<String, Integer> directChildren = new HashMap<>();
 
         // iterate for each parsed compilation unit
-        for (CompilationUnit cu : compilationUnits) {
-            if (cu == null) {
+        for (CompilationUnit compilationUnit : compilationUnits) {
+            if (compilationUnit == null) {
                 continue;
             }
 
             // find all class or interface declarations
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
+            List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 // add current class to map if it doesn't exist
                 addExtendsIfMissing(directChildren, clazz.getNameAsString());
@@ -96,6 +98,7 @@ public class NumberOfChildrenMetricProvider extends MetricProvider {
         int current = classes.get(clazz);
         classes.put(clazz, current + 1);
     }
+
     /**
      * Adds the class to the map if it doesn't exist, ensuring all classes are included even if no other class extends this class.
      *

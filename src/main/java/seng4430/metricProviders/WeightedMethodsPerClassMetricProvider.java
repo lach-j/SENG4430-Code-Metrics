@@ -5,6 +5,9 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.Comment;
+import seng4430.results.ClassResult;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +29,12 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
     public String metricName() {
         return "Weighted Methods per Class (WMC)";
     }
+
     /**
      * Runs the analysis to calculate the Weighted Methods Per Class metric.
      *
-     * @param parseResults    The list of parsed compilation units representing the project's source code.
-     * @param configuration   The analysis configuration.
+     * @param parseResults  The list of parsed compilation units representing the project's source code.
+     * @param configuration The analysis configuration.
      * @return The MetricResultSet containing the metric results.
      */
     @Override
@@ -40,16 +44,16 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
         // total methods in class
         int classCount = 0;
 
-        ClassResult<Double> wmcPerClass = new ClassResult<Double>("Weighted Methods Per Class");
+        ClassResult<Double> wmcPerClass = new ClassResult<>("Weighted Methods Per Class");
 
         // iterate for each parsed compilation unit
-        for (CompilationUnit cu : parseResults) {
-            if (cu == null) {
+        for (CompilationUnit compilationUnit : parseResults) {
+            if (compilationUnit == null) {
                 continue;
             }
 
             // find all class or interface declarations
-            List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
+            List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
 
             // iterate for each class
             for (ClassOrInterfaceDeclaration clazz : classes) {
@@ -79,7 +83,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
     /**
      * Calculates the weighted method complexity (WMC) for a class.
      *
-     * @param methods   The list of methods in the class.
+     * @param methods The list of methods in the class.
      * @return The WMC value for the class.
      */
     private double calculateClassWmc(List<MethodDeclaration> methods) {
@@ -98,7 +102,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
     /**
      * Calculates the complexity of a method by counting the number of characters in the method body that are not comments.
      *
-     * @param method    The method for which to calculate the complexity.
+     * @param method The method for which to calculate the complexity.
      * @return The complexity of the method.
      */
     private int calculateMethodComplexity(MethodDeclaration method) {
@@ -115,7 +119,7 @@ public class WeightedMethodsPerClassMetricProvider extends MetricProvider {
                 .getBody()
                 .map(Node::getChildNodes).orElse(new ArrayList<>())
                 .stream()
-                .map(x -> x.toString().replaceAll("[\\s\\n]+", ""))
+                .map(node -> node.toString().replaceAll("[\\s\\n]+", ""))
                 .collect(Collectors.joining())
                 .length();
 

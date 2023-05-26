@@ -2,7 +2,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.DITMetricProvider;
-import seng4430.metricProviders.MetricResult;
+import seng4430.results.MetricResult;
 import seng4430.parsing.ProjectParser;
 
 import java.io.IOException;

@@ -20,7 +20,7 @@ public class Metrics {
      * The metricProviders map is initialized with the current set of metrics by instantiating the respective
      * MetricProvider classes and adding them to the map.
      */
-    public static HashMap<String, MetricProvider> metricProviders = new HashMap<>() {
+    public static final HashMap<String, MetricProvider> metricProviders = new HashMap<>() {
         {
             put("loi", new LengthOfIdentifiersMetricProvider());
             put("comments", new CommentsMetricProvider());

@@ -9,7 +9,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.AnalysisConfiguration;
-import seng4430.metricProviders.MetricResult;
+import seng4430.results.MetricResult;
 import seng4430.metricProviders.NumberOfChildrenMetricProvider;
 import seng4430.parsing.ProjectParser;
 

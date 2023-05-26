@@ -5,8 +5,8 @@ import seng4430.StaticAnalyser;
 import seng4430.interfaces.gui.MetricResultsFrame;
 import seng4430.metricProviders.AnalysisConfiguration;
 import seng4430.metricProviders.MetricProvider;
-import seng4430.metricProviders.MetricResultSet;
 import seng4430.metricProviders.Metrics;
+import seng4430.results.MetricResultSet;
 
 import java.io.IOException;
 import java.util.*;
@@ -16,7 +16,7 @@ public class Main {
      * The main class for the command-line interface (CLI) application.
      */
     public static void main(String... args) throws IOException {
-        if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"}).noneMatch(x -> x.equals(args[0]))) {
+        if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"}).noneMatch(command -> command.equals(args[0]))) {
             System.err.println("no valid command specified");
             System.out.println("usage: java seng4430.interfaces.cli.Main <command> [options]");
             System.out.println(
@@ -39,7 +39,8 @@ public class Main {
         HelpFormatter formatter = new HelpFormatter();
         Options runOptions = buildOptions();
 
-        if (args.length < 2) {
+        boolean hasEnoughOptions = args.length >= 2;
+        if (!hasEnoughOptions) {
             formatter.printHelp("seng4430.interfaces.cli.Main run <>", runOptions);
 
             System.exit(1);
@@ -57,8 +58,8 @@ public class Main {
 
         try {
             cmd = parser.parse(runOptions, argv);
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
+        } catch (ParseException parseException) {
+            System.out.println(parseException.getMessage());
             formatter.printHelp("seng4430.interfaces.cli.Main run", runOptions);
 
             System.exit(1);
@@ -83,10 +84,11 @@ public class Main {
             return Metrics.metricProviders.values().stream().toList();
 
         return Arrays.stream(providers)
-                .map(p -> Metrics.metricProviders.getOrDefault(p, null))
+                .map(provider -> Metrics.metricProviders.getOrDefault(provider, null))
                 .filter(Objects::nonNull)
                 .toList();
     }
+
     /**
      * Builds the options for the command-line arguments.
      *

@@ -17,6 +17,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import seng4430.metricProviders.*;
 import seng4430.parsing.ProjectParser;
+import seng4430.results.ClassResult;
+import seng4430.results.MetricResultSet;
+import seng4430.results.SummaryResult;
 
 import java.io.IOException;
 import java.util.HashMap;

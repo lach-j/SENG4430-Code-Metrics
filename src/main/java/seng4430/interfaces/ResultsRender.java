@@ -1,6 +1,6 @@
 package seng4430.interfaces;
 
-import seng4430.metricProviders.MetricResultSet;
+import seng4430.results.MetricResultSet;
 
 import java.util.Collection;
 
