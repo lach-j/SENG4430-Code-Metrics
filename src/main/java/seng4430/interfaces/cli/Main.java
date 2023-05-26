@@ -19,7 +19,7 @@ public class Main {
         if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"})
                 .noneMatch(command -> command.equals(args[0]))) {
             System.err.println("no valid command specified");
-            System.out.println("usage: java seng4430.interfaces.cli.Main <command> [options]");
+            System.out.println("usage: <ls|run> [options]");
             System.out.println(
                     """
                             available commands:
@@ -76,7 +76,6 @@ public class Main {
         Collection<MetricResultSet> results = analyser.runAnalysis(getProviders(providers), new AnalysisConfiguration(basePackages));
 
         String resultsString = new StringResultsRenderer().render(results);
-        new MetricResultsFrame(results);
         System.out.println(resultsString);
     }
 

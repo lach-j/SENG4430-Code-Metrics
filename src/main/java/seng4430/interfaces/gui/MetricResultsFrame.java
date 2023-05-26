@@ -28,7 +28,7 @@ public class MetricResultsFrame {
 
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(500, 600);
-        frame.setTitle("test");
+        frame.setTitle("Metric Results");
         frame.setVisible(true);
     }
 
