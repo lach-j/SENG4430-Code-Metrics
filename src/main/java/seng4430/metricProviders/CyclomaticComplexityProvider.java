@@ -33,7 +33,8 @@ public class CyclomaticComplexityProvider extends MetricProvider {
         // loops through every file in the file location specified
         for (CompilationUnit unit : compilationUnits) {
             // gets every class in the find
-            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(declaration -> !declaration.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream()
+                    .filter(declaration -> !declaration.isInterface()).toList();
             // loops through every class in the file
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 // returns the complexity of that class

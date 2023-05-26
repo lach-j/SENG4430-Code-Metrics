@@ -16,7 +16,8 @@ public class Main {
      * The main class for the command-line interface (CLI) application.
      */
     public static void main(String... args) throws IOException {
-        if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"}).noneMatch(command -> command.equals(args[0]))) {
+        if (args.length == 0 || Arrays.stream(new String[]{"ls", "run"})
+                .noneMatch(command -> command.equals(args[0]))) {
             System.err.println("no valid command specified");
             System.out.println("usage: java seng4430.interfaces.cli.Main <command> [options]");
             System.out.println(
@@ -68,7 +69,8 @@ public class Main {
         String inputFilePath = cmd.getOptionValue("input");
         String[] basePackages = Optional.ofNullable(cmd.getOptionValues("base-package")).orElse(new String[]{});
         String[] projectRoots = Optional.ofNullable(cmd.getOptionValues("root")).orElse(new String[]{inputFilePath});
-        String[] providers = Optional.ofNullable(cmd.getOptionValues("metric")).orElse(Metrics.metricProviders.keySet().toArray(String[]::new));
+        String[] providers = Optional.ofNullable(cmd.getOptionValues("metric"))
+                .orElse(Metrics.metricProviders.keySet().toArray(String[]::new));
 
         StaticAnalyser analyser = new StaticAnalyser(inputFilePath, projectRoots);
         Collection<MetricResultSet> results = analyser.runAnalysis(getProviders(providers), new AnalysisConfiguration(basePackages));

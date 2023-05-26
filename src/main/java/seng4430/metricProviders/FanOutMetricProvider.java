@@ -47,7 +47,8 @@ public class FanOutMetricProvider extends MetricProvider {
         for (CompilationUnit unit : compilationUnits) {
 
             // Get all classes in the file
-            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(declaration -> !declaration.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = unit.findAll(ClassOrInterfaceDeclaration.class).stream()
+                    .filter(declaration -> !declaration.isInterface()).toList();
 
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 // Find all methods within the class.
@@ -79,7 +80,8 @@ public class FanOutMetricProvider extends MetricProvider {
 
                     // Add the number of calls to the method.
                     totalFanOut.get(className).put(methodName, currCount + methodCalls.size());
-                    uniqueFanOut.get(className).put(methodName, currUniqueCount + ((int) methodCalls.stream().distinct().count()));
+                    uniqueFanOut.get(className)
+                            .put(methodName, currUniqueCount + ((int) methodCalls.stream().distinct().count()));
                 }
             }
         }

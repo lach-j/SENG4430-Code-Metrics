@@ -34,7 +34,8 @@ public class DepthOfConditionalNestingProvider extends MetricProvider {
         // loops through every file in the file location specified
         for (CompilationUnit compilationUnit : compilationUnits) {
             // gets every class in the find
-            List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class).stream().filter(declaration -> !declaration.isInterface()).toList();
+            List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class)
+                    .stream().filter(declaration -> !declaration.isInterface()).toList();
             // loops through every class in the file
             for (ClassOrInterfaceDeclaration clazz : classes) {
                 // creates a DepthOfConditionalNestingVisitor, to loop through every node in the class

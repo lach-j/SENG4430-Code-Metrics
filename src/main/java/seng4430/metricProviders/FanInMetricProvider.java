@@ -57,7 +57,8 @@ public class FanInMetricProvider extends MetricProvider {
                     // Check if the class exists within the provided base package.
                     if (type != null
                             && (configuration.getBasePackages().length == 0
-                            || Arrays.stream(configuration.getBasePackages()).anyMatch(basePackage -> finalType.startsWith(basePackage + ".")))) {
+                            || Arrays.stream(configuration.getBasePackages())
+                            .anyMatch(basePackage -> finalType.startsWith(basePackage + ".")))) {
                         List<String> classComponents = Arrays.stream(type.split("\\.")).toList();
                         addMethod(classComponents.get(classComponents.size() - 1), methodName);
                     }

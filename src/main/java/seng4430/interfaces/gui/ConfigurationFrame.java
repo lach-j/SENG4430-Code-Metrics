@@ -102,9 +102,11 @@ public class ConfigurationFrame extends JFrame {
         });
         runAnalysisButton.addActionListener(actionEvent -> {
             try {
-                StaticAnalyser analyser = new StaticAnalyser(projectPathTextField.getText(), symbolSourceTextField.getText().split("; "));
+                StaticAnalyser analyser = new StaticAnalyser(projectPathTextField.getText(), symbolSourceTextField
+                        .getText().split("; "));
 
-                AnalysisConfiguration runConfiguration = new AnalysisConfiguration(basePackagesTextField.getText().split(";"));
+                AnalysisConfiguration runConfiguration = new AnalysisConfiguration(basePackagesTextField.getText()
+                        .split(";"));
                 Collection<MetricResultSet> results = analyser.runAnalysis(list1.getSelectedValuesList(), runConfiguration);
 
                 new MetricResultsFrame(results);
